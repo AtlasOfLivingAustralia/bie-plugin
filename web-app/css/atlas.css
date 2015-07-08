@@ -1,0 +1,144 @@
+/* Page */
+.main-content {margin-bottom: 80px;}
+
+/* Typography */
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {margin-top: 0;}
+
+/* Tabs */
+.tab-content {border: 1px solid #ddd; border-top: 0;}
+.tab-pane {padding: 20px;}
+
+/* Panels */
+.panel-footer p {font-size: 12px; line-height: 14px; margin: 0;}
+
+/* Search header */
+.page-search .pg-header {padding-bottom: 20px;}
+.page-search h1 {font-size: 30px; line-height: 36px;}
+
+/* Search result: Refine results */
+.refine-box {padding-left: 0; padding-right: 0;}
+.refine-box h2 {font-size: 24px; line-height: 29px; margin: 0; padding-left: 19px; padding-right: 19px;}
+.refine-box h2 a {display: block;}
+.refine-box h2 a:hover, .refine-box h2 a:focus {text-decoration: none;}
+.refine-box h2 span {font-size: 14px; position: relative; top: -2px;}
+.current-filters {margin-top: 10px; padding: 10px 19px; background-color: #e3e3e3;}
+.current-filters h3 {font-size: 20px; line-height: 24px; margin: 0 0 4px 0;}
+.current-filters ul {margin: 0;}
+.refine-list {padding-left: 19px; padding-right: 19px;}
+.refine-list h3 {font-size: 20px; line-height: 24px; margin: 14px 0 4px 0;}
+.refine-list ul {margin: 0;}
+a.expand-options {border-top: 1px solid #e3e3e3; display: block; padding-top: 2px; margin-top: 6px;}
+
+/* Search result options */
+.result-options {margin-bottom: 20px;}
+.result-options .form-group {margin-right: 10px;}
+
+/* Search results list */
+.search-results-list {border-bottom: 1px solid #ddd;}
+.search-result {border-top: 1px solid #ddd; padding-top: 16px; padding-bottom: 15px;}
+.search-result h3 {font-size: 17px; line-height: 21px; margin-bottom: 5px; margin-top: 0;}
+.search-result p {margin-bottom: 5px;}
+.result-thumbnail {float: right; margin: 4px 0px 5px 20px;}
+.result-thumbnail a {display: block;}
+.result-thumbnail img {max-height: 150px; max-width: 300px;}
+
+/* Search pagination - DM commented out for now */
+/*.pagination li {margin:0 1px 0 0; padding: 0;}*/
+/*.pagination li.current-pg {padding: 2px 8px; background-color: #616161; border: 1px solid #525252; color: #fff;}*/
+/*.pagination li a {display: inline-block; padding: 2px 8px; background-color: #f5f5f5; border: 1px solid #d8d8d8;}*/
+/*.pagination li a:hover, .pagination li a:focus {text-decoration: none; background-color: #e5e5e5; border: 1px solid #c9c9c9;}*/
+
+/* Taxon header */
+.page-taxon .pg-header {padding-bottom: 20px; margin-top: 20px;}
+.taxonomy-bcrumb li {position: relative; padding-left: 16px;}
+.taxonomy-bcrumb li:first-child {padding-left: 5px;}
+.taxonomy-bcrumb li:before {content:"›"; position:absolute; left:2px;}
+.taxonomy-bcrumb li:first-child:before {content: none;}
+.inline-head {display: inline-block; margin-right: 20px;}
+
+/* Taxon column gutters */
+.taxon-row {margin-left: -10px; margin-right: -10px;}
+.taxon-row > div[class*="col-"] {padding-left: 10px; padding-right: 10px;}
+
+/* Taxon summary gallery */
+.taxon-summary-gallery {border-radius: 4px; overflow: hidden; margin-bottom: 20px;}
+.taxon-summary-gallery .main-img {background-color: #3a3a3a; position: relative;}
+.taxon-summary-gallery .main-img:hover {opacity: 0.8;}
+.taxon-summary-gallery .main-img img {max-height: 500px; margin: 0 auto;}
+.taxon-summary-gallery .main-img .caption {background: rgba(0,0,0,0.5); color: #fff; position: absolute; bottom: 0; left: 0; padding: 4px 8px; font-size: 12px; line-height: 14px;}
+.taxon-summary-gallery .thumb-row {border-top: 1px solid #fff; background-color: #3a3a3a;}
+.taxon-summary-thumb {width: 25%; padding-top: 25%; border-left: 1px solid #fff; float:left; position: relative; background-size: cover; background-position: center center; }
+.taxon-summary-thumb:hover {opacity: 0.8;}
+.taxon-summary-thumb:first-child {border-left: 0;}
+.taxon-summary-thumb a {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
+.taxon-summary-thumb .more-photos {background: rgba(0,0,0,0.5); text-decoration: none;}
+.taxon-summary-thumb .more-photos span {color: #fff; font-size: 50px; line-height: 50px; width: 50px; text-align: center; position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -25px;}
+
+/* Taxon resources */
+.panel-resources .panel-body {-webkit-columns: 150px 2; -moz-columns: 150px 2; columns: 150px 2;}
+.panel-resources ul {padding-left: 15px;}
+
+/* Taxon map */
+.taxon-map {margin-bottom: 20px;}
+#leafletMap {height: 550px; border-radius: 4px 4px 0 0; overflow: hidden; background-color: #ebebeb;}
+.map-buttons {border-top: 1px solid #fff; border-radius: 0 0 4px 4px; overflow: hidden;}
+.map-buttons a.btn-lg {width: 50%; border:0; border-left: 1px solid #fff; float: left; border-radius: 0; font-size: 15px; line-height: 18px;}
+.map-buttons a.btn-lg:first-child {border-left: 0;}
+
+/* Taxon actions */
+.panel-actions .panel-body {padding-bottom: 4px; padding-top: 19px; -webkit-columns: 150px 2; -moz-columns: 150px 2; columns: 150px 2;}
+.panel-actions li {padding-bottom: 8px;}
+.panel-actions a {padding-left: 21px; display: inline-block; position: relative;}
+.panel-actions a .glyphicon {position: absolute; top:3px; left: 0; color: #777;}
+
+/* Taxon Gallery tab */
+.taxon-gallery {margin: -4px; font-size: 0; line-height: 0; padding-top: 4px;}
+.taxon-thumb {height: 170px; display: inline-block; margin: 4px; overflow: hidden; position: relative;}
+.taxon-thumb img {height: 100%;}
+.thumb-caption {position: absolute; bottom: 0; left: 0; width: 100%; background:rgba(0,0,0,0.5); font-size:12px; line-height:14px; color:#fff; padding:4px 5px;}
+.caption-detail {display: none;}
+.taxon-thumb:hover .caption-brief {display: none;}
+.taxon-thumb:hover .caption-detail {display: block;}
+
+/* Taxon Names tab */
+.name-table ul {margin: 0; padding-left: 25px;}
+.name-table .source {width: 50%;}
+
+/* Taxon Classification tab */
+.classification-list dl {margin-left: 24px;}
+.classification-list dt {display: inline-block; margin-right: 8px; margin-bottom: 4px;}
+.classification-list dd {display: inline-block;}
+
+/* Taxon Literature & Taxon Sequences tabs */
+.result-list {padding-top: 6px;}
+.result {background-color: #ebebeb; padding: 15px; border-radius: 4px; margin-bottom: 10px; color: #3c3c3c;}
+.result h3 {font-size: 16px; line-height: 19px; font-weight: normal; padding-bottom: 8px; border-bottom: 1px solid #fff;}
+.result p {margin-bottom: 0px;}
+.thumbnail-container {margin: -4px; font-size: 0; padding-top: 3px;}
+.page-thumbnail {display: inline-block; margin: 4px; font-size: 14px;}
+.page-thumbnail a {display: block; border: 4px solid #fff;}
+.page-thumbnail img {height: 100px;}
+.pagination-buttons {padding-bottom: 20px;}
+.pagination-buttons .btn {margin-right: 6px;}
+
+/* Taxon Data Providers tab */
+.data-providers-list {-webkit-columns: 300px 2; -moz-columns: 300px 2; columns: 300px 2; -webkit-column-gap: 20px; -moz-column-gap: 20px; column-gap: 20px; padding-left: 0; }
+.data-providers-list li {margin-left: 30px; padding-bottom: 4px;}
+
+/* Sticky footer */
+html, body {height:100%;}
+.wrap {min-height:100%; height:auto !important; height:100%;}
+.push {clear:both;}
+
+
+
+/* Media Queries
+================================================== */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+	/* Taxon */
+	.map-buttons a.btn-lg {font-size: 18px; line-height: 24px;}
+	/* Search */
+	.mobile-collapse {display: block; visibility: visible;}
+}

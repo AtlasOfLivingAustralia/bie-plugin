@@ -1,0 +1,24 @@
+section#classification dl#classificationList {
+    margin-left:0;
+}
+section#classification dl {
+    margin:3px 0 0 24px;
+}
+@media screen and (max-width: 600px) {
+    section#classification dl {
+        margin:3px 0 0 0px;
+    }
+}
+section#classification dl dt {
+    float:left;
+    padding-right:10px;
+}
+section#classification dl dd {
+    display: block;
+}
+section#classification dd img {
+    vertical-align:middle;
+}
+section#classification dl.childClassification dt,section#classification dl.childClassification dd {
+    float:none;
+}
