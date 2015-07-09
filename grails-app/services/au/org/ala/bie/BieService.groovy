@@ -27,7 +27,7 @@ class BieService {
     }
 
     def getTaxonConcept(guid) {
-        if (!guid) {
+        if (!guid && guid != "undefined") {
             return null
         }
         def json = webService.get(grailsApplication.config.bie.index.url + "/taxon/" + guid.replaceAll(/\s+/,'+'))

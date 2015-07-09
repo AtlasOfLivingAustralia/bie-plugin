@@ -66,7 +66,7 @@
             </div>
         </header>
 
-        <div class="main-content panel panel-body">
+        <div id="main-content" class="main-content panel panel-body">
             <div class="taxon-tabs">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>

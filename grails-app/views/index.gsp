@@ -9,7 +9,7 @@
 <section class="container">
     <h1>Search for taxa</h1>
     <div class="section">
-        <form id="search-inpage" action="search" method="get" name="search-form" class="form-horizontal">
+        <form id="search-inpage" action="search" method="get" name="search-form">
             <div class="form-group">
                 <input id="search" class="form-control" name="q" type="text" placeholder="Search the Atlas" autocomplete="off">
             </div>

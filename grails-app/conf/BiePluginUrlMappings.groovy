@@ -16,7 +16,7 @@ class BiePluginUrlMappings {
         "/bhl-search"(controller: "species", action: "bhlSearch")
         "/sound-search"(controller: "species", action: "soundSearch")
         "/logout"(controller: "species", action: "logout")
-        "/"(view:"/home")
+        "/"(view:"/index")
         "500"(view:'/error')
     }
 }
