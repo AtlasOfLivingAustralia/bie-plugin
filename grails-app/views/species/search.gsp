@@ -111,14 +111,14 @@
                                     <ul class="list-unstyled">
                                         <g:each var="item" in="${facetMap}" status="facetIdx">
                                             <li>
-                                                <g:set var="closeLink">&nbsp;<a href="#" onClick="javascript:removeFacet(${facetIdx}); return true;" title="remove filter"><span class="glyphicon glyphicon-remove-sign"></span></a></g:set>
                                                 <g:if test="${item.key?.contains("uid")}">
                                                     <g:set var="resourceType">${item.value}_resourceType</g:set>
-                                                    ${collectionsMap?.get(resourceType)}: <strong>&nbsp;${collectionsMap?.get(item.value)}</strong>${closeLink}
+                                                    ${collectionsMap?.get(resourceType)}: <strong>&nbsp;${collectionsMap?.get(item.value)}</strong>
                                                 </g:if>
                                                 <g:else>
-                                                    <g:message code="facet.${item.key}" default="${item.key}"/>: <strong><g:message code="${item.key}.${item.value}" default="${item.value}"/></strong>${closeLink}
+                                                    <g:message code="facet.${item.key}" default="${item.key}"/>: <strong><g:message code="${item.key}.${item.value}" default="${item.value}"/></strong>
                                                 </g:else>
+                                                <a href="#" onClick="javascript:removeFacet(${facetIdx}); return true;" title="remove filter"><span class="glyphicon glyphicon-remove-sign"></span></a>
                                             </li>
                                         </g:each>
                                     </ul>
