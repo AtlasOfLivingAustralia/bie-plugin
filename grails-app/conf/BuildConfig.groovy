@@ -48,7 +48,7 @@ grails.project.dependency.resolution = {
         }
         runtime ":jquery:1.11.1"
         runtime ":resources:1.2.8"
-        compile ':cache:1.0.1'
+        compile ':cache:1.1.8'
         runtime ":rest:0.8"
         build ":tomcat:7.0.53"
     }
