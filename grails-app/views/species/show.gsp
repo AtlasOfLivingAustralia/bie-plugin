@@ -34,11 +34,11 @@
     <r:require module="show"/>
 </head>
 <body class="page-taxon">
-        <section class="container">
+    <section class="container">
         <header class="pg-header">
             <g:if test="${taxonHierarchy && taxonHierarchy.size()>1}">
             <div class="taxonomy-bcrumb">
-                <ol class="list-inline">
+                <ol class="list-inline breadcrumb">
                     <g:each in="${taxonHierarchy}" var="taxon">
                         <g:if test="${taxon.guid != tc.taxonConcept.guid}">
                             <li><g:link controller="species" action="show" params="[guid:taxon.guid]">${taxon.scientificName}</g:link></li>
@@ -51,17 +51,22 @@
             </div>
             </g:if>
             <div class="header-inner">
-                <h1>${sciNameFormatted} <span>${tc?.taxonConcept?.author?:""}</span></h1>
+                <h1>
+                    <bie:formatSciName name="${tc?.taxonConcept?.nameString}" rankId="${tc?.taxonConcept?.rankID?:0}"/>
+                    <span>${tc?.taxonConcept?.author?:""}</span></h1>
                 <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.opt(0)?.nameString : ''}"/>
                 <g:if test="${commonNameDisplay}">
                     <h2>${commonNameDisplay}</h2>
                 </g:if>
                 <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
-                <h5 class="inline-head"><strong>Name authority:</strong> ${tc?.taxonConcept.nameAuthority?:grailsApplication.config.defaultNameAuthority}</h5>
+                <h5 class="inline-head name-authority">
+                    <strong>Name authority:</strong>
+                    ${tc?.taxonConcept.nameAuthority?:grailsApplication.config.defaultNameAuthority}
+                </h5>
             </div>
         </header>
 
-        <div class="main-content">
+        <div class="main-content panel panel-body">
             <div class="taxon-tabs">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
@@ -81,7 +86,6 @@
 
                                 <div class="taxon-summary-gallery">
                                     <div class="main-img">
-
                                         <a class="lightbox-img"
                                            data-toggle="lightbox"
                                            data-gallery="taxon-summary-gallery"
@@ -229,7 +233,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>${sciNameFormatted} ${authorship}</td>
+                                <td><bie:formatSciName name="${tc?.taxonConcept?.nameString}" rankId="${tc?.taxonConcept?.rankID?:0}"/> ${authorship}</td>
                                 <td class="source">
                                     <ul><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.nameAuthority}</a></li></ul>
                                 </td>

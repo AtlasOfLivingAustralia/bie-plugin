@@ -224,7 +224,8 @@ function loadCharts(){
         collection_uid: {title: 'By collection'},
         state: {title: 'By state & territory'},
         month: {chartType: "column"},
-        occurrence_year: {chartType: "column"}
+        occurrence_year: {chartType: "column"},
+        is3D:false
     };
 
     console.log("Charts showSpeciesPage");

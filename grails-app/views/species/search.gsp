@@ -85,7 +85,7 @@
         </div>
     </header>
 
-    <div class="main-content">
+    <div class="main-content panel panel-body">
     <g:if test="${searchResults.totalRecords}">
         <g:set var="paramsValues" value="${[:]}"/>
         <div class="row">
