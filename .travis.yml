@@ -1,0 +1,43 @@
+language: groovy
+sudo: false
+jdk:
+- oraclejdk7
+branches:
+  only:
+  - master
+before_install:
+- export TZ=Australia/Canberra
+- date
+- rm -rf ~/.gvm
+- curl -s get.gvmtool.net > ~/install_gvm.sh
+- chmod 775 ~/install_gvm.sh
+- ~/install_gvm.sh
+- echo "gvm_auto_answer=true" > ~/.gvm/etc/config
+- source ~/.gvm/bin/gvm-init.sh
+- GRAILS_VERSION=`grep '^\s*app.grails.version' application.properties | sed -e 's/^\s*app\.grails\.version=//g'
+  | tr -d "\r"`
+- echo "GRAILS_VERSION:$GRAILS_VERSION"
+- gvm install grails $GRAILS_VERSION || true
+before_script:
+- GRAILS_VERSION_NUMBER=`echo $GRAILS_VERSION | sed -e 's/\.[0-9]*$//g' -e 's/\.//g'
+  | tr -d "\r"`
+- echo "GRAILS_VERSION_NUMBER:$GRAILS_VERSION_NUMBER"
+- GRAILS_SETTINGS_FILE="travis_grails_settings_new.groovy"
+- if [ "$GRAILS_VERSION_NUMBER" -lt "23" ]; then GRAILS_SETTINGS_FILE="travis_grails_settings_old.groovy";
+  fi;
+- echo "GRAILS_SETTINGS_FILE:$GRAILS_SETTINGS_FILE"
+- mkdir -p ~/.grails; wget -q -O ~/.grails/settings.groovy https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/$GRAILS_SETTINGS_FILE
+- MAVEN_REPO="ala-repo-snapshot"
+- APP_VERSION=`grep '^\s*def\s*version' *GrailsPlugin.groovy | sed -e 's/^.*= *"//g'
+  | sed -e 's/".*$//g' | tr -d "\r"`
+- echo $APP_VERSION | grep -q "\-SNAPSHOT"; if [ "$?" = "1" ]; then MAVEN_REPO="ala-repo-release";
+  fi;
+- echo "APP_VERSION:$APP_VERSION"
+- echo "MAVEN_REPO:$MAVEN_REPO"
+script:
+- grails clean && grails refresh-dependencies --non-interactive && grails prod maven-install
+  --non-interactive && grails prod maven-deploy --repository=$MAVEN_REPO --non-interactive
+env:
+  global:
+  - secure: WOvjK19te6dB1WoaF2vWsssjn8Eq/Mepy01Z8gyU3p1XXepxmbGoraSVWF/dTwhR2GU6QY5EMn4eRqzuIMt4YPhNWCcJ7AXMyX1UcIn3e6mXuwBs6BQTnxWCGirKMbg3vB51hPF4aIIKfmqGgRgOIPqtnLMjf8fWnoqg0bp+kZxLTWSBoLDWoyDbALrDivrVxKW2I2wpl/uluCwfGQv6GSvqTo+wHYnhxgQX5IHtPHz1HQXaMZqkziK+9WImj156mr7XUkSXCXYDbh8jGvxVwUY3Ar2GhZz2kELt3Uatp1z0F0ElgCf7nNeD6nDs3aCfFlMtPUx60CQtKJvG0P0BX19bQ0PUe92y0vTPj62eO0br5gniVvExxjhCf4XsEplBKHlNYRHGbukjlZGWWVWNpfwPvOl7tbt4FQPnDLRjrHKY4GruQcQ9LN8FewMcBxRm9Us8eN2GJiVVGzzWhHSOi2srWeeQEGtsW2erYk3GSvyAcV6bELMp7vO/RDvTzPNMZ+M/MbU2xu3HkFH987Bih4dj6AobiiM2bFMGdvhN1HSzh4gBnvM64W1YWJeq3kRPzWZe+LCHKvEUk7Ns9MV6YZvFihIiMVc0jg/vBCtjwlvA22oObra/lLYUiKh6gyy3tpgmxbCaeJR1t9SlWEWyJVCpBYVJV/ky2vZk4mDGoxc=
+  - secure: dLXiLVIxloRxAcxMP4LWjSmwBOHE5ukk5Yin/ATQNTOUEqDgtYBKFF+SxqSH6HrFX/UjqzxXjOLPtaxNqrbrSxdXYq1dsPwNzQPdER7E7byNomnFVVjMwxMwhsSQJwyMHabK6BcdlkKuO2xF/92r/bc2Cd8R5fGbQMsoybxPenhnGUfs+i03IUZsLK7hB6cxF1tLS/Kzzhn5fIguht2KrzIalKBp2jpaXJmOpuYutK/hTTjrfqRBgHC9DS8LDWcGkzFrWtJMeT90/fhacgMuNxZCUZ8iVKhG5k5f7OZRdKtwjaykTEltNV/sYVIMkWKZJiPtnpwdwU0weV7ZztUbSbma4lPH9TTmySSpMfdvSLfIjd1HrOIzyVl5RxkhGmvcu2AYa4XZQj+LmBQPxq7Irj48q2eMPeUnTsw8gbqP+N4b8Ysj+zvuqkU2ufmmgi+qv0HRqYuBAi6oog7JmKbrAFcgTxRjV+oz787CC6c/SQtYqPG6v5d/YQix006fg+X85Jy8FFHiJoy898DdHJyRGml0uMF2+aA0J9O/TzSirC3Y0ZffpugMpHW6sxjrCg/zzDVXL/6xZ+/IxLFTl7li77QtLfQS6iNy27oEZmJxj7pVU9++jyr7aWM9AvfuN6SoTkxvpPwgXVdHbs6xs7XWPUAvJARqdZslly0QiZJ5AaE=
