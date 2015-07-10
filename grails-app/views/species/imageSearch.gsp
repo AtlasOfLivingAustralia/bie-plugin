@@ -47,15 +47,6 @@
             // initial load images
             imageLoad();
 
-            // trigger more images to load when bottom of page comes "in view"
-            $("#loadMoreTrigger").live("inview", function(event, visible, visiblePartX, visiblePartY) {
-                if (visible && !processing) {
-                    //console.log("currentPage", currentPage);
-                    imageLoad();
-                }
-
-            });
-
             // trigger button - when inview doesn't work, e.g. iPad
             $("#loadMoreButton").click(function(e) {
                 e.preventDefault();
@@ -94,15 +85,14 @@
         };
 
         function addImages(data) {
-            //console.log("addImages", data.results);
 
             if (data.results.length > 0) {
                 $.each(data.results, function(i, el) {
                     //console.log('el', i, el);
-                    if(el.smallImageUrl) {
+                    if(el.image) {
                         var scientificName = (el.nameComplete) ? "<i>" + el.nameComplete + "</i>" : "";
                         var commonName = (el.commonNameSingle) ? el.commonNameSingle + "<br/> " : "";
-                        var imageUrl = el.smallImageUrl;
+                        var imageUrl = "${grailsApplication.config.image.thumbnailUrl} + el.image;
                         var titleText = $("<div/>" + commonName.replace("<br/>", " - ") + scientificName).text();
                         var $ImgCon = $('.imgConTmpl').clone();
                         $ImgCon.removeClass('imgConTmpl').removeClass('hide');
@@ -146,6 +136,8 @@
 
     }
 
+    body { padding-left: 15px; padding-right: 15px; }
+
     #imageResults {
         margin-top: 20px;
         margin-bottom: 30px;
@@ -160,15 +152,6 @@
         text-align: center;
         -moz-box-shadow: 2px 2px 11px #666;
         -webkit-box-shadow: 2px 2px 11px #666;
-    }
-
-    hgroup h1 {
-        text-align: left;
-        margin-top: 10px;
-    }
-
-    hgroup h1 a {
-        text-decoration: none;
     }
 
     .imgContainer {
@@ -237,7 +220,7 @@
                 <ol class="breadcrumb">
                     <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
                     <li><a href="${alaUrl}/australias-species/">Australia&#39;s species</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li class="active">Image browser for ${msg}</li>
+                    <li class="active">Images  for ${msg}</li>
                 </ol>
             </nav>
         </div>
@@ -248,7 +231,7 @@
                 <a href="${grailsApplication.config.grails.serverURL}/search?q=${params.scientificName}" title="More information on this ${params.taxonRank}">${params.scientificName}</a></h1>
             </g:if>
     </header>
-    <div class="inner">
+    <div>
         <%-- template used by AJAX code --%>
         <div class="imgConTmpl hide">
             <div class="imgCon">
@@ -266,7 +249,7 @@
 
         <div id="divPostsLoader" style="margin-left:auto;margin-right:auto; width:120px;"></div>
 
-        <div id="loadMoreTrigger" style="display: block;"><input type="button" id="loadMoreButton" class="btn" value="Load more images"/></div>
+        <div id="loadMoreTrigger" style="display: block;"><input type="button" id="loadMoreButton" class="btn btn-primary" value="Load more images"/></div>
     </div>
 </body>
 </html>

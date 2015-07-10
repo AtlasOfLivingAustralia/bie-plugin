@@ -34,37 +34,6 @@
     </r:script>
 </head>
 <body class="general-search page-search">
-    %{--<header id="page-header" class="page-heading">--}%
-        %{--<div class="inner row-fluid">--}%
-            %{--<div id="breadcrumb" class="span12">--}%
-                %{--<ol class="breadcrumb">--}%
-                    %{--<li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>--}%
-                    %{--<li class="active">Search the ${grailsApplication.config.skin.orgNameShort}</li>--}%
-                %{--</ol>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-        %{--<hgroup class="row-fluid">--}%
-            %{--<div class="span9">--}%
-                %{--<g:if test="${searchResults.totalRecords}">--}%
-                    %{--<h2>Search for "<b>${query.replaceFirst(/^\*$/, "all records")}</b>" returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/> results</h2>--}%
-                %{--</g:if>--}%
-                %{--<g:else>--}%
-                    %{--<h2>Search for <b>${query}</b> did not match any documents</h2>--}%
-                %{--</g:else>--}%
-                %{--<div class="inner-search-form">--}%
-                    %{--<form class="form-search" action="${grailsApplication.config.grails.serverURL}/search">--}%
-                        %{--<div class="input-append">--}%
-                            %{--<input type="text" class="search-query input-xxlarge" name="q" id="search-2013"  placeholder="Search the Atlas" autocomplete="off" value="${params.q}"/>--}%
-                            %{--<button type="submit" class="btn"><i class="icon-search" style="margin-left:-3px;"></i></button>--}%
-                        %{--</div>--}%
-                    %{--</form>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-            %{--<div class="span3 well well-small hidden-phone" id="relatedSearches">--}%
-                %{--<!-- content inserted via jQuery -->--}%
-            %{--</div>--}%
-        %{--</hgroup>--}%
-    %{--</header>--}%
 
 <section class="container">
 
@@ -230,7 +199,7 @@
                                 <g:if test="${result.image}">
                                     <div class="result-thumbnail">
                                         <a href="${speciesPageLink}">
-                                            <img src="http://images.ala.org.au/image/proxyImageThumbnail?imageId=${result.image}" alt="">
+                                            <img src="${grailsApplication.config.image.thumbnailUrl}${result.image}" alt="">
                                         </a>
                                     </div>
                                 </g:if>
@@ -244,6 +213,9 @@
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
                                 <g:if test="${result.kingdom}"><p class="summmary-info"><strong>Kingdom:</strong> ${result.kingdom}</p></g:if>
                                 <ul class="summary-actions list-inline">
+                                    <g:if test="${result.rankID < 7000}">
+                                        <li><g:link controller="species" action="imageSearch" params="[scientificName:result.scientificName, taxonRank:result.rank]">View images of species within this ${result.rank}</g:link></li>
+                                    </g:if>
                                     <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
                                     <g:if test="${result?.occCount?:0 > 0}">
                                         <li>
