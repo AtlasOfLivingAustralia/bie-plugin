@@ -19,3 +19,4 @@ bie.index.url = "http://localhost:8080/bie-index"
 defaultDecimalLatitude = -27.7
 defaultDecimalLongitude = 133.8
 defaultZoomLevel = 4
+image.thumbnailUrl = "http://images.ala.org.au/image/proxyImageThumbnail?imageId="
