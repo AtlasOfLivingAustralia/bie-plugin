@@ -24,15 +24,10 @@
 <!doctype html>
 <html>
 <head>
-    <title><g:if test="${params.scientificName}">${params.taxonRank}  ${params.scientificName} | </g:if> Image browser | Atlas of Living Australia</title>
+    <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if> Image browser | Atlas of Living Australia</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     %{--<meta name="fluidLayout" content="${true}" />--}%
     <meta name="fluidLayout" content="true" />
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'colorbox.css')}" type="text/css" media="screen" />
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.colorbox-min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.tools.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.inview.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.livequery.min.js')}"></script>
     <script type="text/javascript">
         var prevPage = 0;
         var currentPage = 0;
@@ -67,7 +62,7 @@
             //send a query to server side to present new content
             $.ajax({
                 type: "GET",
-                url: "${grailsApplication.config.bie.index.url}/imageSearch?taxonRank=${params['taxonRank']}&scientificName=${params['scientificName']}&start=" + (currentPage * pageSize) + "&rows=" + pageSize,
+                url: "${grailsApplication.config.bie.index.url}/imageSearch/${taxonConcept?.taxonConcept?.guid}?start=" + (currentPage * pageSize) + "&rows=" + pageSize,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
@@ -220,15 +215,22 @@
                 <ol class="breadcrumb">
                     <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
                     <li><a href="${alaUrl}/australias-species/">Australia&#39;s species</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li class="active">Images  for ${msg}</li>
+                    <li class="active">
+                        <g:if test="${taxonConcept}">
+                            Images for ${taxonConcept.taxonConcept.nameString}
+                        </g:if>
+                        <g:else>
+                            Species images
+                        </g:else>
+                    </li>
                 </ol>
             </nav>
         </div>
-        <h1>Images of <b id="totalImageCount">...</b> species
 
-            <g:if test="${params.taxonRank && params.scientificName}">
-                from ${params.taxonRank}:
-                <a href="${grailsApplication.config.grails.serverURL}/search?q=${params.scientificName}" title="More information on this ${params.taxonRank}">${params.scientificName}</a></h1>
+        <h1>Images of <b id="totalImageCount">...</b> species
+            <g:if test="${taxonConcept}">
+                from ${taxonConcept.taxonConcept.taxonRank}
+                <a href="${grailsApplication.config.grails.serverURL}/species/${taxonConcept?.taxonConcept?.guid}" title="More information on this ${taxonConcept?.taxonConcept?.taxonRank}">${taxonConcept?.taxonConcept?.nameString}</a></h1>
             </g:if>
     </header>
     <div>
@@ -236,7 +238,7 @@
         <div class="imgConTmpl hide">
             <div class="imgCon">
                 <a class="thumbImage" rel="thumbs" href="" id="thumb">
-                    <img src="" class="searchImage" alt="${params.scientificName} image thumbnail"/>
+                    <img src="" class="searchImage" alt="image thumbnail"/>
                     <div class="meta brief"></div>
                     <div class="meta detail hide"></div>
                 </a>

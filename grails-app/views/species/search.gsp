@@ -193,7 +193,7 @@
                         <li class="search-result clearfix">
 
                         <g:set var="sectionText"><g:if test="${!facetMap.idxtype}"><span><b>Section:</b> <g:message code="idxType.${result.idxType}"/></span></g:if></g:set>
-                            <g:if test="${result.has("idxType") && result.idxType == 'TAXON'}">
+                            <g:if test="${result.has("idxtype") && result.idxtype == 'TAXON'}">
 
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.guid}</g:set>
                                 <g:if test="${result.image}">
@@ -214,7 +214,7 @@
                                 <g:if test="${result.kingdom}"><p class="summmary-info"><strong>Kingdom:</strong> ${result.kingdom}</p></g:if>
                                 <ul class="summary-actions list-inline">
                                     <g:if test="${result.rankID < 7000}">
-                                        <li><g:link controller="species" action="imageSearch" params="[scientificName:result.scientificName, taxonRank:result.rank]">View images of species within this ${result.rank}</g:link></li>
+                                        <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
                                     </g:if>
                                     <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
                                     <g:if test="${result?.occCount?:0 > 0}">
@@ -225,24 +225,15 @@
                                     </g:if>
                                 </ul>
                             </g:if>
-                            <g:elseif test="${result.has("regionTypeName") && result.get("regionTypeName")}">
-                                <h4><g:message code="idxType.${result.idxType}"/>:
+                            <g:elseif test="${result.has("name")}">
+                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
-                                    <span>Region type: ${result.regionTypeName}</span>
-                                    <!-- ${sectionText} -->
-                                </p>
-                            </g:elseif>
-                            <g:elseif test="${result.has("institutionName") && result.get("institutionName")}">
-                                <h4><g:message code="idxType.${result.idxType}"/>:
-                                    <a href="${result.guid}">${result.name}</a></h4>
-                                <p>
-                                    <span>${result.institutionName}</span>
-                                    <!-- ${sectionText} -->
+                                    <span>${result?.description?:""}</span>
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("acronym") && result.get("acronym")}">
-                                <h4><g:message code="idxType.${result.idxType}"/>:
+                                <h4><g:message code="idxtype.${result.idxtype}"/>:
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span>${result.acronym}</span>
@@ -250,7 +241,7 @@
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("description") && result.get("description")}">
-                                <h4><g:message code="idxType.${result.idxType}"/>:
+                                <h4><g:message code="idxtype.${result.idxtype}"/>:
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span class="searchDescription">${result.description?.trimLength(500)}</span>
@@ -258,7 +249,7 @@
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("highlight") && result.get("highlight")}">
-                                <h4><g:message code="idxType.${result.idxType}"/>:
+                                <h4><g:message code="idxtype.${result.idxtype}"/>:
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span>${result.highlight}</span>
@@ -266,8 +257,8 @@
                                     %{--<br/>--}%
                                 </p>
                             </g:elseif>
-                            <g:elseif test="${result.has("idxType") && result.idxType == 'LAYERS'}">
-                                <h4><g:message code="idxType.${result.idxType}"/>:
+                            <g:elseif test="${result.has("idxtype") && result.idxType == 'LAYER'}">
+                                <h4><g:message code="idxtype.${result.idxtype}"/>:
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span>${result.highlight}</span>
@@ -275,7 +266,7 @@
                                 </p>
                             </g:elseif>
                             <g:else>
-                                <h4><g:message code="idxType.${result.idxType}"/>: <a href="${result.guid}">${result.name}</a></h4>
+                                <h4><g:message code="idxtype.${result.idxtype}"/>: <a href="${result.guid}">${result.name}</a></h4>
                                 <p><!-- ${sectionText} --></p>
                             </g:else>
 

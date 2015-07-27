@@ -104,7 +104,7 @@ class SpeciesController {
                 isAustralian: false,
                 isRoleAdmin: false, //authService.userInRole(grailsApplication.config.auth.admin_role),
                 userName: "",
-                isReadOnly: grailsApplication.config.ranking.readonly, // TODO: implement this properly based on BIE version
+                isReadOnly: grailsApplication.config.ranking.readonly,
                 sortCommonNameSources: utilityService.getNamesAsSortedMap(etc.commonNames),
                 taxonHierarchy: bieService.getClassificationForGuid(guid),
                 childConcepts: bieService.getChildConceptsForGuid(guid),
@@ -118,10 +118,12 @@ class SpeciesController {
      * Note: page is AJAX driven so very little is done here.
      */
     def imageSearch = {
-        def taxonRank = params.taxonRank
-        def scientificName = params.scientificName
-        def msg =  taxonRank + ": " + scientificName
-        render (view: 'imageSearch', model: [ msg: msg])
+        def model = [:]
+        if(params.id){
+            def taxon = bieService.getTaxonConcept(params.id)
+            model["taxonConcept"] = taxon
+        }
+        model
     }
 
     def bhlSearch = {
@@ -130,17 +132,9 @@ class SpeciesController {
 
     def soundSearch = {
         def result = biocacheService.getSoundsForTaxon(params.s)
-
-        if (result) {
-            render(contentType: "text/json") {
-                result
-            }
-        } else {
-            render(contentType: "text/json") {
-                []
-            }
+        render(contentType: "text/json") {
+            result
         }
-
     }
 
     /**

@@ -8,7 +8,11 @@ class BieService {
     def grailsApplication
 
     def searchBie(SearchRequestParamsDTO requestObj) {
-        def json = webService.get(grailsApplication.config.bie.index.url + "/search?" + requestObj.getQueryString())
+
+
+
+
+        def json = webService.get(grailsApplication.config.bie.index.url + "/search?" + requestObj.getQueryString() +"&facets="+grailsApplication.config.facets)
         return JSON.parse(json)
     }
 

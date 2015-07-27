@@ -20,3 +20,4 @@ defaultDecimalLatitude = -27.7
 defaultDecimalLongitude = 133.8
 defaultZoomLevel = 4
 image.thumbnailUrl = "http://images.ala.org.au/image/proxyImageThumbnail?imageId="
+facets = "idxtype,rank,imageAvailable,speciesGroup"
