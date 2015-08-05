@@ -19,10 +19,34 @@
 <div class="wrap">
 
     <!-- start generic header -->
-    <header style="text-align: center; background-color: #999; padding: 20px; margin-bottom: 30px;">
-        <h1 style="margin: 0;">Header</h1>
-    </header>
-    <!-- end generic footer -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    %{--<img alt="Brand" class="img-responsive" src="::headerFooterServer::/img/supporting-graphic-element-flat.png">--}%
+                </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand font-xsmall" href="#">${grailsApplication.config.skin.orgNameLong?:'ALA Demo'}</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <g:form class="navbar-form navbar-left" role="search" controller="species" action="search" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control general-search" placeholder="Search the Atlas" name="q" ></div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </g:form>
+            </div>
+        </div><!-- /.navbar-collapse -->
+    </nav><!-- /.container-fluid -->
+    <div class="push"></div>
+    <!-- end generic header -->
 
     <g:layoutBody/>
     <div class="push"></div>

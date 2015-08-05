@@ -1,6 +1,5 @@
 package au.org.ala.bie
 
-import org.apache.catalina.util.URLEncoder
 
 class BiocacheService {
 
@@ -14,7 +13,7 @@ class BiocacheService {
      * @return
      */
     def getSoundsForTaxon(taxonName){
-        def queryUrl = grailsApplication.config.biocacheService.baseURL + "/occurrences/search?q=" + URLEncoder.encode(taxonName, "UTF-8") + "&fq=multimedia:\"Sound\""
+        def queryUrl = grailsApplication.config.biocacheService.baseURL + "/occurrences/search?q=" + java.net.URLEncoder.encode(taxonName, "UTF-8") + "&fq=multimedia:\"Sound\""
         def data = webService.getJson(queryUrl)
         //log.debug "sound data => " + data
         if(data.size() && data.has("occurrences") && data.get("occurrences").size()){
