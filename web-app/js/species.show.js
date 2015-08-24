@@ -21,6 +21,7 @@ function showSpeciesPage() {
 
     //load content
     loadOverviewImages();
+    loadSpeciesLists();
     loadMap();
     loadGalleries();
     loadBhl(0, 10, false);
@@ -29,9 +30,37 @@ function showSpeciesPage() {
     loadExternalSources();
     loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
     loadDataProviders();
-
-    //setup controls
+    //
+    ////setup controls
     addAlerts();
+}
+
+function loadSpeciesLists(){
+
+    console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
+    //
+    $.get(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid, function( data ) {
+        for(var i = 0; i < data.length; i++){
+            var specieslist = data[i];
+
+            var $description = $('#descriptionTemplate').clone();
+            $description.css({'display':'block'});
+            $description.attr('id', '#specieslist-block-' + specieslist.dataResourceUid);
+            $description.find(".title").html(specieslist.list.listName);
+
+            var content = "<dl class='dl-horizontal species-list-dl'>";
+            $.each(specieslist.kvpValues, function(idx, kvpValue){
+                content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + kvpValue.value + "</dd>");
+            });
+            content += "</dl>";
+
+            $description.find(".content").html(content);
+            $description.find(".providedBy").attr('href', SHOW_CONF.speciesListUrl + '/speciesListItem/list/' + specieslist.dataResourceUid);
+            $description.find(".providedBy").html(specieslist.list.listName);
+
+            $description.appendTo('#descriptiveContent');
+        }
+    });
 }
 
 function addAlerts(){
@@ -74,11 +103,11 @@ function loadMap() {
         layers: [speciesLayers]
     });
 
+    var mbUrl = 'https://{s}.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={token}';
     var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>';
-    var mbUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
-    var defaultBaseLayer = L.tileLayer(mbUrl, {id: 'examples.map-20v6611k', attribution: mbAttr});
+    var defaultBaseLayer = L.tileLayer(mbUrl, {mapid: SHOW_CONF.mapboxId, token: SHOW_CONF.mapboxToken, attribution: mbAttr});
 
     defaultBaseLayer.addTo(map);
 
@@ -328,7 +357,6 @@ function generateOverviewThumb(occurrence, id){
     $taxonSummaryThumbLink.attr('data-footer', getImageFooterFromOccurrence(occurrence));
     $taxonSummaryThumbLink.attr('href', occurrence.largeImageUrl);
     return $taxonSummaryThumb;
-
 }
 
 /**
@@ -382,7 +410,7 @@ function loadGalleryType(category, start) {
                 $taxonThumb.find('img').attr('src', el.smallImageUrl);
 
                 // brief metadata
-                var briefHtml = getImageTitleFromOccurrence(el)
+                var briefHtml = getImageTitleFromOccurrence(el);
                 $taxonThumb.find('.caption-brief').html(briefHtml);
                 $taxonThumb.attr('data-title', briefHtml);
                 $taxonThumb.find('.caption-detail').html(briefHtml);
@@ -432,7 +460,6 @@ function getImageFooterFromOccurrence(el){
     detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a></div>';
     return detailHtml;
 }
-
 
 /**
  * BHL search to populate literature tab

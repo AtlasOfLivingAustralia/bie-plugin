@@ -21,3 +21,5 @@ defaultDecimalLongitude = 133.8
 defaultZoomLevel = 4
 image.thumbnailUrl = "http://images.ala.org.au/image/proxyImageThumbnail?imageId="
 facets = "idxtype,rank,imageAvailable,speciesGroup"
+map.mapbox.id = "nickdos.kf2g7gpb"
+map.mapbox.token = "pk.eyJ1Ijoibmlja2RvcyIsImEiOiJ2V2dBdEg0In0.Ep2VyMOaOUnOwN1ZVa9uyQ"

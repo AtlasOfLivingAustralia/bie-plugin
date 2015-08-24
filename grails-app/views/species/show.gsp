@@ -463,6 +463,7 @@
         synonymsQuery:      "${synonymsQuery}",
         citizenSciUrl:      "${citizenSciUrl}",
         serverName:         "${grailsApplication.config.grails.serverURL}",
+        speciesListUrl:     "${grailsApplication.config.speciesList.baseURL}",
         bieUrl:             "${grailsApplication.config.bie.baseURL}",
         alertsUrl:          "${grailsApplication.config.alerts.baseUrl}",
         remoteUser:         "${request.remoteUser?:''}",
@@ -474,7 +475,9 @@
         defaultDecimalLatitude: ${grailsApplication.config.defaultDecimalLatitude},
         defaultDecimalLongitude: ${grailsApplication.config.defaultDecimalLongitude},
         defaultZoomLevel: ${grailsApplication.config.defaultZoomLevel},
-        mapAttribution: "${raw(grailsApplication.config.skin.orgNameLong)}"
+        mapAttribution: "${raw(grailsApplication.config.skin.orgNameLong)}",
+        mapboxId: "${grailsApplication.config.map.mapbox.id}",
+        mapboxToken: "${grailsApplication.config.map.mapbox.token}"
     }
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});
