@@ -88,9 +88,9 @@ class SpeciesController {
         log.debug "show - guid = ${guid} "
 
         if (!etc) {
-            log.error "Error requesting taxon concept object: " + params.guid
+            log.error "Error requesting taxon concept object: " + guid
             response.status = 404
-            render(view: '../error', model: [message: "Requested taxon <b>" + params.guid + "</b> was not found"])
+            render(view: '../error', model: [message: "Requested taxon <b>" + guid + "</b> was not found"])
         } else if (etc instanceof JSONObject && etc.has("error")) {
             log.error "Error requesting taxon concept object: " + etc.error
             render(view: '../error', model: [message: etc.error])
@@ -106,8 +106,8 @@ class SpeciesController {
                 userName: "",
                 isReadOnly: grailsApplication.config.ranking.readonly,
                 sortCommonNameSources: utilityService.getNamesAsSortedMap(etc.commonNames),
-                taxonHierarchy: bieService.getClassificationForGuid(guid),
-                childConcepts: bieService.getChildConceptsForGuid(guid),
+                taxonHierarchy: bieService.getClassificationForGuid(etc.taxonConcept.guid),
+                childConcepts: bieService.getChildConceptsForGuid(etc.taxonConcept.guid),
                 speciesList: bieService.getSpeciesList(etc.taxonConcept?.guid?:guid)
             ])
         }
