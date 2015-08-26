@@ -150,8 +150,8 @@ function onMapClick(e) {
 function loadDataProviders(){
 
     var url = SHOW_CONF.biocacheServiceUrl  +
-        '/occurrences/search.json?q=' +
-        SHOW_CONF.scientificName +
+        '/occurrences/search.json?q=lsid:' +
+        SHOW_CONF.guid +
         '&pageSize=0&flimit=-1' +
         '&facet=on&facets=data_resource_uid&callback=?';
 
@@ -241,7 +241,7 @@ function loadExternalSources(){
 function loadCharts(){
     // Charts via collectory charts.js
     var chartOptions = {
-        query: SHOW_CONF.scientificName,
+        query: "lsid:" + SHOW_CONF.guid,
         biocacheServicesUrl: SHOW_CONF.biocacheServiceUrl,
         biocacheWebappUrl: SHOW_CONF.biocacheUrl,
         collectionsUrl: SHOW_CONF.collectoryUrl,
@@ -256,12 +256,6 @@ function loadCharts(){
         occurrence_year: {chartType: "column"},
         is3D:false
     };
-
-    console.log("Charts showSpeciesPage");
-    console.log(SHOW_CONF);
-    console.log("chartOptions");
-    console.log(chartOptions);
-
     loadFacetCharts(chartOptions);
 }
 
@@ -301,8 +295,8 @@ function escapeHtml(string) {
 function loadOverviewImages(){
 
     var url = SHOW_CONF.biocacheServiceUrl  +
-        '/occurrences/search.json?q=' +
-        SHOW_CONF.scientificName +
+        '/occurrences/search.json?q=lsid:' +
+        SHOW_CONF.guid +
         '&fq=multimedia:"Image"&facet=off&pageSize=5&start=0&callback=?';
 
     console.log('Loading images from: ' + url);
@@ -384,8 +378,8 @@ function loadGalleryType(category, start) {
 
     //TODO a toggle between LSID based searches and names searches
     var url = SHOW_CONF.biocacheServiceUrl  +
-        '/occurrences/search.json?q=' +
-        SHOW_CONF.scientificName +
+        '/occurrences/search.json?q=lsid:' +
+        SHOW_CONF.guid +
         '&fq=multimedia:"Image"&pageSize=' + pageSize +
         '&facet=off&start=' + start + imageCategoryParams[category] + '&callback=?';
 
