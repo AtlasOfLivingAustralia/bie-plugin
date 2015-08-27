@@ -24,7 +24,7 @@
 <!doctype html>
 <html>
 <head>
-    <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if> Image browser | Atlas of Living Australia</title>
+    <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if> Image browser | ${grailsApplication.config.skin.orgNameLong}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     %{--<meta name="fluidLayout" content="${true}" />--}%
     <meta name="fluidLayout" content="true" />
@@ -213,8 +213,8 @@
         <div class="inner row-fluid">
             <nav id="breadcrumb" class="span12">
                 <ol class="breadcrumb">
-                    <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li><a href="${alaUrl}/australias-species/">Australia&#39;s species</a> <span class=" icon icon-arrow-right"></span></li>
+                    <li><a href="${alaUrl}">Home</a> <span class="icon icon-arrow-right"></span></li>
+                    <li><g:link controller="species" action="search"> species</g:link> <span class=" icon icon-arrow-right"></span></li>
                     <li class="active">
                         <g:if test="${taxonConcept}">
                             Images for ${taxonConcept.taxonConcept.nameString}

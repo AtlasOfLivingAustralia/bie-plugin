@@ -24,7 +24,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${params.q} | BHL search | ${grailsApplication.config.skin.orgNameLong}</title>
+    <title>${params.q} | Literature search | ${grailsApplication.config.skin.orgNameLong}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <r:require modules=" cleanHtml"/>
     <r:script disposition='head'>
