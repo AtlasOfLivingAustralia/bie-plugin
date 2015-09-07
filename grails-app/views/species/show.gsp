@@ -106,6 +106,10 @@
                                     </div>
                                 </div>
 
+                                <div id="listContent">
+                                </div>
+
+
                                 <div id="descriptiveContent">
                                 </div>
 
@@ -115,7 +119,7 @@
                                     </div>
                                     <div class="panel-body">
                                         <ul>
-                                            <li><a href="#">GBIF</a></li>
+                                            <li><a href="http://www.gbif.org/species/search?q=${tc?.taxonConcept?.nameString}">GBIF</a></li>
                                             <li><a href="#">Encyclopaedia of Life</a></li>
                                             <li><a href="#">Biodiversity Heritage Library</a></li>
                                             <li><a href="#">PESI</a></li>
@@ -477,7 +481,8 @@
         defaultZoomLevel: ${grailsApplication.config.defaultZoomLevel},
         mapAttribution: "${raw(grailsApplication.config.skin.orgNameLong)}",
         mapboxId: "${grailsApplication.config.map.mapbox.id}",
-        mapboxToken: "${grailsApplication.config.map.mapbox.token}"
+        mapboxToken: "${grailsApplication.config.map.mapbox.token}",
+        mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}"
     }
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});

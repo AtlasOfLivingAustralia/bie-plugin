@@ -7,7 +7,11 @@
 <body class="page-search">
 
 <section class="container">
-    <h1>Search for taxa</h1>
+
+    <header class="pg-header">
+        <h1>Search for taxa</h1>
+    </header>
+
     <div class="section">
         <form id="search-inpage" action="search" method="get" name="search-form">
             <div class="form-group">

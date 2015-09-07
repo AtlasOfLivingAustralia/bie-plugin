@@ -21,13 +21,13 @@ function showSpeciesPage() {
 
     //load content
     loadOverviewImages();
-    loadSpeciesLists();
     loadMap();
     loadGalleries();
     loadBhl(0, 10, false);
     loadCharts();
     loadExpertDistroMap();
     loadExternalSources();
+    loadSpeciesLists();
     loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
     loadDataProviders();
     //
@@ -40,25 +40,28 @@ function loadSpeciesLists(){
     console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
     //
     $.get(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid, function( data ) {
-        for(var i = 0; i < data.length; i++){
+        for(var i = 0; i < data.length; i++) {
             var specieslist = data[i];
 
-            var $description = $('#descriptionTemplate').clone();
-            $description.css({'display':'block'});
-            $description.attr('id', '#specieslist-block-' + specieslist.dataResourceUid);
-            $description.find(".title").html(specieslist.list.listName);
+            if (specieslist.list.isBIE) {
 
-            var content = "<dl class='dl-horizontal species-list-dl'>";
-            $.each(specieslist.kvpValues, function(idx, kvpValue){
-                content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + kvpValue.value + "</dd>");
-            });
-            content += "</dl>";
+                var $description = $('#descriptionTemplate').clone();
+                $description.css({'display': 'block'});
+                $description.attr('id', '#specieslist-block-' + specieslist.dataResourceUid);
+                $description.find(".title").html(specieslist.list.listName);
 
-            $description.find(".content").html(content);
-            $description.find(".providedBy").attr('href', SHOW_CONF.speciesListUrl + '/speciesListItem/list/' + specieslist.dataResourceUid);
-            $description.find(".providedBy").html(specieslist.list.listName);
+                var content = "<dl class='dl-horizontal species-list-dl'>";
+                $.each(specieslist.kvpValues, function (idx, kvpValue) {
+                    content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + kvpValue.value + "</dd>");
+                });
+                content += "</dl>";
 
-            $description.appendTo('#descriptiveContent');
+                $description.find(".content").html(content);
+                $description.find(".providedBy").attr('href', SHOW_CONF.speciesListUrl + '/speciesListItem/list/' + specieslist.dataResourceUid);
+                $description.find(".providedBy").html(specieslist.list.listName);
+
+                $description.appendTo('#listContent');
+            }
         }
     });
 }
@@ -84,7 +87,7 @@ function addAlerts(){
 
 function loadMap() {
     //add an occurrence layer for this taxon
-    var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=" + SHOW_CONF.scientificName, {
+    var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=" + SHOW_CONF.scientificName + "&qc=" + SHOW_CONF.mapQueryContext, {
         layers: 'ALA:occurrences',
         format: 'image/png',
         transparent: true,
@@ -160,13 +163,17 @@ function loadDataProviders(){
         SHOW_CONF.scientificName;
 
     $.getJSON(url, function(data){
-        $('.datasetCount').html(data.facetResults[0].fieldResult.length);
-        $.each(data.facetResults[0].fieldResult, function(idx, facetValue){
 
-            var queryUrl = uiUrl + "&fq=" + facetValue.fq;
+        if(data.totalRecords > 0) {
 
-            $('#data-providers-list tbody').append("<tr><td><a href='" + queryUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a></td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count +  "</span></a></td></tr>");
-        });
+            $('.datasetCount').html(data.facetResults[0].fieldResult.length);
+            $.each(data.facetResults[0].fieldResult, function (idx, facetValue) {
+
+                var queryUrl = uiUrl + "&fq=" + facetValue.fq;
+
+                $('#data-providers-list tbody').append("<tr><td><a href='" + queryUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a></td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td></tr>");
+            });
+        }
     });
 }
 
@@ -175,22 +182,22 @@ function loadExternalSources(){
     console.log('####### Loading EOL content - ' + SHOW_CONF.eolUrl);
     $.ajax({url: SHOW_CONF.eolUrl}).done(function ( data ) {
         console.log(data);
-        console.log('Loading EOL content - ' + data.dataObjects.length);
         //clone a description template...
         if(data.dataObjects){
             console.log('Loading EOL content - ' + data.dataObjects.length);
             $.each(data.dataObjects, function(idx, dataObject){
                 if(dataObject.language == SHOW_CONF.eolLanguage){
-                    var $description = $('#descriptionTemplate').clone()
+                    console.log('Adding EOL content - ' + dataObject.id);
+                    var $description = $('#descriptionTemplate').clone();
                     $description.css({'display':'block'});
                     $description.attr('id', dataObject.id);
                     $description.find(".title").html(dataObject.title ?  dataObject.title : 'Description');
                     $description.find(".content").html(dataObject.description);
                     $description.find(".sourceLink").attr('href',dataObject.source);
-                    $description.find(".sourceLink").html(dataObject.rightsHolder)
-                    $description.find(".rights").html(dataObject.rights)
+                    $description.find(".sourceLink").html(dataObject.rightsHolder);
+                    $description.find(".rights").html(dataObject.rights);
                     $description.find(".providedBy").attr('href', 'http://eol.org/pages/' + data.identifier);
-                    $description.find(".providedBy").html("Encyclopedia of Life")
+                    $description.find(".providedBy").html("Encyclopedia of Life");
                     $description.appendTo('#descriptiveContent');
                 }
             });
