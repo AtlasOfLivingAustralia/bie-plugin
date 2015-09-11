@@ -176,7 +176,7 @@ function injectBhlResults() {
 function injectBiocacheResults() {
 
     var queryToUse = (SEARCH_CONF.query == "" || SEARCH_CONF.query == "*" ? "*:*" : SEARCH_CONF.query);
-    var url = SEARCH_CONF.biocacheServicesUrl + "/occurrences/search.json?q=" + queryToUse + "&start=0&pageSize=0&facet=off";
+    var url = SEARCH_CONF.biocacheServicesUrl + "/occurrences/search.json?q=" + queryToUse + "&start=0&pageSize=0&facet=off&qc=" + SEARCH_CONF.biocacheQueryContext;
     $.ajax({
         url: url,
         dataType: 'jsonp',

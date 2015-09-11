@@ -436,7 +436,7 @@
         <div class="thumb-caption caption-detail"></div>
     </a>
 
-    <!-- eol -->
+    <!-- description template -->
     <div id="descriptionTemplate" class="panel panel-default panel-description" style="display:none;">
         <div class="panel-heading">
             <h3 class="panel-title title"></h3>

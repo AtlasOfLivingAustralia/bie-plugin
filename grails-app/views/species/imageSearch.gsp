@@ -26,8 +26,7 @@
 <head>
     <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if> Image browser | ${grailsApplication.config.skin.orgNameLong}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    %{--<meta name="fluidLayout" content="${true}" />--}%
-    <meta name="fluidLayout" content="true" />
+    <meta name="fluidLayout" content="${grailsApplication.config.skin.fluidLayout}" />
     <script type="text/javascript">
         var prevPage = 0;
         var currentPage = 0;
@@ -36,7 +35,7 @@
         var processing = false;
 
         /**
-         * OnLoad equavilent in JQuery
+         * OnLoad equivalent in JQuery
          */
         $(document).ready(function() {
             // initial load images
@@ -52,12 +51,11 @@
             $('#imageResults').on('hover', '.imgCon', function() {
                 $(this).find('.brief, .detail').toggleClass('hide');
             });
-
         });
 
         function imageLoad() {
             processing = true;
-            $('#divPostsLoader').html('<img src="${resource(dir: "images", file:"spinner.gif")}">');
+            $('#divPostsLoader').html('<img src="${resource(dir: "images", file:"spinner.gif")}"/>');
 
             //send a query to server side to present new content
             $.ajax({
@@ -67,7 +65,6 @@
                 dataType: "json",
                 success: function (data) {
                     if (data) {
-                        //addTable(data);
                         $("#totalImageCount").text(data.searchResults.totalRecords);
                         addImages(data.searchResults);
                         currentPage = currentPage + 1;
@@ -77,7 +74,7 @@
             }).done(function() {
                 processing = false;
             });
-        };
+        }
 
         function addImages(data) {
 
@@ -112,7 +109,6 @@
             } else {
                 $("#loadMoreTrigger").hide();
             }
-
         }
 
         function numberWithCommas(x) {
@@ -127,9 +123,6 @@
 
     </script>
     <style type="text/css">
-    .thumbImage {
-
-    }
 
     body { padding-left: 15px; padding-right: 15px; }
 
@@ -138,30 +131,8 @@
         margin-bottom: 30px;
     }
 
-    .tooltip {
-        display:none;
-        background-color:#ffa;
-        border:1px solid #cc9;
-        padding:3px 6px;
-        font-size:13px;
-        text-align: center;
-        -moz-box-shadow: 2px 2px 11px #666;
-        -webkit-box-shadow: 2px 2px 11px #666;
-    }
-
-    .imgContainer {
-        display: inline-block;
-        margin-right: 8px;
-        text-align: center;
-        line-height: 1.3em;
-        background-color: #DDD;
-        /*color: #DDD;*/
-        padding: 5px;
-        margin-bottom: 8px;
-    }
     .imgContainer a:link {
         text-decoration: none;
-        /*color: #DDD;*/
     }
 
     div#loadMoreTrigger {
@@ -171,15 +142,11 @@
 
     .imgCon {
         display: inline-block;
-        /* margin-right: 8px; */
         text-align: center;
         line-height: 1.3em;
         background-color: #DDD;
         color: #DDD;
         font-size: 12px;
-        /*text-shadow: 2px 2px 6px rgba(255, 255, 255, 1);*/
-        /* padding: 5px; */
-        /* margin-bottom: 8px; */
         margin: 2px 0 2px 0;
         position: relative;
     }

@@ -29,7 +29,8 @@
             bieUrl: "${grailsApplication.config.bie.baseURL}",
             biocacheUrl: "${grailsApplication.config.biocache.baseURL}",
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
-            bhlUrl: "${grailsApplication.config.bhl.baseURL}"
+            bhlUrl: "${grailsApplication.config.bhl.baseURL}",
+            biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}"
         }
     </r:script>
 </head>
@@ -72,9 +73,6 @@
                         <g:else>
                             <g:set var="queryParam">q=${query.encodeAsHTML()}<g:if test="${params.fq}">&fq=${fqList?.join("&fq=")}</g:if></g:set>
                         </g:else>
-                        <g:if test="${searchResults.query}">
-                            <g:set var="downloadParams">q=${searchResults.query?.encodeAsHTML()}<g:if test="${params.fq}">&fq=${params.list("fq")?.join("&fq=")?.trim()}</g:if></g:set>
-                        </g:if>
                         <g:if test="${facetMap}">
                                 <div class="current-filters" id="currentFilters">
                                     <h3>Current filters</h3>
@@ -150,9 +148,11 @@
 
                     <g:if test="${idxTypes.contains("TAXON")}">
                         <div class="download-button pull-right">
-                        <g:set var="downloadUrl" value="${grailsApplication.config.bie.baseURL}/ws/download/?${downloadParams}${appendQueryParam}&sort=${searchResults.sort}&dir=${searchResults.dir}"/>
+                        <g:set var="downloadUrl" value="${grailsApplication.config.bie.index.url}/download?${request.queryString?:''}${grailsApplication.config.bieService.queryContext}"/>
                         <button onclick="window.location='${downloadUrl}'" value="Download"
-                               title="Download a list of taxa for your search" class="btn btn-small">Download
+                               title="Download a list of taxa for your search" class="btn btn-small">
+                            <i class="glyphicon glyphicon-download"></i>
+                            Download
                         </button>
                         </div>
                     </g:if>
