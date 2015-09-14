@@ -9,10 +9,14 @@ class BieService {
 
     def searchBie(SearchRequestParamsDTO requestObj) {
 
-        def json = webService.get(grailsApplication.config.bie.index.url + "/search?" + requestObj.getQueryString() +
-                "&facets=" + grailsApplication.config.facets +
-                grailsApplication.config.bieService.queryContext
-        )
+        def queryUrl = grailsApplication.config.bie.index.url + "/search?" + requestObj.getQueryString() +
+                "&facets=" + grailsApplication.config.facets
+
+        if(grailsApplication.config.bieService.queryContext){
+            queryUrl = queryUrl + "&" + grailsApplication.config.bieService.queryContext
+        }
+
+        def json = webService.get(queryUrl)
         JSON.parse(json)
     }
 
@@ -44,25 +48,25 @@ class BieService {
         }
     }
 
-    def getExtraImages(tc) {
-        def images = []
-
-        if (tc?.taxonConcept?.rankID && tc?.taxonConcept?.rankID < 7000 /*&& tc?.taxonConcept?.rankID % 1000 == 0*/) {
-            // only lookup for higher taxa of major ranks
-            // /ws/higherTaxa/images
-            images = webService.getJson(grailsApplication.config.bie.baseURL + "/ws/higherTaxa/images.json?scientificName=" + tc?.taxonConcept?.nameString + "&taxonRank=" + tc?.taxonConcept?.rankString)
-        }
-
-        if (images.hasProperty("error")) {
-            images = []
-        }
-        log.debug "images = " + images
-
-        return images
-    }
+//    def getExtraImages(tc) {
+//        def images = []
+//
+////        if (tc?.taxonConcept?.rankID && tc?.taxonConcept?.rankID < 7000 /*&& tc?.taxonConcept?.rankID % 1000 == 0*/) {
+////            // only lookup for higher taxa of major ranks
+////            // /ws/higherTaxa/images
+////            images = webService.getJson(grailsApplication.config.bie.baseURL + "/ws/higherTaxa/images.json?scientificName=" + tc?.taxonConcept?.nameString + "&taxonRank=" + tc?.taxonConcept?.rankString)
+////        }
+////
+////        if (images.hasProperty("error")) {
+////            images = []
+////        }
+////        log.debug "images = " + images
+//
+//        return images
+//    }
 
     def getClassificationForGuid(guid) {
-        String url = grailsApplication.config.bie.index.url + "/classification/" + guid.replaceAll(/\s+/,'+')
+        def url = grailsApplication.config.bie.index.url + "/classification/" + guid.replaceAll(/\s+/,'+')
         def json = webService.getJson(url)
         log.debug "json type = " + json
         if (json instanceof JSONObject && json.has("error")) {
@@ -75,7 +79,12 @@ class BieService {
     }
 
     def getChildConceptsForGuid(guid) {
-        String url = grailsApplication.config.bie.index.url + "/childConcepts/" + guid.replaceAll(/\s+/,'+')
+        def url = grailsApplication.config.bie.index.url + "/childConcepts/" + guid.replaceAll(/\s+/,'+')
+
+        if(grailsApplication.config.bieService.queryContext){
+            url = url + "?" + grailsApplication.config.bieService.queryContext
+        }
+
         def json = webService.getJson(url).sort() { it.rankID?:0 }
 
         if (json instanceof JSONObject && json.has("error")) {

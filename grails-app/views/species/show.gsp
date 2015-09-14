@@ -109,7 +109,6 @@
                                 <div id="listContent">
                                 </div>
 
-
                                 <div id="descriptiveContent">
                                 </div>
 
@@ -137,8 +136,8 @@
                                 <div class="taxon-map">
                                     <div id="leafletMap"></div>
                                     <div class="map-buttons">
-                                        <a class="btn btn-primary btn-lg" href="${biocacheUrl}/occurrences/search?q=${tc?.taxonConcept?.nameString}#tab_mapView" role="button">View Interactive Map</a>
-                                        <a class="btn btn-primary btn-lg" href="${biocacheUrl}/occurrences/search?q=${tc?.taxonConcept?.nameString}#tab_recordsView" role="button">View Locations</a>
+                                        <a class="btn btn-primary btn-lg" href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView" role="button">View Interactive Map</a>
+                                        <a class="btn btn-primary btn-lg" href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView" role="button">View Locations</a>
                                     </div>
                                 </div>
 
@@ -293,10 +292,8 @@
                             <tbody>
                                 <g:each in="${sortCommonNameSources}" var="cn">
                                     <g:set var="cNames" value="${cn.value}" />
-                                    <%-- special treatment for <div> id and cookie name/value. matchup with Ranking Controller.rankTaxonCommonNameByUser --%>
                                     <g:set var="nkey" value="${cn.key}" />
                                     <g:set var="fName" value="${nkey?.trim()?.hashCode()}" />
-                                    <%-- javascript treatment: manual translate special character, because string:encodeURL cannot handle non-english character --%>
                                     <g:set var="enKey" value="${nkey?.encodeAsJavaScript()}" />
                                     <tr>
                                         <td>
@@ -316,6 +313,22 @@
                     </section>
 
                     <section class="tab-pane fade" id="classification">
+
+                        <g:if test="${tc.taxonConcept.rankID < 7000}">
+                        <div class="pull-right btn-group btn-group-vertical">
+                            <a href="${grailsApplication.config.bie.index.url}/download?q=rkid_${tc.taxonConcept.rankString}:${tc.taxonConcept.guid}&${grailsApplication.config.bieService.queryContext}" class="btn btn-default">
+                                <i class="glyphicon glyphicon-arrow-down"></i>
+                                Download child taxa of ${tc.taxonConcept.nameString}
+                            </a>
+                            <a href="${grailsApplication.config.bie.index.url}/download?q=rkid_${tc.taxonConcept.rankString}:${tc.taxonConcept.guid}&fq=rank:species&${grailsApplication.config.bieService.queryContext}" class="btn btn-default">
+                                <i class="glyphicon glyphicon-arrow-down"></i>
+                                Download species of ${tc.taxonConcept.nameString}
+                            </a>
+                            <a class="btn btn-default" href="${createLink(controller:'species', action:'search')}?q=${'rkid_' + tc.taxonConcept.rankString + ':' + tc.taxonConcept.guid}">
+                                Search for child taxa of ${tc.taxonConcept.nameString}
+                            </a>
+                        </div>
+                        </g:if>
 
                         <h2>
                             <g:if test="${grailsApplication.config.classificationSupplier}">
@@ -361,8 +374,8 @@
                     <section class="tab-pane fade" id="records">
                         <h2>Occurrence records</h2>
                         <div id="occurrenceRecords">
-                            <p><a href="${biocacheUrl}/occurrences/search?q=${tc?.taxonConcept?.nameString?:''}">View
-                            list of all <span id="occurenceCount"></span> occurrence records for this taxon</a></p>
+                            <p><a href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid?:''}">View
+                            list of all <span id="occurrenceCount"></span> occurrence records for this taxon</a></p>
                             <div id="recordBreakdowns" style="display: block;">
                                 <h2>Charts showing breakdown of occurrence records</h2>
                                 <div id="chartsHint">Hint: click on chart elements to view that subset of records</div>

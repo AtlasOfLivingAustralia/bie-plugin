@@ -29,6 +29,7 @@ class SpeciesController {
     def authService
     def biocacheService
     def webService
+    def grailsApplication
 
     /**
      * Search page - display search results fro the BIE (includes results for non-species pages too)
@@ -99,7 +100,7 @@ class SpeciesController {
                 tc: etc,
                 statusRegionMap: utilityService.getStatusRegionCodes(),
                 infoSourceMap:[],
-                extraImages: bieService.getExtraImages(etc),
+//                extraImages: bieService.getExtraImages(etc),
                 textProperties: [],
                 isAustralian: false,
                 isRoleAdmin: false, //authService.userInRole(grailsApplication.config.auth.admin_role),

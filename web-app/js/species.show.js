@@ -80,14 +80,15 @@ function addAlerts(){
         url += "&baseUrlForUI=" + encodeURIComponent(SHOW_CONF.serverName);
         url += "&webserviceQuery=%2Fws%2Foccurrences%2Fsearch" + encodeURIComponent(searchString);
         url += "&uiQuery=%2Foccurrences%2Fsearch%3Fq%3D*%3A*";
-        url += "&resourceName=" + encodeURIComponent("Atlas of Living Australia");
+        url += "&resourceName=" + encodeURIComponent("Atlas");
         window.location.href = url;
     });
 }
 
 function loadMap() {
     //add an occurrence layer for this taxon
-    var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=" + SHOW_CONF.scientificName + "&qc=" + SHOW_CONF.mapQueryContext, {
+    var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=lsid:" +
+        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext, {
         layers: 'ALA:occurrences',
         format: 'image/png',
         transparent: true,
@@ -101,7 +102,7 @@ function loadMap() {
     taxonLayer.addTo(speciesLayers);
 
     var map = L.map('leafletMap', {
-        center: [SHOW_CONF.defaultDecimalLatitude,SHOW_CONF.defaultDecimalLongitude],
+        center: [SHOW_CONF.defaultDecimalLatitude, SHOW_CONF.defaultDecimalLongitude],
         zoom: SHOW_CONF.defaultZoomLevel,
         layers: [speciesLayers]
     });
@@ -159,8 +160,8 @@ function loadDataProviders(){
         '&facet=on&facets=data_resource_uid&callback=?';
 
     var uiUrl = SHOW_CONF.biocacheUrl  +
-        '/occurrences/search?q=' +
-        SHOW_CONF.scientificName;
+        '/occurrences/search?q=lsid:' +
+        SHOW_CONF.guid;
 
     $.getJSON(url, function(data){
 

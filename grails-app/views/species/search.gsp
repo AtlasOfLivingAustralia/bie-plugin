@@ -42,9 +42,9 @@
         <div class="row">
             <div class="col-sm-9">
                 <h1>
-                    Search for "<strong>${query.replaceFirst(/^\*$/, "all records")}</strong>"
+                    Search for <strong>${searchResults.queryTitle}</strong>
                     returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
-                    result
+                    results.
                  </h1>
             </div>
             <div class="col-sm-3">
