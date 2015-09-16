@@ -48,23 +48,6 @@ class BieService {
         }
     }
 
-//    def getExtraImages(tc) {
-//        def images = []
-//
-////        if (tc?.taxonConcept?.rankID && tc?.taxonConcept?.rankID < 7000 /*&& tc?.taxonConcept?.rankID % 1000 == 0*/) {
-////            // only lookup for higher taxa of major ranks
-////            // /ws/higherTaxa/images
-////            images = webService.getJson(grailsApplication.config.bie.baseURL + "/ws/higherTaxa/images.json?scientificName=" + tc?.taxonConcept?.nameString + "&taxonRank=" + tc?.taxonConcept?.rankString)
-////        }
-////
-////        if (images.hasProperty("error")) {
-////            images = []
-////        }
-////        log.debug "images = " + images
-//
-//        return images
-//    }
-
     def getClassificationForGuid(guid) {
         def url = grailsApplication.config.bie.index.url + "/classification/" + guid.replaceAll(/\s+/,'+')
         def json = webService.getJson(url)
