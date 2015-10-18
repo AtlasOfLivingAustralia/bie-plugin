@@ -226,6 +226,13 @@
                                     </g:if>
                                 </ul>
                             </g:if>
+                            <g:elseif test="${result.has("idxtype") && result.idxtype == 'REGION'}">
+                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                    <a href="${grailsApplication.config.regions.baseURL}/feature/${result.guid}">${result.name}</a></h4>
+                                <p>
+                                    <span>${result?.description?:""}</span>
+                                </p>
+                            </g:elseif>
                             <g:elseif test="${result.has("name")}">
                                 <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
                                     <a href="${result.guid}">${result.name}</a></h4>
