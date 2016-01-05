@@ -7,7 +7,7 @@ class BiePluginUrlMappings {
             }
         }
         // Redirects for BIE web services URLs
-        "/species/$guid"(controller: "species", action: "show")
+        "/species/$guid**"(controller: "species", action: "show")
         "/search"(controller: "species", action: "search")
         "/image-search"(controller: "species", action: "imageSearch")
         "/image-search/showSpecies"(controller: "species", action: "imageSearch")
