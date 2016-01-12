@@ -131,6 +131,12 @@ html, body {height:100%;}
 .push {clear:both;}
 
 
+/* Name formatting */
+
+.scientific-name { font-style: normal; }
+.scientific-name.rank-genus .name { font-style: italic; }
+.scientific-name.rank-species .name { font-style: italic; }
+.scientific-name.rank-subspecies .name { font-style: italic; }
 
 /* Media Queries
 ================================================== */

@@ -10,28 +10,34 @@ class BieTagLib {
     /**
      * Format a scientific name with appropriate italics depending on rank
      *
+     * @attr nameFormatted OPTIONAL The HTML formatted scientific name
+     * @attr nameComplete OPTIONAL The complete, unformatted scientific name
+     * @attr acceptedName OPTIONAL The accepted name
      * @attr name REQUIRED the scientific name
-     * @attr rankId REQUIRED the rank id
+     * @attr rankId REQUIRED The rank ID
      */
     def formatSciName = { attrs ->
-        def rankId = attrs.rankId?:0
-        def name = attrs.name
+        def nameFormatted = attrs.nameFormatted
 
-        if (rankId >= 6000) {
-            def output = "<i>" + name + "</i>"
-            PhraseNameParser pnp = new PhraseNameParser()
+        if (nameFormatted)
+            out << nameFormatted
+        else {
+            def rankId = attrs.rankID ?: 0
+            def name = attrs.nameComplete ?: attrs.name
+            def rank = cssRank(rankId)
+            def output = "<span class=\"scientific-name rank-${rank}\"><span class=\"name\">${name}</span></span>"
+            if (rankId >= 6000) {
+                PhraseNameParser pnp = new PhraseNameParser()
 
-            try {
-                def pn = pnp.parse(name) // attempt to parse phrase name
-                log.debug "name = ${name} || rankId = ${pn.canonicalName()}"
-                output = "<i>${pn.canonicalName()}</i> ${pn.authorshipComplete()}"
-            } catch (Exception ex) {
-                log.warn "Error parsing name (${name}): ${ex}", ex
+                try {
+                    def pn = pnp.parse(name) // attempt to parse phrase name
+                    log.debug "name = ${name} || rankId = ${pn.canonicalName()}"
+                    output = "<span class=\"scientific-name rank-${rank}\"><span class=\"name\">${pn.canonicalName()}</span> <span class=\"author\">${pn.authorshipComplete()}</span></span>"
+                } catch (Exception ex) {
+                    log.warn "Error parsing name (${name}): ${ex}", ex
+                }
             }
-
             out << output
-        } else {
-            out << name
         }
     }
 
@@ -159,4 +165,34 @@ class BieTagLib {
     def static escapeJS(String value) {
         return StringEscapeUtils.escapeJavaScript(value);
     }
+
+    /**
+     * Get a default rank grouping for a rank ID.
+     * <p>
+     * See bie-index taxonRanks.properties for the rank structure
+     *
+     * @param rankId The rank identifier
+     *
+     * @return The grouping
+     */
+    private def cssRank(int rankId) {
+        if (rankId <= 0)
+            return "unknown"
+        if (rankId <= 1200)
+            return "kingdom"
+        if (rankId <= 2200)
+            return "phylum"
+        if (rankId <= 3400)
+            return "class"
+        if (rankId <= 4400)
+            return "order"
+        if (rankId <= 5700)
+            return "famnily"
+        if (rankId < 7000)
+            return "genus"
+        if (rankId < 8000)
+            return "species"
+        return "subspecies"
+    }
+
 }
