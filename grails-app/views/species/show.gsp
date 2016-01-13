@@ -21,7 +21,7 @@
 <g:set var="citizenSciUrl" value="${grailsApplication.config.sightings.guidUrl}"/>
 <g:set var="alertsUrl" value="${grailsApplication.config.alerts.url}"/>
 <g:set var="guid" value="${tc?.previousGuid?:tc?.taxonConcept?.guid?:''}"/>
-<g:set var="sciNameFormatted"><bie:formatSciName name="${tc?.taxonConcept?.nameString}" rankId="${tc?.taxonConcept?.rankID?:0}"/></g:set>
+<g:set var="sciNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,9 +51,7 @@
             </div>
             </g:if>
             <div class="header-inner">
-                <h1>
-                    <bie:formatSciName name="${tc?.taxonConcept?.nameString}" rankId="${tc?.taxonConcept?.rankID?:0}"/>
-                    <span>${tc?.taxonConcept?.author?:""}</span></h1>
+                <h1><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></h1>
                 <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.opt(0)?.nameString : ''}"/>
                 <g:if test="${commonNameDisplay}">
                     <h2>${commonNameDisplay}</h2>
@@ -189,10 +187,10 @@
                                         <p><a class="tab-link" href="#data-providers">Browse the list of data providers</a> and find organisations you can join if you are
                                         interested in participating in a survey for
                                         <g:if test="${tc.taxonConcept?.rankID > 6000}">
-                                            species like ${sciNameFormatted}
+                                            species like ${raw(sciNameFormatted)}
                                         </g:if>
                                         <g:else>
-                                            species of ${sciNameFormatted}.
+                                            species of ${raw(sciNameFormatted)}.
                                         </g:else>
                                         </p>
                                     </div>
@@ -236,7 +234,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><bie:formatSciName name="${tc?.taxonConcept?.nameString}" rankId="${tc?.taxonConcept?.rankID?:0}"/> ${authorship}</td>
+                                <td><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></td>
                                 <td class="source">
                                     <ul><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.nameAuthority}</a></li></ul>
                                 </td>
@@ -262,7 +260,7 @@
                             <tbody>
                                 <g:each in="${tc.synonyms}" var="synonym">
                                     <tr>
-                                        <td><bie:formatSciName name="${synonym.nameString}" rankId="${tc.taxonConcept?.rankID}"/> ${synonym.author}</td>
+                                        <td><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${synonym.nameFormatted}" nameComplete="${synonym.nameComplete}" name="${synonym.nameString}"/></td>
                                         <td class="source">
                                             <ul>
                                                 <g:if test="${!synonym.infoSourceURL}"><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.infoSourceName}</a></li></g:if>
@@ -341,15 +339,15 @@
                         <g:each in="${taxonHierarchy}" var="taxon">
                             <!-- taxon = ${taxon} -->
                             <g:if test="${taxon.guid != tc.taxonConcept.guid}">
-                                <dl><dt><g:if test="${taxon.rankId?:0 !=0}">${taxon.rank}</g:if></dt>
+                                <dl><dt><g:if test="${taxon.rankID?:0 !=0}">${taxon.rank}</g:if></dt>
                                 <dd><a href="${request?.contextPath}/species/${taxon.guid}#classification" title="${taxon.rank}">
-                                    <bie:formatSciName name="${taxon.scientificName}" rankId="${taxon.rankId?:0}"/>
+                                    <bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}" nameComplete="${taxon.nameComplete}" name="${taxon.scientificName}"/>
                                     <g:if test="${taxon.commonNameSingle}">: ${taxon.commonNameSingle}</g:if></a>
                                 </dd>
                             </g:if>
                             <g:elseif test="${taxon.guid == tc.taxonConcept.guid}">
                                 <dl><dt id="currentTaxonConcept">${taxon.rank}</dt>
-                                <dd><span><bie:formatSciName name="${taxon.scientificName}" rankId="${taxon.rankId?:0}"/>
+                                <dd><span><bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}" nameComplete="${taxon.nameComplete}" name="${taxon.scientificName}"/>
                                     <g:if test="${taxon.commonNameSingle}">: ${taxon.commonNameSingle}</g:if></span>
                                 </dd>
                             </g:elseif>
@@ -360,9 +358,8 @@
                             <g:each in="${childConcepts}" var="child" status="i">
                                 <g:set var="currentRank" value="${child.rank}"/>
                                 <dt>${child.rank}</dt>
-                                <g:set var="taxonLabel"><bie:formatSciName name="${child.nameComplete ? child.nameComplete : child.name}"
-                                                                           rankId="${child.rankId?:0}"/><g:if test="${child.commonNameSingle}">: ${child.commonNameSingle}</g:if></g:set>
-                                <dd><a href="${request?.contextPath}/species/${child.guid}#classification">${taxonLabel.trim()}</a>&nbsp;
+                                <g:set var="taxonLabel"><bie:formatSciName rankId="${child.rankID}" nameFormatted="${child.nameFormatted}" nameComplete="${child.nameComplete}" name="${child.name}"/><g:if test="${child.commonNameSingle}">: ${child.commonNameSingle}</g:if></g:set>
+                                <dd><a href="${request?.contextPath}/species/${child.guid}#classification">${raw(taxonLabel.trim())}</a>&nbsp;
                                 </dd>
                             </g:each>
                         </dl>

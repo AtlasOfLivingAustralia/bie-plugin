@@ -206,9 +206,7 @@
                                 </g:if>
 
                                 <h3>${result.rank}:
-                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}"
-                                                       name="${(result.nameComplete) ? result.nameComplete : result.name}"
-                                                       acceptedName="${result.acceptedConceptName}"/></a>
+                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a>
                                     <g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
                                 </h3>
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
