@@ -23,6 +23,7 @@
 <g:set var="guid" value="${tc?.previousGuid?:tc?.taxonConcept?.guid?:''}"/>
 <g:set var="sciNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
+<g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -236,13 +237,13 @@
                             <tr>
                                 <td><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></td>
                                 <td class="source">
-                                    <ul><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.nameAuthority}</a></li></ul>
+                                    <ul><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</a></li></ul>
                                 </td>
                             </tr>
-                            <g:if test="${(tc.taxonName && tc.taxonName.publishedIn) || tc.taxonConcept.publishedIn}">
+                            <g:if test="${(tc.taxonName && tc.taxonName.namePublishedIn) || tc.taxonConcept.namePublishedIn}">
                                 <tr class="cite">
                                     <td colspan="2">
-                                        <cite>Published in: <a href="#" target="_blank" class="external">${tc.taxonName?.publishedIn?:tc.taxonConcept.publishedIn}</a></cite>
+                                        <cite>Published in: <a href="#" target="_blank" class="external">${tc.taxonName?.namePublishedIn?:tc.taxonConcept.namePublishedIn}</a></cite>
                                     </td>
                                 </tr>
                             </g:if>
@@ -263,15 +264,15 @@
                                         <td><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${synonym.nameFormatted}" nameComplete="${synonym.nameComplete}" name="${synonym.nameString}"/></td>
                                         <td class="source">
                                             <ul>
-                                                <g:if test="${!synonym.infoSourceURL}"><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.infoSourceName}</a></li></g:if>
-                                                <g:else><li><a href="${synonym.infoSourceURL}" target="_blank" class="external">${synonym.infoSourceName}</a></li></g:else>
+                                                <g:if test="${!synonym.infoSourceURL}"><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></li></g:if>
+                                                <g:else><li><a href="${synonym.infoSourceURL}" target="_blank" class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></li></g:else>
                                             </ul>
                                         </td>
                                     </tr>
-                                    <g:if test="${synonym.publishedIn || synonym.referencedIn}">
+                                    <g:if test="${synonym.namePublishedIn || synonym.referencedIn}">
                                         <tr class="cite">
                                             <td colspan="2">
-                                                <cite>Published in: <span class="publishedIn">${synonym.publishedIn?:synonym.referencedIn}</span></cite>
+                                                <cite>Published in: <span class="publishedIn">${synonym.namePublishedIn?:synonym.referencedIn}</span></cite>
                                             </td>
                                         </tr>
                                     </g:if>
@@ -279,6 +280,7 @@
                             </tbody>
                         </table>
                     </g:if>
+
                     <g:if test="${tc.commonNames}">
                         <table class="table name-table table-responsive">
                             <thead>
@@ -287,15 +289,16 @@
                                     <th>Source</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody
                                 <g:each in="${sortCommonNameSources}" var="cn">
                                     <g:set var="cNames" value="${cn.value}" />
                                     <g:set var="nkey" value="${cn.key}" />
                                     <g:set var="fName" value="${nkey?.trim()?.hashCode()}" />
                                     <g:set var="enKey" value="${nkey?.encodeAsJavaScript()}" />
+                                    <g:set var="language" value="${sortCommonNameSources?.get(nkey)?.get(0)?.language}" />
                                     <tr>
                                         <td>
-                                            ${nkey}
+                                            ${nkey}<g:if test="${language && !language.startsWith(locale.language)}"> [${language}]</g:if>
                                         </td>
                                         <td class="source">
                                             <ul>
@@ -307,6 +310,30 @@
                                     </tr>
                                 </g:each>
                         </tbody></table>
+                    </g:if>
+                    <g:if test="${tc.identifiers && !tc.identifiers.isEmpty()}">
+                        <table class="table name-table table-responsive">
+                            <thead>
+                            <tr>
+                                <th>Identifier</th>
+                                <th>Source</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <g:each in="${tc.identifiers}" var="identifier">
+                                <tr>
+                                    <td>
+                                        <g:if test="${identifier.format || identifier.status}"><span title="${identifier.format} ${identifier.status}">${identifier.identifier}</span></g:if>
+                                        <g:else>${identifier.identifier}</g:else>
+                                    </td>
+                                    <td class="source">
+                                        <ul>
+                                            <li><a href="${identifier.infoSourceURL}" title="${identifier.infoSourceName}" onclick="window.open(this.href); return false;">${identifier.nameString ?: identifier.infoSourceName}</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </g:each>
+                            </tbody></table>
                     </g:if>
                     </section>
 
