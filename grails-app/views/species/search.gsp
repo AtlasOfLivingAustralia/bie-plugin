@@ -142,7 +142,7 @@
                 </div><!-- refine-box -->
             </div>
 
-            <ol class="col-sm-9">
+            <div class="col-sm-9">
 
                 <div class="result-options">
 
