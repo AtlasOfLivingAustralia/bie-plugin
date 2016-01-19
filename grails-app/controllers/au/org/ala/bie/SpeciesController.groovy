@@ -85,7 +85,7 @@ class SpeciesController {
     def show = {
         def guid = params.guid
 
-        def etc = bieService.getTaxonConcept(guid.encodeAsURL())
+        def etc = bieService.getTaxonConcept(guid)
         log.debug "show - guid = ${guid} "
 
         if (!etc) {
