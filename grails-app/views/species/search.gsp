@@ -224,6 +224,16 @@
                                     </g:if>
                                 </ul>
                             </g:if>
+                            <g:elseif test="${result.has("idxtype") && result.idxtype == 'COMMON'}">
+                                <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
+                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                    <a href="${speciesPageLink}">${result.name}</a></h4>
+                            </g:elseif>
+                            <g:elseif test="${result.has("idxtype") && result.idxtype == 'IDENTIFIER'}">
+                                <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
+                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                    <a href="${speciesPageLink}">${result.guid}</a></h4>
+                            </g:elseif>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'REGION'}">
                                 <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
                                     <a href="${grailsApplication.config.regions.baseURL}/feature/${result.guid}">${result.name}</a></h4>
