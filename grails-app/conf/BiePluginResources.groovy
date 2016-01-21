@@ -25,6 +25,8 @@ modules = {
         resource url: 'https://ajax.googleapis.com/jsapi', attrs: [type: 'js'], disposition: 'head'
         resource url:[dir:'js/leaflet', file:'leaflet.css', plugin:'bie-plugin'], attrs: [ media: 'all' ]
         resource url:[dir:'js/leaflet', file:'leaflet.js', plugin:'bie-plugin']
+        //resource url: "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js", attrs: [type: 'js'], disposition: 'head'
+        //resource url: "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css", attrs: [type: 'css'], disposition: 'head'
 
         resource url: [dir: 'css', file: 'species.css', plugin:'bie-plugin']
         resource url: [dir: 'css', file: 'jquery.qtip.min.css', plugin:'bie-plugin']

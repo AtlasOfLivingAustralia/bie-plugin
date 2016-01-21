@@ -78,16 +78,18 @@ class UtilityService {
         infoSourceMap
     }
 
-    def unDuplicateNames(names) {
+    def unDuplicateNames(List names) {
         def namesSet = []
+        def seen = [] as Set
 
-        names.eachWithIndex { it, i ->
-            if (names.length() == 1 || normaliseString(it.nameString) != normaliseString(names[i - 1]?.nameString)
-                    || it.infoSourceName != names[i - 1]?.infoSourceName) {
-                namesSet.add(it)
-            } else {
-                log.debug i + " dupe not added: "  + normaliseString(it.nameString) + "=" + it.infoSourceName + " | " +
-                        normaliseString(names[i - 1]?.nameString) + "=" + names[i - 1]?.infoSourceName
+        names = names.sort(false, { n -> - n.priority })
+        names.each { name ->
+            def key = normaliseString(name.nameString) + "=" + name.infoSourceName
+            if (seen.contains(key))
+                log.debug(" dupe not added: " + key)
+            else {
+                namesSet.add(name)
+                seen.add(key)
             }
         }
         log.debug "namesSet: ${namesSet}"
@@ -95,7 +97,9 @@ class UtilityService {
     }
 
     /**
-     * Group names which are equivalent into a map with a list of their name objects
+     * Group names which are equivalent into a map with a list of their name objects.
+     * <p>
+     * The keys are sorted by name priority
      *
      * @param names
      * @return

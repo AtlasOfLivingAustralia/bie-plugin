@@ -34,7 +34,7 @@ $(function(){
 	});
 	$("a.expand-options").click(function() {
 		$(this).text(function(i, text){
-			return text === "More" ? "Less" : "More";
+			return text.trim() === "More" ? "Less" : "More";
 		})
 		$(this).prev(".collapse").collapse("toggle");
 	});

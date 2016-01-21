@@ -16,6 +16,7 @@
 package au.org.ala.bie
 
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.springframework.web.servlet.support.RequestContextUtils
 
 /**
  * Species Controller
@@ -85,7 +86,7 @@ class SpeciesController {
     def show = {
         def guid = params.guid
 
-        def etc = bieService.getTaxonConcept(guid.encodeAsURL())
+        def etc = bieService.getTaxonConcept(guid)
         log.debug "show - guid = ${guid} "
 
         if (!etc) {
@@ -97,19 +98,19 @@ class SpeciesController {
             render(view: '../error', model: [message: etc.error])
         } else {
             render(view: 'show', model: [
-                tc: etc,
-                statusRegionMap: utilityService.getStatusRegionCodes(),
-                infoSourceMap:[],
+                    tc: etc,
+                    statusRegionMap: utilityService.getStatusRegionCodes(),
+                    infoSourceMap:[],
 //                extraImages: bieService.getExtraImages(etc),
-                textProperties: [],
-                isAustralian: false,
-                isRoleAdmin: false, //authService.userInRole(grailsApplication.config.auth.admin_role),
-                userName: "",
-                isReadOnly: grailsApplication.config.ranking.readonly,
-                sortCommonNameSources: utilityService.getNamesAsSortedMap(etc.commonNames),
-                taxonHierarchy: bieService.getClassificationForGuid(etc.taxonConcept.guid),
-                childConcepts: bieService.getChildConceptsForGuid(etc.taxonConcept.guid),
-                speciesList: bieService.getSpeciesList(etc.taxonConcept?.guid?:guid)
+                    textProperties: [],
+                    isAustralian: false,
+                    isRoleAdmin: false, //authService.userInRole(grailsApplication.config.auth.admin_role),
+                    userName: "",
+                    isReadOnly: grailsApplication.config.ranking.readonly,
+                    sortCommonNameSources: utilityService.getNamesAsSortedMap(etc.commonNames),
+                    taxonHierarchy: bieService.getClassificationForGuid(etc.taxonConcept.guid),
+                    childConcepts: bieService.getChildConceptsForGuid(etc.taxonConcept.guid),
+                    speciesList: bieService.getSpeciesList(etc.taxonConcept?.guid?:guid)
             ])
         }
     }

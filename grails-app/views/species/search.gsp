@@ -142,7 +142,7 @@
                 </div><!-- refine-box -->
             </div>
 
-            <ol class="col-sm-9">
+            <div class="col-sm-9">
 
                 <div class="result-options">
 
@@ -206,9 +206,7 @@
                                 </g:if>
 
                                 <h3>${result.rank}:
-                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}"
-                                                       name="${(result.nameComplete) ? result.nameComplete : result.name}"
-                                                       acceptedName="${result.acceptedConceptName}"/></a>
+                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a>
                                     <g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
                                 </h3>
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
@@ -226,6 +224,16 @@
                                     </g:if>
                                 </ul>
                             </g:if>
+                            <g:elseif test="${result.has("idxtype") && result.idxtype == 'COMMON'}">
+                                <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
+                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                    <a href="${speciesPageLink}">${result.name}</a></h4>
+                            </g:elseif>
+                            <g:elseif test="${result.has("idxtype") && result.idxtype == 'IDENTIFIER'}">
+                                <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
+                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                    <a href="${speciesPageLink}">${result.guid}</a></h4>
+                            </g:elseif>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'REGION'}">
                                 <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
                                     <a href="${grailsApplication.config.regions.baseURL}/feature/${result.guid}">${result.name}</a></h4>
