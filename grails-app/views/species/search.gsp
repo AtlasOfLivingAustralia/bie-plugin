@@ -142,7 +142,7 @@
                 </div><!-- refine-box -->
             </div>
 
-            <ol class="col-sm-9">
+            <div class="col-sm-9">
 
                 <div class="result-options">
 
@@ -211,18 +211,6 @@
                                 </h3>
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
                                 <g:if test="${result.kingdom}"><p class="summmary-info"><strong>Kingdom:</strong> ${result.kingdom}</p></g:if>
-                                <ul class="summary-actions list-inline">
-                                    <g:if test="${result.rankID < 7000}">
-                                        <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
-                                    </g:if>
-                                    <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
-                                    <g:if test="${result?.occCount?:0 > 0}">
-                                        <li>
-                                        <a href="${biocacheUrl}/occurrences/taxa/${result.guid}">Occurrences:
-                                            <g:formatNumber number="${result.occCount}" type="number"/></a></span>
-                                        </li>
-                                    </g:if>
-                                </ul>
                             </g:if>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'COMMON'}">
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
@@ -285,7 +273,23 @@
                                 <h4><g:message code="idxtype.${result.idxtype}"/>: <a href="${result.guid}">${result.name}</a></h4>
                                 <p><!-- ${sectionText} --></p>
                             </g:else>
-
+                            <g:if test="${result.has("highlight")}">
+                                <p>${raw(result.highlight)}</p>
+                            </g:if>
+                            <g:if test="${result.has("idxtype") && result.idxtype == 'TAXON'}">
+                                <ul class="summary-actions list-inline">
+                                    <g:if test="${result.rankID < 7000}">
+                                        <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
+                                    </g:if>
+                                    <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
+                                    <g:if test="${result?.occCount?:0 > 0}">
+                                        <li>
+                                        <a href="${biocacheUrl}/occurrences/taxa/${result.guid}">Occurrences:
+                                        <g:formatNumber number="${result.occCount}" type="number"/></a></span>
+                                        </li>
+                                    </g:if>
+                                </ul>
+                            </g:if>
                         </li>
                     </g:each>
                 </ol><!--close results-->
