@@ -235,15 +235,21 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></td>
+                                <td>
+                                    <g:if test="${tc.taxonConcept.infoSourceURL && tc.taxonConcept.infoSourceURL != tc.taxonConcept.datasetURL}"><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></a></g:if>
+                                    <g:else><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${tc?.taxonConcept?.nameFormatted}" nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}" acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:else>
+                                </td>
                                 <td class="source">
-                                    <ul><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</a></li></ul>
+                                    <ul><li>
+                                        <g:if test="${tc.taxonConcept.datasetURL}"><a href="${tc.taxonConcept.datasetURL}" target="_blank" class="external">${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</a></g:if>
+                                        <g:else>${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</g:else>
+                                    </li></ul>
                                 </td>
                             </tr>
                             <g:if test="${(tc.taxonName && tc.taxonName.namePublishedIn) || tc.taxonConcept.namePublishedIn}">
                                 <tr class="cite">
                                     <td colspan="2">
-                                        <cite>Published in: <a href="#" target="_blank" class="external">${tc.taxonName?.namePublishedIn?:tc.taxonConcept.namePublishedIn}</a></cite>
+                                        <cite>Published in: <span class="publishedIn">${tc.taxonName?.namePublishedIn?:tc.taxonConcept.namePublishedIn}</span></cite>
                                     </td>
                                 </tr>
                             </g:if>
@@ -261,12 +267,15 @@
                             <tbody>
                                 <g:each in="${tc.synonyms}" var="synonym">
                                     <tr>
-                                        <td><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${synonym.nameFormatted}" nameComplete="${synonym.nameComplete}" name="${synonym.nameString}"/></td>
+                                        <td>
+                                            <g:if test="${synonym.infoSourceURL && synonym.infoSourceURL != synonym.datasetURL}"><a href="${synonym.infoSourceURL}" target="_blank" class="external"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${synonym.nameFormatted}" nameComplete="${synonym.nameComplete}" name="${synonym.nameString}"/></a></g:if>
+                                            <g:else><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}" nameFormatted="${synonym.nameFormatted}" nameComplete="${synonym.nameComplete}" name="${synonym.nameString}"/></g:else>
+                                        </td>
                                         <td class="source">
-                                            <ul>
-                                                <g:if test="${!synonym.infoSourceURL}"><li><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></li></g:if>
-                                                <g:else><li><a href="${synonym.infoSourceURL}" target="_blank" class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></li></g:else>
-                                            </ul>
+                                            <ul><li>
+                                                <g:if test="${synonym.datasetURL}"><a href="${synonym.datasetURL}" target="_blank" class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></g:if>
+                                                <g:else>${synonym.nameAuthority ?: synonym.infoSourceName}</g:else>
+                                            </li></ul>
                                         </td>
                                     </tr>
                                     <g:if test="${synonym.namePublishedIn || synonym.referencedIn}">
@@ -296,14 +305,22 @@
                                     <g:set var="fName" value="${nkey?.trim()?.hashCode()}" />
                                     <g:set var="enKey" value="${nkey?.encodeAsJavaScript()}" />
                                     <g:set var="language" value="${sortCommonNameSources?.get(nkey)?.get(0)?.language}" />
+                                    <g:set var="infoSourceURL" value="${sortCommonNameSources?.get(nkey)?.get(0)?.infoSourceURL}" />
+                                    <g:set var="datasetURL" value="${sortCommonNameSources?.get(nkey)?.get(0)?.datasetURL}" />
                                     <tr>
                                         <td>
-                                            ${nkey}<g:if test="${language && !language.startsWith(locale.language)}"> [${language}]</g:if>
+                                            <g:if test="${infoSourceURL && infoSourceURL != datasetURL}"><a href="${infoSourceURL}" target="_blank" class="external">${nkey}</a></g:if>
+                                            <g:else>${nkey}</a></g:else>
+                                            <g:if test="${language && !language.startsWith(locale.language)}"><span class="annotation annotation-language">${language}</span></g:if>
                                         </td>
                                         <td class="source">
                                             <ul>
                                             <g:each in="${sortCommonNameSources?.get(nkey)}" var="commonName">
-                                                <li><a href="${commonName.infoSourceURL}" onclick="window.open(this.href); return false;">${commonName.infoSourceName}</a></li>
+                                                <li>
+                                                    <g:if test="${commonName.datasetURL}"><a href="${commonName.datasetURL}" onclick="window.open(this.href); return false;">${commonName.infoSourceName}</a></g:if>
+                                                    <g:else>${commonName.infoSourceName}</g:else>
+                                                    <g:if test="${commonName.status && commonName.status != 'common'}"><span class="annotation annotation-status">${commonName.status}</span></g:if>
+                                                </li>
                                             </g:each>
                                             </ul>
                                         </td>
@@ -311,7 +328,6 @@
                                 </g:each>
                         </tbody></table>
                     </g:if>
-                    <g:if test="${tc.identifiers && !tc.identifiers.isEmpty()}">
                         <table class="table name-table table-responsive">
                             <thead>
                             <tr>
@@ -320,21 +336,43 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <tr>
+                                <td>
+                                    <g:if test="${tc.taxonConcept.infoSourceURL && tc.taxonConcept.infoSourceURL != tc.taxonConcept.datasetURL}"><a href="${tc.taxonConcept.infoSourceURL}" target="_blank" class="external">${tc.taxonConcept.guid}</a></g:if>
+                                    <g:else>${tc.taxonConcept.guid}</g:else>
+                                </td>
+                                <td class="source">
+                                    <ul>
+                                        <li>
+                                            <g:if test="${tc.taxonConcept.datasetURL}"><a href="${tc.taxonConcept.datasetURL}" onclick="window.open(this.href); return false;">${tc.taxonConcept.nameAuthority}</a></g:if>
+                                            <g:else>${tc.taxonConcept.nameAuthority}</g:else>
+                                            <span class="annotation annotation-status">current</span>
+                                        </li>
+                                    </ul>
+                                </td>
+
+                            </tr>
+                        <g:if test="${tc.identifiers && !tc.identifiers.isEmpty()}">
                             <g:each in="${tc.identifiers}" var="identifier">
                                 <tr>
                                     <td>
-                                        <g:if test="${identifier.format || identifier.status}"><span title="${identifier.format} ${identifier.status}">${identifier.identifier}</span></g:if>
+                                        <g:if test="${identifier.infoSourceURL && identifier.infoSourceURL != identifier.datasetURL}"><a href="${identifier.infoSourceURL}" target="_blank" class="external">${identifier.identifier}</a></g:if>
                                         <g:else>${identifier.identifier}</g:else>
                                     </td>
                                     <td class="source">
                                         <ul>
-                                            <li><a href="${identifier.infoSourceURL}" title="${identifier.infoSourceName}" onclick="window.open(this.href); return false;">${identifier.nameString ?: identifier.infoSourceName}</a></li>
+                                            <li>
+                                                <g:if test="${identifier.datasetURL}"><a href="${identifier.datasetURL}" onclick="window.open(this.href); return false;">${identifier.nameString ?: identifier.infoSourceName}</a></g:if>
+                                                <g:else>${identifier.nameString ?: identifier.infoSourceName}</g:else>
+                                                <g:if test="${identifier.format}"><span class="annotation annotation-format">${identifier.format}</span></g:if>
+                                                <g:if test="${identifier.status}"><span class="annotation annotation-status">${identifier.status}</span></g:if>
+                                            </li>
                                         </ul>
                                     </td>
                                 </tr>
                             </g:each>
+                        </g:if>
                             </tbody></table>
-                    </g:if>
                     </section>
 
                     <section class="tab-pane fade" id="classification">

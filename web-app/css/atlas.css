@@ -104,6 +104,7 @@ a.expand-options {border-top: 1px solid #e3e3e3; display: block; padding-top: 2p
 /* Taxon Names tab */
 .name-table ul {margin: 0; padding-left: 25px;}
 .name-table .source {width: 50%;}
+.name-table tr.cite td { border: none; }
 
 /* Taxon Classification tab */
 .classification-list dl {margin-left: 24px;}
@@ -138,6 +139,9 @@ html, body {height:100%;}
 .scientific-name.rank-genus .name { font-style: italic; }
 .scientific-name.rank-species .name { font-style: italic; }
 .scientific-name.rank-subspecies .name { font-style: italic; }
+
+/* Name annotations */
+.annotation { display: inline; background: #C8D0E0; font-size: smaller; padding: 2px 1ex; border: none; border-radius: 2px; }
 
 /* Media Queries
 ================================================== */
