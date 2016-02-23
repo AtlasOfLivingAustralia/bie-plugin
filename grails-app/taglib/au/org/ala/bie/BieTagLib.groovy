@@ -4,8 +4,8 @@ import org.apache.commons.lang.StringEscapeUtils
 import au.org.ala.names.parser.PhraseNameParser
 
 class BieTagLib {
+
     static namespace = 'bie'     // namespace for headers and footers
-    def authService
 
     /**
      * Format a scientific name with appropriate italics depending on rank
@@ -39,6 +39,28 @@ class BieTagLib {
             }
             out << output
         }
+    }
+
+    /**
+     * Constructs a link to EYA from this locality.
+     */
+    def constructEYALink = {  attrs, body ->
+
+       def group = attrs.result.centroid =~ /([\d.-]+) ([\d.-]+)/
+       def bieUrl = grailsApplication.config.biocache.baseURL
+
+       def parsed = group && group[0] && group[0].size() == 3
+       if(parsed){
+           def latLong = group[0]
+           out <<  "<a href='" + bieUrl + "/explore/your-area#" +
+                   latLong[2] + "|" + latLong[1] + "|12|ALL_SPECIES'>"
+       }
+
+       out << body()
+
+       if(parsed){
+           out << "</a>"
+       }
     }
 
     /**
@@ -139,24 +161,6 @@ class BieTagLib {
     }
 
     /**
-     * Attempt to lookup a user name for its id (email address) with fail-over to obfuscate the email address
-     *
-     * @attr id REQUIRED the input user id
-     */
-    def lookupUserName = { attrs ->
-        def email = attrs.id
-        def userIdMap = authService.getAllUserNameMap()
-        def userName = userIdMap.get(email)
-        log.info "id = " + email + " || name = " + userName
-
-        if (userName) {
-            out << userName
-        } else {
-            out << email.replaceAll(/\@\w+/, "...")
-        }
-    }
-
-    /**
      * Custom function to escape a string for JS use
      *
      * @param value
@@ -194,5 +198,4 @@ class BieTagLib {
             return "species"
         return "subspecies"
     }
-
 }

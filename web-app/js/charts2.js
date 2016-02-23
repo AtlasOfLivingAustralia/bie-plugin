@@ -23,7 +23,7 @@ var baseFacetChart = {
     biocacheWebappUrl: "http://no-default-biocache",
     chartsDiv: null,  // the container for the chart
     chart: null,    // the google chart object
-    width: 480,
+    width: 900,
     height: 350,
     chartArea: {left:0, top:30, width:"90%", height: "70%"},
     is3D: false,
@@ -38,13 +38,13 @@ var baseFacetChart = {
     individualChartOptions: {
         state_conservation: {chartArea: {left:60, height: "58%"}, title: 'By state conservation status'},
         occurrence_year: {chartArea: {left:60, height: "55%"}, requestFacetName: 'decade'},
-        decade: {chartArea: {left:60, height: "55%"}, responseFacetName: 'occurrence_year'},
-        year: {width: 600},
-        month: {width: 600},
+        decade: {chartArea: {left:60, height: "55%", chbh:'a'}, responseFacetName: 'occurrence_year'},
+        year: {width: 700, chbh:'a'},
+        month: {width: 700, chbh:'a'},
         institution_uid: {chartArea: {left: 0, width: "100%"}},
         collection_uid: {chartArea: {left: 0, width: "100%"}},
         species_group: {title: 'By higher-level group', ignore: ['Animals'], chartType: 'column',
-            width: 450, chartArea: {left:60, height:"58%"},
+            width: 700, chartArea: {left:60, height:"58%"},
             vAxis: {minValue: 0, textPosition:'in', gridlines:{color: '#ddd', count: 4}},
             colors: ['#108628'], reverseCategories:true, hAxis:{slantedTextAngle:60}},
         state: {ignore: ['Unknown1']},
@@ -478,7 +478,7 @@ var facetChartTypes = {
         var chartArea = baseFacetChart.chartArea;
         chartArea.left = 60;
         chartArea.height = "58%";
-        return baseFacetChart.newChart({chartType: 'column', width: 450, chartArea: chartArea,
+        return baseFacetChart.newChart({chartType: 'column', width: 700, chartArea: chartArea,
             hAxis: {slantedText: true}, legend: 'none'});
     },
     scatter: function () {
@@ -680,7 +680,7 @@ var biocacheWebappUrl = "http://biocache.ala.org.au";  // should be overridden f
 
 // defaults for taxa chart
 var taxonomyPieChartOptions = {
-    width: 480,
+    width: 700,
     height: 350,
     chartArea: {left:0, top:30, width:"100%", height: "70%"},
     is3D: false,
@@ -692,7 +692,7 @@ var taxonomyPieChartOptions = {
 
 // defaults for facet charts
 var genericChartOptions = {
-    width: 480,
+    width: 700,
     height: 350,
     chartArea: {left:0, top:30, width:"100%", height: "70%"},
     is3D: false,
@@ -705,9 +705,9 @@ var genericChartOptions = {
 
 // defaults for individual facet charts
 var individualChartOptions = {
-    state_conservation: {chartType: 'column', width: 450, chartArea: {left:60, height: "58%"},
+    state_conservation: {chartType: 'column', width: 700, chartArea: {left:60, height: "58%"},
         title: 'By state conservation status', hAxis: {slantedText: true}},
-    occurrence_year: {chartType: 'column', width: 450, chartArea: {left:60, height: "65%"}, hAxis: {slantedText: true}},
+    occurrence_year: {chartType: 'column', width: 700, chartArea: {left:60, height: "65%"}, hAxis: {slantedText: true}},
     species_group: {title: 'By higher-level group', ignore: ['Animals']},
     state: {ignore: ['Unknown1']},
     type_status: {title: 'By type status (as % of all type specimens)', ignore: ['notatype']},

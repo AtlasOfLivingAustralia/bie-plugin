@@ -19,11 +19,12 @@
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <title>${query} | Search | ${grailsApplication.config.skin.orgNameLong}</title>
+    <title>${query} | Search</title>
     <r:require modules="search"/>
     <r:script disposition='head'>
         // global var to pass GSP vars into JS file
         SEARCH_CONF = {
+            searchResultTotal: ${searchResults.totalRecords},
             query: "${BieTagLib.escapeJS(query)}",
             serverName: "${grailsApplication.config.grails.serverURL}",
             bieUrl: "${grailsApplication.config.bie.baseURL}",
@@ -57,7 +58,7 @@
     </header>
 
     <div class="main-content panel panel-body">
-    <g:if test="${searchResults.totalRecords}">
+        <g:if test="${searchResults.totalRecords}">
         <g:set var="paramsValues" value="${[:]}"/>
         <div class="row">
             <div class="col-sm-3">
@@ -187,7 +188,7 @@
                 </div><!-- result-options -->
 
                 <input type="hidden" value="${pageTitle}" name="title"/>
-                <ol class="search-results-list list-unstyled">
+                <ol id="search-results-list" class="search-results-list list-unstyled">
 
                     <g:each var="result" in="${searchResults.results}">
                         <li class="search-result clearfix">
@@ -228,6 +229,16 @@
                                     <span>${result?.description?:""}</span>
                                 </p>
                             </g:elseif>
+                            <g:elseif test="${result.has("idxtype") && result.idxtype == 'LOCALITY'}">
+                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                    <bie:constructEYALink result="${result}">
+                                        ${result.name}
+                                    </bie:constructEYALink>
+                                </h4>
+                                <p>
+                                    <span>${result?.description?:""}</span>
+                                </p>
+                            </g:elseif>
                             <g:elseif test="${result.has("name")}">
                                 <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
                                     <a href="${result.guid}">${result.name}</a></h4>
@@ -240,7 +251,6 @@
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span>${result.acronym}</span>
-                                    <!-- ${sectionText} -->
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("description") && result.get("description")}">
@@ -248,7 +258,6 @@
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span class="searchDescription">${result.description?.trimLength(500)}</span>
-                                    <!-- ${sectionText} -->
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("highlight") && result.get("highlight")}">
@@ -302,7 +311,44 @@
             </div><!--end .col-wide last-->
         </div><!--end .inner-->
     </g:if>
+
     </div>
 </section>
+
+<div id="result-template" class="row hide">
+    <div class="col-sm-12">
+        <ol class="search-results-list list-unstyled">
+            <li class="search-result clearfix">
+                <h4><g:message code="idxtype.LOCALITY"/> : <a class="exploreYourAreaLink" href="">Address here</a></h4>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<g:if test="${searchResults.totalRecords == 0}">
+    <r:script>
+        $(function(){
+            console.log(SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query);
+            $.get( SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query, function( searchResults ) {
+                for(var i=0; i< searchResults.length; i++){
+                    var $results = $('#result-template').clone(true);
+                    $results.attr('id', 'results-lists');
+                    $results.removeClass('hide');
+                    console.log(searchResults)
+                    if(searchResults.length > 0){
+                        $results.find('.exploreYourAreaLink').html(searchResults[i].name);
+                        $results.find('.exploreYourAreaLink').attr('href', '${grailsApplication.config.biocache.baseURL}/explore/your-area#' +
+                                searchResults[0].latitude  +
+                                '|' +  searchResults[0].longitude +
+                                '|12|ALL_SPECIES'
+                        );
+                        $('.main-content').append($results.html());
+                    }
+                }
+            });
+        });
+    </r:script>
+</g:if>
+
 </body>
 </html>

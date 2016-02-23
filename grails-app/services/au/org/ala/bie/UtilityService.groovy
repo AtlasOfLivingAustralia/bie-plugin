@@ -82,7 +82,13 @@ class UtilityService {
         def namesSet = []
         def seen = [] as Set
 
-        names = names.sort(false, { n -> - n.priority })
+        names = names.sort(false, { n ->
+            if(n.priority){
+                - n.priority
+            } else {
+                n
+            }
+        })
         names.each { name ->
             def key = normaliseString(name.nameString) + "=" + name.infoSourceName
             if (seen.contains(key))

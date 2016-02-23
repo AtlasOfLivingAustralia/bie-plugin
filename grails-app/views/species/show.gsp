@@ -145,40 +145,10 @@
                                         <ul class="list-unstyled">
                                             <li><a href="${citizenSciUrl}${tc.taxonConcept.guid}"><span class="glyphicon glyphicon-map-marker"></span> Record a sighting</a></li>
                                             <li><a href="${citizenSciUrl}${tc.taxonConcept.guid}"><span class="glyphicon glyphicon-camera"></span> Submit a photo</a></li>
-                                            %{--<li><a href="#"><span class="glyphicon glyphicon-download"></span> Download a fact sheet</a></li>--}%
                                             <li><a href="${alertsUrl}"><span class="glyphicon glyphicon-bell"></span> Receive alerts when new records are added</a></li>
-                                            %{--<li><a href="#"><span class="glyphicon glyphicon-comment"></span> Start a topic about this species on the forum</a></li>--}%
                                         </ul>
                                     </div>
                                 </div>
-
-                                <div class="panel panel-default panel-stats">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">Statistics</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-sm-3 col-xs-5">
-                                                <img class="img-responsive" src="http://www.cerulean.co.nz/atlas/images/demo-stats-chart.png">
-                                            </div>
-                                            <div class="col-sm-9 col-xs-7">
-                                                <p><strong>58%</strong> of records fully verified.</p>
-                                                <p><a class="tab-link" href="#records">More statistics</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel-footer">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p><strong><span class="occurenceCount"></span></strong> occurrence record</p>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p><strong><span class="datasetCount"></span></strong> datasets</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="panel panel-default panel-data-providers">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Data Providers</h3>
@@ -396,14 +366,25 @@
                     </section>
 
                     <section class="tab-pane fade" id="records">
-                        <h2>Occurrence records</h2>
+
+                        <div class="pull-right btn-group btn-group-vertical">
+                            <a class="btn btn-default" href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid?:''}">
+                                <i class="glyphicon glyphicon-th-list"></i>
+                                View list of all
+                                occurrence records for this taxon
+                            </a>
+                            <a class="btn btn-default" href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid?:''}#tab_mapView">
+                                <i class="glyphicon glyphicon-map-marker"></i>
+                                View map of all
+                                occurrence records for this taxon
+                            </a>
+                        </div>
+
                         <div id="occurrenceRecords">
-                            <p><a href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid?:''}">View
-                            list of all <span id="occurrenceCount"></span> occurrence records for this taxon</a></p>
                             <div id="recordBreakdowns" style="display: block;">
                                 <h2>Charts showing breakdown of occurrence records</h2>
                                 <div id="chartsHint">Hint: click on chart elements to view that subset of records</div>
-                                <div id="charts" class=""></div>
+                                <div id="charts"></div>
                             </div>
                         </div>
                     </section>

@@ -26,7 +26,6 @@
 <head>
     <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if> Image browser | ${grailsApplication.config.skin.orgNameLong}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <meta name="fluidLayout" content="${grailsApplication.config.skin.fluidLayout}" />
     <script type="text/javascript">
         var prevPage = 0;
         var currentPage = 0;
@@ -175,9 +174,9 @@
 
     </style>
 </head>
-<body class="nav-species fluid image-search">
+<body class="nav-species  image-search">
     <header id="page-header" class="heading-bar">
-        <div class="inner row-fluid">
+        <div class="inner row">
             <nav id="breadcrumb" class="span12">
                 <ol class="breadcrumb">
                     <li><a href="${alaUrl}">Home</a> <span class="icon icon-arrow-right"></span></li>

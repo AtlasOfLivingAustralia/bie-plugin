@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2012 Atlas of Living Australia
+/**
+ * Copyright (C) 2016 Atlas of Living Australia
  * All Rights Reserved.
  *
  * The contents of this file are subject to the Mozilla Public
@@ -12,11 +12,11 @@
  * implied. See the License for the specific language governing
  * rights and limitations under the License.
  */
-
 package au.org.ala.bie
 
+import grails.converters.deep.JSON
+import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
-import org.springframework.web.servlet.support.RequestContextUtils
 
 /**
  * Species Controller
@@ -27,10 +27,35 @@ class SpeciesController {
 
     def bieService
     def utilityService
-    def authService
     def biocacheService
-    def webService
     def grailsApplication
+
+    def geoSearch = {
+
+        def searchResults = []
+        try {
+            def googleMapsKey = grailsApplication.config.googleMapsApiKey
+            def url = "https://maps.googleapis.com/maps/api/geocode/json?key=${googleMapsKey}&address=" +
+                    URLEncoder.encode(params.q, 'UTF-8')
+            def response = new URL(url).text
+            def js = new JsonSlurper()
+            def json = js.parseText(response)
+
+            if(json.results){
+                json.results.each {
+                    searchResults << [
+                            name: it.formatted_address,
+                            latitude: it.geometry.location.lat,
+                            longitude: it.geometry.location.lng
+                    ]
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e)
+        }
+
+        render searchResults as JSON
+    }
 
     /**
      * Search page - display search results fro the BIE (includes results for non-species pages too)
@@ -41,7 +66,7 @@ class SpeciesController {
         def filterQuery = params.list('fq') // will be a list even with only one value
         def startIndex = params.offset?:0
         def rows = params.rows?:10
-        def sortField = params.sortField?:""  //FIXME
+        def sortField = params.sortField?:""
         def sortDirection = params.dir?:"asc"
         def sort = ""
         if(sortField){
@@ -101,7 +126,6 @@ class SpeciesController {
                     tc: etc,
                     statusRegionMap: utilityService.getStatusRegionCodes(),
                     infoSourceMap:[],
-//                extraImages: bieService.getExtraImages(etc),
                     textProperties: [],
                     isAustralian: false,
                     isRoleAdmin: false, //authService.userInRole(grailsApplication.config.auth.admin_role),
