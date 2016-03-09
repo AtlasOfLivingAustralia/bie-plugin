@@ -32,7 +32,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <r:require module="show"/>
+    <r:require modules="show, charts"/>
 </head>
 <body class="page-taxon">
     <section class="container">
@@ -60,7 +60,7 @@
                 <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
                 <h5 class="inline-head name-authority">
                     <strong>Name authority:</strong>
-                    ${tc?.taxonConcept.nameAuthority?:grailsApplication.config.defaultNameAuthority}
+                    <span class="name-authority">${tc?.taxonConcept.nameAuthority?:grailsApplication.config.defaultNameAuthority}</span>
                 </h5>
             </div>
         </header>
@@ -118,12 +118,10 @@
                                     <div class="panel-body">
                                         <ul>
                                             <li><a href="http://www.gbif.org/species/search?q=${tc?.taxonConcept?.nameString}">GBIF</a></li>
-                                            <li><a href="#">Encyclopaedia of Life</a></li>
-                                            <li><a href="#">Biodiversity Heritage Library</a></li>
-                                            <li><a href="#">PESI</a></li>
-                                            <li><a href="#">ARKive</a></li>
-                                            <li><a href="#">Flickr</a></li>
-                                            <li><a href="#">Wikipedia</a></li>
+                                            <li><a href="http://eol.org/search?q=${tc?.taxonConcept?.nameString}&show_all=true">Encyclopaedia of Life</a></li>
+                                            <li><a href="http://www.biodiversitylibrary.org/search?searchTerm=${tc?.taxonConcept?.nameString}#/names">Biodiversity Heritage Library</a></li>
+                                            <li><a href="http://www.eu-nomen.eu/portal/">PESI</a></li>
+                                            <li><a href="http://www.arkive.org/explore/species?q=${tc?.taxonConcept?.nameString}">ARKive</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -143,9 +141,9 @@
                                 <div class="panel panel-default panel-actions">
                                     <div class="panel-body">
                                         <ul class="list-unstyled">
-                                            <li><a href="${citizenSciUrl}${tc.taxonConcept.guid}"><span class="glyphicon glyphicon-map-marker"></span> Record a sighting</a></li>
-                                            <li><a href="${citizenSciUrl}${tc.taxonConcept.guid}"><span class="glyphicon glyphicon-camera"></span> Submit a photo</a></li>
-                                            <li><a href="${alertsUrl}"><span class="glyphicon glyphicon-bell"></span> Receive alerts when new records are added</a></li>
+                                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span class="glyphicon glyphicon-map-marker"></span> Record a sighting</a></li>
+                                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span class="glyphicon glyphicon-camera"></span> Submit a photo</a></li>
+                                            <li><a id="alertsButton" href="#"><span class="glyphicon glyphicon-bell"></span> Receive alerts when new records are added</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -421,8 +419,8 @@
                         <div id="occurrenceRecords">
                             <div id="recordBreakdowns" style="display: block;">
                                 <h2>Charts showing breakdown of occurrence records</h2>
-                                <div id="chartsHint">Hint: click on chart elements to view that subset of records</div>
-                                <div id="charts"></div>
+                                %{--<div id="chartsHint">Hint: click on chart elements to view that subset of records</div>--}%
+                                <div id="charts"> </div>
                             </div>
                         </div>
                     </section>
@@ -501,7 +499,9 @@
             <p class="content"></p>
         </div>
         <div class="panel-footer">
-            <p>Source: <a href="#" class="providedBy"></a> <span class="rights"></span></p>
+            <p class="source">Source: <span class="sourceText"></span></p>
+            <p class="rights">Rights holder: <span class="rightsText"></span></p>
+            <p class="provider">Provided by: <a href="#" class="providedBy"></a></p>
         </div>
     </div>
 
@@ -543,11 +543,26 @@
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});
 
-    $(function(){
-        showSpeciesPage();
-    })
+    $(function(){ showSpeciesPage(); })
 </r:script>
 
+<r:script type="text/javascript">
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href");
+        if(target == "#records"){
+            <charts:biocache
+                biocacheServiceUrl="${grailsApplication.config.biocacheService.baseURL}"
+                biocacheWebappUrl="${grailsApplication.config.biocache.baseURL}"
+                q="lsid:${guid}"
+                qc="${grailsApplication.config.biocacheService.queryContext ?:''}"
+                fq=""
+            />
+        }
+        if(target == '#overview'){
+            loadMap();
+        }
+    });
+</r:script>
 
 </body>
 </html>

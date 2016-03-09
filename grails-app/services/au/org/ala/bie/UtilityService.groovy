@@ -7,6 +7,7 @@ class UtilityService {
 
     def grailsApplication
     def webService
+
     /**
      * Get a map of region names to collectory codes
      *
@@ -26,56 +27,6 @@ class UtilityService {
         regions.put("Victoria", "dr655");
         regions.put("Western Australia", "dr467");
         return regions;
-    }
-
-    /**
-     * Truncates the text at a sentence break after min length
-     * @param text
-     * @param min
-     * @return
-     */
-    def truncateTextBySentence(String text, int min) {
-        try {
-            if (text != null && text.length() > min) {
-                java.text.BreakIterator bi = java.text.BreakIterator.getSentenceInstance();
-                bi.setText(text);
-                int finalIndex = bi.following(min);
-                return text.substring(0, finalIndex) + "...";
-            }
-        } catch (Exception e) {
-            log.debug("Unable to truncate " + text, e);
-        }
-        text;
-    }
-
-    def getInfoSourcesForTc(etc) {
-        def infoSourceMap = new TreeMap() // so it keeps its sorted order
-        def selectedSections = []
-        //log.debug "etc = " + etc.simpleProperties
-        selectedSections.addAll(etc.simpleProperties)
-
-        selectedSections.each {
-            def identifier = it.infoSourceURL
-            def name = it.infoSourceName
-            def property = (it.name?.startsWith("http://ala.org.au/ontology/ALA")) ? it.name?.replaceFirst(/^.*#/, "") : null
-
-            if (identifier && name && property) {
-                if (infoSourceMap.containsKey(identifier)) {
-                    def mapValue = infoSourceMap.get(identifier)
-                    def newValues = mapValue.sections as Set
-                    newValues.add(property)
-                    infoSourceMap.put(identifier, [name: name, sections: newValues])
-                } else {
-                    infoSourceMap.put(identifier, [name: name, sections: [property]])
-                }
-            }
-        }
-
-        if(log.debugEnabled) log.debug "1. infoSourceMap = " + infoSourceMap
-        infoSourceMap = infoSourceMap.sort {a, b -> a.value.name <=> b.value.name}
-        if(log.debugEnabled) log.debug "2. infoSourceMap = " + infoSourceMap
-
-        infoSourceMap
     }
 
     def unDuplicateNames(List names) {
@@ -193,10 +144,6 @@ class UtilityService {
             }
         }
         idxtypes
-    }
-
-    def getJsonMimeType(params) {
-        (params.callback) ? "text/javascript" : "application/json"
     }
 
     def Map<BiocacheService.ImageCategory, List> splitImages(List images) {

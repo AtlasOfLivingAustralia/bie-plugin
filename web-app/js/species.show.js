@@ -23,22 +23,20 @@ function showSpeciesPage() {
     loadOverviewImages();
     loadMap();
     loadGalleries();
-    loadBhl(0, 10, false);
-    loadCharts();
     loadExpertDistroMap();
     loadExternalSources();
     loadSpeciesLists();
-    loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
     loadDataProviders();
     //
     ////setup controls
     addAlerts();
+    loadBhl();
+    //loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
 }
 
 function loadSpeciesLists(){
 
     console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
-    //
     $.get(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid, function( data ) {
         for(var i = 0; i < data.length; i++) {
             var specieslist = data[i];
@@ -48,6 +46,7 @@ function loadSpeciesLists(){
                 var $description = $('#descriptionTemplate').clone();
                 $description.css({'display': 'block'});
                 $description.attr('id', '#specieslist-block-' + specieslist.dataResourceUid);
+                $description.addClass('species-list-block');
                 $description.find(".title").html(specieslist.list.listName);
 
                 var content = "<dl class='dl-horizontal species-list-dl'>";
@@ -57,6 +56,10 @@ function loadSpeciesLists(){
                 content += "</dl>";
 
                 $description.find(".content").html(content);
+
+                $description.find(".source").css({'display':'none'});
+                $description.find(".rights").css({'display':'none'});
+
                 $description.find(".providedBy").attr('href', SHOW_CONF.speciesListUrl + '/speciesListItem/list/' + specieslist.dataResourceUid);
                 $description.find(".providedBy").html(specieslist.list.listName);
 
@@ -70,11 +73,9 @@ function addAlerts(){
     // alerts button
     $("#alertsButton").click(function(e) {
         e.preventDefault();
-        //console.log("alertsButton");
         var query = "Species: " + SHOW_CONF.scientificName;
         var searchString = "?q=" + SHOW_CONF.guid;
-        //console.log("fqueries",fqueries, query);
-        var url = SHOW_CONF.alertsUrl + "createBiocacheNewRecordsAlert?";
+        var url = SHOW_CONF.alertsUrl + "/ws/createBiocacheNewRecordsAlert?";
         url += "queryDisplayName=" + encodeURIComponent(query);
         url += "&baseUrlForWS=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
         url += "&baseUrlForUI=" + encodeURIComponent(SHOW_CONF.serverName);
@@ -188,15 +189,23 @@ function loadExternalSources(){
             console.log('Loading EOL content - ' + data.dataObjects.length);
             $.each(data.dataObjects, function(idx, dataObject){
                 if(dataObject.language == SHOW_CONF.eolLanguage){
-                    console.log('Adding EOL content - ' + dataObject.id);
                     var $description = $('#descriptionTemplate').clone();
                     $description.css({'display':'block'});
                     $description.attr('id', dataObject.id);
                     $description.find(".title").html(dataObject.title ?  dataObject.title : 'Description');
                     $description.find(".content").html(dataObject.description);
-                    $description.find(".sourceLink").attr('href',dataObject.source);
-                    $description.find(".sourceLink").html(dataObject.rightsHolder);
-                    $description.find(".rights").html(dataObject.rights);
+
+                    if(dataObject.source && dataObject.source.trim().length != 0){
+                        $description.find(".sourceText").html(dataObject.source);
+                    } else {
+                        $description.find(".source").css({'display':'none'});
+                    }
+                    if(dataObject.rightsHolder && dataObject.rightsHolder.trim().length != 0){
+                        $description.find(".rightsText").html(dataObject.rightsHolder);
+                    } else {
+                        $description.find(".rights").css({'display':'none'});
+                    }
+
                     $description.find(".providedBy").attr('href', 'http://eol.org/pages/' + data.identifier);
                     $description.find(".providedBy").html("Encyclopedia of Life");
                     $description.appendTo('#descriptiveContent');
@@ -243,32 +252,6 @@ function loadExternalSources(){
     }).fail(function(jqXHR, textStatus, errorThrown) {
         //alert( "error" + errorThrown);
     });
-}
-
-
-function loadCharts(){
-    // Charts via collectory charts.js
-    var chartOptions = {
-        query: "lsid:" + SHOW_CONF.guid,
-        biocacheServicesUrl: SHOW_CONF.biocacheServiceUrl,
-        biocacheWebappUrl: SHOW_CONF.biocacheUrl,
-        collectionsUrl: SHOW_CONF.collectoryUrl,
-        totalRecordsSelector: ".occurenceCount",
-        chartsDiv: "recordBreakdowns",
-        error: chartsError,
-        width: 540,
-        charts: ['collection_uid','state','month','occurrence_year'],
-        collection_uid: {title: 'By collection'},
-        state: {title: 'By state & territory'},
-        month: {chartType: "column"},
-        occurrence_year: {chartType: "column"},
-        is3D:false
-    };
-    loadFacetCharts(chartOptions);
-}
-
-function chartsError() {
-    $("#chartsError").html("An error occurred and charts cannot be displayed at this time.");
 }
 
 /**
@@ -453,14 +436,18 @@ function getImageFooterFromOccurrence(el){
     if (el.typeStatus) detailHtml += br + 'Type: ' + el.typeStatus;
     if (el.collector) detailHtml += br + 'By: ' + el.collector;
     if (el.eventDate) detailHtml += br + 'Date: ' + moment(el.eventDate).format('YYYY-MM-DD');
-    if (el.institutionName) {
+    if (el.institutionName && el.institutionName !== undefined) {
         detailHtml += br + el.institutionName;
-    } else {
+    } else if (el.dataResourceName && el.dataResourceName !== undefined) {
         detailHtml += br + el.dataResourceName;
     }
     // write to DOM
     detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a></div>';
     return detailHtml;
+}
+
+function loadBhl() {
+    loadBhl(0, 10, false);
 }
 
 /**

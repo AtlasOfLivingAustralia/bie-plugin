@@ -153,3 +153,9 @@ html, body {height:100%;}
 	/* Search */
 	.mobile-collapse {display: block; visibility: visible;}
 }
+
+/* charts config */
+#charts { margin-top:30px; padding-top:20px; }
+.chart { width:50%;  margin-bottom: 20px; float:left; padding-right: 10px; }
+.chart-legend { font-size:12px; }
+#data_resource_uid-chart { width:100%; }

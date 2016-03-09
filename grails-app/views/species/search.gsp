@@ -226,7 +226,7 @@
                                 <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
                                     <a href="${grailsApplication.config.regions.baseURL}/feature/${result.guid}">${result.name}</a></h4>
                                 <p>
-                                    <span>${result?.description?:""}</span>
+                                    <span>${result?.description &&  result?.description != result?.name ?  result?.description : ""}</span>
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'LOCALITY'}">
@@ -237,6 +237,13 @@
                                 </h4>
                                 <p>
                                     <span>${result?.description?:""}</span>
+                                </p>
+                            </g:elseif>
+                            <g:elseif test="${result.has("idxtype") && result.idxtype == 'LAYER'}">
+                                <h4><g:message code="idxtype.${result.idxtype}"/>:
+                                    <a href="${grailsApplication.config.spatial.baseURL}?layers=${result.guid}">${result.name}</a></h4>
+                                <p>
+                                    <g:if test="${result.dataProviderName}"><strong>Source: ${result.dataProviderName}</strong></g:if>
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("name")}">
@@ -265,21 +272,10 @@
                                     <a href="${result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span>${result.highlight}</span>
-                                    <!-- ${sectionText} -->
-                                    %{--<br/>--}%
-                                </p>
-                            </g:elseif>
-                            <g:elseif test="${result.has("idxtype") && result.idxType == 'LAYER'}">
-                                <h4><g:message code="idxtype.${result.idxtype}"/>:
-                                    <a href="${result.guid}">${result.name}</a></h4>
-                                <p>
-                                    <span>${result.highlight}</span>
-                                    <g:if test="${result.dataProviderName}"><strong>Source: ${result.dataProviderName}</strong></g:if>
                                 </p>
                             </g:elseif>
                             <g:else>
-                                <h4><g:message code="idxtype.${result.idxtype}"/>: <a href="${result.guid}">${result.name}</a></h4>
-                                <p><!-- ${sectionText} --></p>
+                                <h4><g:message code="idxtype.${result.idxtype}"/> TEST: <a href="${result.guid}">${result.name}</a></h4>
                             </g:else>
                             <g:if test="${result.has("highlight")}">
                                 <p>${raw(result.highlight)}</p>
