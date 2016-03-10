@@ -5,8 +5,8 @@ grails.project.test.reports.dir = "target/test-reports"
 //grails.plugin.location."ala-charts-plugin" = "../ala-charts-plugin"
 
 grails.project.fork = [
-    test: false,
-    run: false
+        test: false,
+        run: true
 ]
 
 grails.project.dependency.resolver = "maven" // or ivy

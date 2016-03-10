@@ -288,7 +288,7 @@ function loadOverviewImages(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&facet=off&pageSize=5&start=0&callback=?';
+        '&fq=multimedia:"Image"&im=true&facet=off&pageSize=5&start=0&callback=?';
 
     console.log('Loading images from: ' + url);
 
@@ -303,10 +303,10 @@ function loadOverviewImages(){
             var $mainOverviewImage = $('.mainOverviewImage');
             $mainOverviewImage.attr('src', data.occurrences[0].largeImageUrl);
             $mainOverviewImage.parent().attr('href', data.occurrences[0].largeImageUrl);
-            $mainOverviewImage.parent().attr('data-title', data.occurrences[0].dataResourceName);
-            $mainOverviewImage.parent().attr('data-footer', data.occurrences[0].dataResourceName);
+            $mainOverviewImage.parent().attr('data-title', getImageTitleFromOccurrence(data.occurrences[0]));
+            $mainOverviewImage.parent().attr('data-footer', getImageFooterFromOccurrence(data.occurrences[0]));
 
-            $('.mainOverviewImageInfo').html(data.occurrences[0].dataResourceName);
+            $('.mainOverviewImageInfo').html(getImageTitleFromOccurrence(data.occurrences[0]));
 
             if(data.occurrences.length >= 2){
                 var $thumb = generateOverviewThumb(data.occurrences[1], "1");
@@ -372,7 +372,7 @@ function loadGalleryType(category, start) {
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
         '&fq=multimedia:"Image"&pageSize=' + pageSize +
-        '&facet=off&start=' + start + imageCategoryParams[category] + '&callback=?';
+        '&facet=off&start=' + start + imageCategoryParams[category] + '&im=true&callback=?';
 
     console.log("URL: " + url);
 
@@ -424,9 +424,33 @@ function loadGalleryType(category, start) {
 
 function getImageTitleFromOccurrence(el){
     var br = "<br/>";
-    var briefHtml = el.raw_scientificName;
-    if (el.typeStatus) briefHtml += br + el.typeStatus;
-    if (el.institutionName) briefHtml += ((el.typeStatus) ? ' | ' : br) + el.institutionName;
+    var briefHtml = "";
+    //include sci name when genus or higher taxon
+    if(SHOW_CONF.taxonRankID  < 7000) {
+        briefHtml += el.raw_scientificName;
+    }
+
+    if (el.typeStatus) {
+        if(briefHtml.length > 0)  briefHtml += br;
+        briefHtml += el.typeStatus;
+    }
+
+    if (el.institutionName) {
+        if(briefHtml.length > 0)  briefHtml += br;
+        briefHtml += ((el.typeStatus) ? ' | ' : br) + el.institutionName;
+    }
+
+    if(el.imageMetadata && el.imageMetadata.length > 0 && el.imageMetadata[0].creator != null){
+        if(briefHtml.length > 0)  briefHtml += br;
+        briefHtml += "Photographer: " + el.imageMetadata[0].creator;
+    } else if(el.imageMetadata && el.imageMetadata.length > 0 && el.imageMetadata[0].rightsHolder != null) {
+        if(briefHtml.length > 0)  briefHtml += br;
+        briefHtml += "Rights holder: " + el.imageMetadata[0].rightsHolder;
+    } else if(el.collector){
+        if(briefHtml.length > 0)  briefHtml += br;
+        briefHtml += "Supplied by: " + el.collector;
+    }
+
     return briefHtml;
 }
 
@@ -437,10 +461,14 @@ function getImageFooterFromOccurrence(el){
     if (el.collector) detailHtml += br + 'By: ' + el.collector;
     if (el.eventDate) detailHtml += br + 'Date: ' + moment(el.eventDate).format('YYYY-MM-DD');
     if (el.institutionName && el.institutionName !== undefined) {
-        detailHtml += br + el.institutionName;
+        detailHtml += br + "Supplied by: " + el.institutionName;
     } else if (el.dataResourceName && el.dataResourceName !== undefined) {
-        detailHtml += br + el.dataResourceName;
+        detailHtml += br + "Supplied by: " + el.dataResourceName;
     }
+    if(el.imageMetadata && el.imageMetadata.length > 0 && el.imageMetadata[0].rightsHolder != null){
+        detailHtml += br + "Rights holder: " + el.imageMetadata[0].rightsHolder;
+    }
+
     // write to DOM
     detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a></div>';
     return detailHtml;

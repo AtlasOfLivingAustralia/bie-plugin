@@ -520,6 +520,8 @@
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
         guid:               "${guid}",
         scientificName:     "${tc?.taxonConcept?.nameString?:''}",
+        rankString:         "${tc?.taxonConcept?.rankString?:''}",
+        taxonRankID:        "${tc?.taxonConcept?.rankID?:''}",
         synonymsQuery:      "${synonymsQuery}",
         citizenSciUrl:      "${citizenSciUrl}",
         serverName:         "${grailsApplication.config.grails.serverURL}",
