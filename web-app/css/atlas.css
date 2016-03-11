@@ -159,3 +159,6 @@ html, body {height:100%;}
 .chart { width:50%;  margin-bottom: 20px; float:left; padding-right: 10px; }
 .chart-legend { font-size:12px; }
 #data_resource_uid-chart { width:100%; }
+
+/* Hide wikipedia links */
+.mw-editsection { display:none; }
