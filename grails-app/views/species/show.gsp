@@ -105,6 +105,28 @@
                                     </div>
                                 </div>
 
+                                <g:if test="${tc.conservationStatuses}">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Conservation Status</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="conservationList">
+                                                <g:each in="${tc.conservationStatuses.entrySet().sort { it.key} }" var="cs">
+                                                    <li>
+                                                        <g:if test="${cs.value.dr}">
+                                                            <a href="${collectoryUrl}/public/showDataResource/${cs.value.dr}"><span class="iucn <bie:colourForStatus status="${cs.value.status}" />">${cs.key}</span>${cs.value.status}</a>
+                                                        </g:if>
+                                                        <g:else>
+                                                            <span class="iucn <bie:colourForStatus status="${cs.value.status}" />">${cs.key}</span>${cs.value.status}
+                                                        </g:else>
+                                                    </li>
+                                                </g:each>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </g:if>
+
                                 <div id="listContent">
                                 </div>
 

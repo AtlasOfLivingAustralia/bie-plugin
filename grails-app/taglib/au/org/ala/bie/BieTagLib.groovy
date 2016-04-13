@@ -81,17 +81,25 @@ class BieTagLib {
         def colour
 
         switch ( status ) {
-            case ~/extinct$/:
-            case ~/(?i)wild/:
+            case ~/(?i)extinct/:
+                colour = "extinct"
+                break
+            case ~/(?i).*extinct.*/:
+                colour = "black"
+                break
+            case ~/(?i)critically\sendangered.*/:
                 colour = "red"
                 break
-            case ~/(?i)Critically/:
-            case ~/(?i)^Endangered/:
-            case ~/(?i)Vulnerable/:
+            case ~/(?i)endangered.*/:
+                colour = "orange"
+                break
+            case ~/(?i)vulnerable.*/:
                 colour = "yellow"
                 break
-            case ~/(?i)Near/:
-            case ~/(?i)concern/:
+            case ~/(?i)near\sthreatened.*/:
+                colour = "near-threatened"
+                break
+            //case ~/(?i)least\sconcern.*/:
             default:
                 colour = "green"
                 break
