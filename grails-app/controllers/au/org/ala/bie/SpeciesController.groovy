@@ -107,23 +107,31 @@ class SpeciesController {
 
     /**
      * Species page - display information about the requested taxa
+     *
+     * TAXON: a taxon is 'any group or rank in a biological classification in which organisms are related.'
+     * It is also any of the taxonomic units. So basically a taxon is a catch-all term for any of the
+     * classification rankings; i.e. domain, kingdom, phylum, etc.
+     *
+     * TAXON CONCEPT: A taxon concept defines what the taxon means - a series of properties
+     * or details about what we mean when we use the taxon name.
+     *
      */
     def show = {
         def guid = params.guid
 
-        def etc = bieService.getTaxonConcept(guid)
+        def taxonDetails = bieService.getTaxonConcept(guid)
         log.debug "show - guid = ${guid} "
 
-        if (!etc) {
+        if (!taxonDetails) {
             log.error "Error requesting taxon concept object: " + guid
             response.status = 404
             render(view: '../error', model: [message: "Requested taxon <b>" + guid + "</b> was not found"])
-        } else if (etc instanceof JSONObject && etc.has("error")) {
-            log.error "Error requesting taxon concept object: " + etc.error
+        } else if (taxonDetails instanceof JSONObject && taxonDetails.has("error")) {
+            log.error "Error requesting taxon concept object: " + taxonDetails.error
             render(view: '../error', model: [message: etc.error])
         } else {
             render(view: 'show', model: [
-                    tc: etc,
+                    tc: taxonDetails,
                     statusRegionMap: utilityService.getStatusRegionCodes(),
                     infoSourceMap:[],
                     textProperties: [],
@@ -131,10 +139,10 @@ class SpeciesController {
                     isRoleAdmin: false, //authService.userInRole(grailsApplication.config.auth.admin_role),
                     userName: "",
                     isReadOnly: grailsApplication.config.ranking.readonly,
-                    sortCommonNameSources: utilityService.getNamesAsSortedMap(etc.commonNames),
-                    taxonHierarchy: bieService.getClassificationForGuid(etc.taxonConcept.guid),
-                    childConcepts: bieService.getChildConceptsForGuid(etc.taxonConcept.guid),
-                    speciesList: bieService.getSpeciesList(etc.taxonConcept?.guid?:guid)
+                    sortCommonNameSources: utilityService.getNamesAsSortedMap(taxonDetails.commonNames),
+                    taxonHierarchy: bieService.getClassificationForGuid(taxonDetails.taxonConcept.guid),
+                    childConcepts: bieService.getChildConceptsForGuid(taxonDetails.taxonConcept.guid),
+                    speciesList: bieService.getSpeciesList(taxonDetails.taxonConcept?.guid?:guid)
             ])
         }
     }
