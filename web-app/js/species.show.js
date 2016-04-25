@@ -15,6 +15,10 @@
 /**
  * jQuery page onload callback
  */
+$(document).ready(function() {
+    showSpeciesPage();
+});
+
 function showSpeciesPage() {
 
     console.log("Starting show species page");
@@ -31,7 +35,7 @@ function showSpeciesPage() {
     ////setup controls
     addAlerts();
     loadBhl();
-    //loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
+    loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
 }
 
 function loadSpeciesLists(){
@@ -506,10 +510,10 @@ function loadBhl(start, rows, scroll) {
             query += taxonName;
         }
     }
-    if (synonyms) {
-        //synonyms = "  " + ((synonyms.indexOf("OR") != -1) ? "(" + synonyms + ")" : synonyms);
-        query += (taxonName) ? ' OR ' + synonyms : synonyms;
-    }
+    //if (synonyms) {
+    //    //synonyms = "  " + ((synonyms.indexOf("OR") != -1) ? "(" + synonyms + ")" : synonyms);
+    //    query += (taxonName) ? ' OR ' + synonyms : synonyms;
+    //}
 
     if (!query) {
         return cancelSearch("No names were found to search BHL");
