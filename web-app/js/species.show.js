@@ -510,18 +510,24 @@ function loadBhl(start, rows, scroll) {
             query += taxonName;
         }
     }
-    //if (synonyms) {
-    //    //synonyms = "  " + ((synonyms.indexOf("OR") != -1) ? "(" + synonyms + ")" : synonyms);
-    //    query += (taxonName) ? ' OR ' + synonyms : synonyms;
-    //}
+    if (synonyms) {
+        //synonyms = "  " + ((synonyms.indexOf("OR") != -1) ? "(" + synonyms + ")" : synonyms);
+        query += (taxonName) ? ' OR ' + synonyms : synonyms;
+    }
 
     if (!query) {
         return cancelSearch("No names were found to search BHL");
     }
+    //var tail = "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
+    //var url = bhl.searchUrlStart + query + '&start=' + start + "&rows=" + rows + tail;
+    //  console.log("BHL url: "+url);
+
+        //bhl.searchUrlTail;
 
     var url = "http://bhlidx.ala.org.au/select?q=" + query + '&start=' + start + "&rows=" + rows +
         "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
         "group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
+
     var buf = "";
     $("#status-box").css("display", "block");
     $("#synonyms").html("").css("display", "none")
