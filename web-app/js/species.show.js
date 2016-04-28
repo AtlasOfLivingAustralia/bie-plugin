@@ -531,7 +531,7 @@ function loadBhl(start, rows, scroll) {
     var buf = "";
     $("#status-box").css("display", "block");
     $("#synonyms").html("").css("display", "none")
-    $(".result-list").html("");
+    $("#bhl-results-list").html("");
 
     $.ajax({
         url: url,
