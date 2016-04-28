@@ -44,6 +44,8 @@ function troveNextPage(){
     if( (TROVE.s + TROVE.n) < TROVE.totalResults){
         TROVE.s += TROVE.n;
         queryTrove();
+        var topOfTrove = $('#trove-integration').offset();
+        $('html, body').animate({scrollTop: topOfTrove.top-30},"slow");
     }
 }
 
@@ -51,6 +53,8 @@ function trovePreviousPage(){
     if(TROVE.s > 0){
         TROVE.s -= TROVE.n;
         queryTrove();
+        var topOfTrove = $('#trove-integration').offset();
+        $('html, body').animate({scrollTop: topOfTrove.top-30},"slow");
     }
 }
 
@@ -95,6 +99,21 @@ function queryTrove(){
                     }
                     buff +=  '</div>';
                 });
+                var prevStart = TROVE.s;
+                var nextStart = TROVE.s + TROVE.n;
+                var maxItems = TROVE.totalResults;
+
+                buff += '<div id="trove-button-bar">';
+                if (prevStart > 0) {
+                    buff += '<input type="button" class="btn" value="Previous page" onclick="trovePreviousPage()">';
+                }
+                buff += '&nbsp;&nbsp;&nbsp;';
+                if (nextStart < maxItems) {
+                    buff += '<input type="button" class="btn" value="Next page" onclick="troveNextPage()">';
+                }
+
+                buff += '</div>';
+
                 $('#'+TROVE.divId).html(buff);
             }
         },
