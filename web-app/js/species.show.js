@@ -35,7 +35,7 @@ function showSpeciesPage() {
     ////setup controls
     addAlerts();
     loadBhl();
-    loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
+    loadTrove(SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
 function loadSpeciesLists(){

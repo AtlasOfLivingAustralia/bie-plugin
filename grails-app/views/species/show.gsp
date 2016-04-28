@@ -573,18 +573,16 @@
 
                 <section class="tab-pane fade" id="literature">
                     <div id="bhl-integration">
-                        <h2>Name references found in the Biodiversity Heritage Library</h2>
+                        <h2>Name references found in the <a href="http://biodiversityheritagelibrary.com">Biodiversity Heritage Library</a></h2>
 
-                        <div id="bhl-results-list" class="result-list">
+                        <div id="bhl-results-list" class="results-list">
                         </div>
                     </div>
 
-                    <div id="trove-integration" class="hide">
-                        <h2>Name references found in the TROVE - NLA</h2>
+                    <div id="trove-integration">
+                        <h2>Name references found in the <a href="http://trove.nla.gov.au">Trove - NLA</a></h2>
 
-                        <p>Number of matches in TROVE: 75</p>
-
-                        <div class="result-list">
+                        <div id="trove-result-list" class="results-list">
                         </div>
                     </div>
 
