@@ -586,6 +586,12 @@
                         </div>
                        </div>
 
+                    <nav class="floating-menu">
+                        <a href="#bhl-integration">Biodiversity Heritage Library</a>
+                        <a href="#trove-integration">Trove</a>
+
+                    </nav>
+
                 </section>
 
                 <section class="tab-pane fade" id="sequences">
