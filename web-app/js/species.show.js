@@ -579,7 +579,6 @@ function loadBhl(start, rows, scroll) {
 
             var prevStart = start - rows;
             var nextStart = start + rows;
-            //console.log("nav buttons", prevStart, nextStart);
 
             buf += '<div id="button-bar">';
             if (prevStart >= 0) {
