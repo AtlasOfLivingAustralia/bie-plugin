@@ -579,10 +579,10 @@
                         </div>
                     </div>
 
-                    <div id="trove-integration">
+                    <div id="trove-integration" class="column-wrap" style="padding-top:20px;">
                         <h2>Name references found in the <a href="http://trove.nla.gov.au">Trove - NLA</a></h2>
 
-                        <div id="trove-result-list" class="results-list">
+                        <div id="trove-result-list" class="result-list">
                         </div>
                     </div>
 

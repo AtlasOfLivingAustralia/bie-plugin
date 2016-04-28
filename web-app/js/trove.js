@@ -66,17 +66,17 @@ function queryTrove(){
             if(TROVE.totalResults == 0){
                 $('#'+TROVE.containerDivId).css({display:'none'});
             } else {
-                var buff = '<div class="results-summary">Number of matches in TROVE: ' + TROVE.totalResults +'</div>'
+                var buff = '<div class="results-summary">Number of matches in Trove: ' + TROVE.totalResults +'</div>'
                 $.each(data.response.zone[0].records.work, function(index, value){
                     //console.log(value.title);
-                    buff += '<div class="result-box">';
+                    buff += '<div class="result">';
                     //buff +=  '<a href="' + value.troveUrl + '">';
-                    buff += '<p class="titleInfo">';
+                    buff += '<h3>';
                     buff += '<span class="troveIdx">';
                     buff += '<b>'+ (index + TROVE.s + 1) +'</b>.&nbsp;';
                     buff += '</span>';
                     buff += '<span class="title"><a href="' + value.troveUrl + '">' + value.title + '</a></span>';
-                    buff += '</p>';
+                    buff += '</h3>';
                     if(value.contributor != null){
                         buff +=  '<p class="contributors">Contributors: ';
                         var contribIdx = 0;
