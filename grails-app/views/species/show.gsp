@@ -585,7 +585,7 @@
                         <div id="trove-result-list" class="result-list">
                         </div>
                         <input type="button" class="btn" id="previousTrove" value="Previous page"/>
-                        <input type="button" class="btn" id="nextTrove" value="Next page"/
+                        <input type="button" class="btn" id="nextTrove" value="Next page"/>
                     </div>
 
                 </section>
