@@ -44,8 +44,7 @@ function troveNextPage(){
     if( (TROVE.s + TROVE.n) < TROVE.totalResults){
         TROVE.s += TROVE.n;
         queryTrove();
-        var topOfTrove = $('#trove-integration').offset();
-        $('html, body').animate({scrollTop: topOfTrove.top-30},"slow");
+        scrollToTopOfTrove();
     }
 }
 
@@ -53,9 +52,13 @@ function trovePreviousPage(){
     if(TROVE.s > 0){
         TROVE.s -= TROVE.n;
         queryTrove();
-        var topOfTrove = $('#trove-integration').offset();
-        $('html, body').animate({scrollTop: topOfTrove.top-30},"slow");
+        scrollToTopOfTrove();
     }
+}
+
+function scrollToTopOfTrove(){
+    var topOfTrove = $('#trove-integration').offset();
+    $('html, body').animate({scrollTop: topOfTrove.top-30},"slow");
 }
 
 function queryTrove(){

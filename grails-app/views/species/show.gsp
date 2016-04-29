@@ -580,6 +580,7 @@
                     </div>
 
                     <div id="trove-integration" class="column-wrap" style="padding-top:20px;">
+                        <h2>&nbsp;</h2>
                         <h2>Name references found in <a href="http://trove.nla.gov.au">Trove - NLA</a></h2>
 
                         <div id="trove-result-list" class="result-list">
