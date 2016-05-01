@@ -80,7 +80,7 @@ class SpeciesController {
         // empty search -> search for all records
         if (query.isEmpty()) {
             //render(view: '../error', model: [message: "No search term specified"])
-            query = "*";
+            query = "*:*";
         }
 
         if (filterQuery.size() > 1 && filterQuery.findAll { it.size() == 0 }) {
