@@ -10,7 +10,7 @@ class BieService {
     def searchBie(SearchRequestParamsDTO requestObj) {
 
         def queryUrl = grailsApplication.config.bie.index.url + "/search?" + requestObj.getQueryString() +
-                "&facets=" + grailsApplication.config.facets
+                "&facets=" + grailsApplication.config.facets + "&q.op=OR"
 
         if(grailsApplication.config.bieService.queryContext){
             queryUrl = queryUrl + "&" + grailsApplication.config.bieService.queryContext
