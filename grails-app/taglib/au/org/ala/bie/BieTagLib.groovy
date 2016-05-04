@@ -18,26 +18,34 @@ class BieTagLib {
      */
     def formatSciName = { attrs ->
         def nameFormatted = attrs.nameFormatted
+        def rankId = attrs.rankId ?: 0
+        def name = attrs.nameComplete ?: attrs.name
+        def rank = cssRank(rankId)
+        def accepted = attrs.acceptedName
+        def parsed = { n, r, incAuthor ->
+            PhraseNameParser pnp = new PhraseNameParser()
+            try {
+                def pn = pnp.parse(n) // attempt to parse phrase name
+                log.debug "name = ${n} || rankId = ${pn.canonicalName()}"
+                def author = incAuthor ? " <span class=\"author\">${pn.authorshipComplete()}</span>" : ""
+                n = "<span class=\"scientific-name rank-${r}\"><span class=\"name\">${pn.canonicalName()}</span>${author}</span>"
+            } catch (Exception ex) {
+                log.warn "Error parsing name (${n}): ${ex}", ex
+            }
+            n
+        }
 
         if (nameFormatted)
             out << nameFormatted
         else {
-            def rankId = attrs.rankID ?: 0
-            def name = attrs.nameComplete ?: attrs.name
-            def rank = cssRank(rankId)
             def output = "<span class=\"scientific-name rank-${rank}\"><span class=\"name\">${name}</span></span>"
-            if (rankId >= 6000) {
-                PhraseNameParser pnp = new PhraseNameParser()
-
-                try {
-                    def pn = pnp.parse(name) // attempt to parse phrase name
-                    log.debug "name = ${name} || rankId = ${pn.canonicalName()}"
-                    output = "<span class=\"scientific-name rank-${rank}\"><span class=\"name\">${pn.canonicalName()}</span> <span class=\"author\">${pn.authorshipComplete()}</span></span>"
-                } catch (Exception ex) {
-                    log.warn "Error parsing name (${name}): ${ex}", ex
-                }
-            }
-            out << output
+            if (rankId >= 6000)
+                output = parsed(name, rank, true)
+             out << output
+        }
+        if (accepted) {
+            accepted = parsed(accepted, rank, false)
+            out << " <span class=\"accepted-name\">(accepted name:&nbsp;${accepted})</span> "
         }
     }
 
