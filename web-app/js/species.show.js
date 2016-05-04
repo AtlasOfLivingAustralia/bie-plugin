@@ -15,6 +15,10 @@
 /**
  * jQuery page onload callback
  */
+$(document).ready(function() {
+    showSpeciesPage();
+});
+
 function showSpeciesPage() {
 
     console.log("Starting show species page");
@@ -31,7 +35,7 @@ function showSpeciesPage() {
     ////setup controls
     addAlerts();
     loadBhl();
-    //loadTrove(SHOW_CONF.scientificName,'trove-container','trove-results-home','previousTrove','nextTrove');
+    loadTrove(SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
 function loadSpeciesLists(){
@@ -519,14 +523,20 @@ function loadBhl(start, rows, scroll) {
     if (!query) {
         return cancelSearch("No names were found to search BHL");
     }
+    //var tail = "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
+    //var url = bhl.searchUrlStart + query + '&start=' + start + "&rows=" + rows + tail;
+    //  console.log("BHL url: "+url);
+
+        //bhl.searchUrlTail;
 
     var url = "http://bhlidx.ala.org.au/select?q=" + query + '&start=' + start + "&rows=" + rows +
         "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
         "group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
+
     var buf = "";
     $("#status-box").css("display", "block");
     $("#synonyms").html("").css("display", "none")
-    $(".result-list").html("");
+    $("#bhl-results-list").html("");
 
     $.ajax({
         url: url,
@@ -572,7 +582,6 @@ function loadBhl(start, rows, scroll) {
 
             var prevStart = start - rows;
             var nextStart = start + rows;
-            //console.log("nav buttons", prevStart, nextStart);
 
             buf += '<div id="button-bar">';
             if (prevStart >= 0) {

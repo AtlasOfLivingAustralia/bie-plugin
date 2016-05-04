@@ -286,10 +286,10 @@
                                         <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
                                     </g:if>
                                     <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
-                                    <g:if test="${result?.occCount?:0 > 0}">
+                                    <g:if test="${result?.occurrenceCount?:0 > 0}">
                                         <li>
                                         <a href="${biocacheUrl}/occurrences/taxa/${result.guid}">Occurrences:
-                                        <g:formatNumber number="${result.occCount}" type="number"/></a></span>
+                                        <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
                                         </li>
                                     </g:if>
                                 </ul>
