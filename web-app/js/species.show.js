@@ -12,13 +12,6 @@
  * implied. See the License for the specific language governing
  * rights and limitations under the License.
  */
-/**
- * jQuery page onload callback
- */
-$(document).ready(function() {
-    showSpeciesPage();
-});
-
 function showSpeciesPage() {
 
     console.log("Starting show species page");
