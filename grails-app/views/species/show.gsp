@@ -214,7 +214,7 @@
                                     </p>
 
                                     <p><a class="tab-link"
-                                          href="#data-providers">Browse the list of data partners</a> and find organisations you can join if you are
+                                          href="#data-partners">Browse the list of data partners</a> and find organisations you can join if you are
                                     interested in participating in a survey for
                                     <g:if test="${tc.taxonConcept?.rankID > 6000}">
                                         species like ${raw(sciNameFormatted)}
@@ -602,7 +602,7 @@
                     <div class="genbank-results result-list">
                     </div>
                 </section>
-                <section class="tab-pane fade" id="data-providers">
+                <section class="tab-pane fade" id="data-partners">
                     <table id="data-providers-list" class="table name-table  table-responsive">
                         <thead>
                         <tr>
@@ -702,7 +702,8 @@
         mapAttribution: "${raw(grailsApplication.config.skin.orgNameLong)}",
         mapboxId: "${grailsApplication.config.map.mapbox.id}",
         mapboxToken: "${grailsApplication.config.map.mapbox.token}",
-        mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}"
+        mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+        map: null
     }
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});
