@@ -95,6 +95,11 @@ function addAlerts(){
 }
 
 function loadMap() {
+
+    if(SHOW_CONF.map != null){
+        return;
+    }
+
     //add an occurrence layer for this taxon
     var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=lsid:" +
         SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext, {
@@ -110,7 +115,7 @@ function loadMap() {
     var speciesLayers = new L.LayerGroup();
     taxonLayer.addTo(speciesLayers);
 
-    var map = L.map('leafletMap', {
+    SHOW_CONF.map = L.map('leafletMap', {
         center: [SHOW_CONF.defaultDecimalLatitude, SHOW_CONF.defaultDecimalLongitude],
         zoom: SHOW_CONF.defaultZoomLevel,
         layers: [speciesLayers]
@@ -122,7 +127,7 @@ function loadMap() {
         'Imagery © <a href="http://mapbox.com">Mapbox</a>';
     var defaultBaseLayer = L.tileLayer(mbUrl, {mapid: SHOW_CONF.mapboxId, token: SHOW_CONF.mapboxToken, attribution: mbAttr});
 
-    defaultBaseLayer.addTo(map);
+    defaultBaseLayer.addTo(SHOW_CONF.map);
 
     var baseLayers = {
         "Base layer": defaultBaseLayer
@@ -133,10 +138,10 @@ function loadMap() {
     var overlays = {};
     overlays[sciName] = taxonLayer;
 
-    L.control.layers(baseLayers, overlays).addTo(map);
+    L.control.layers(baseLayers, overlays).addTo(SHOW_CONF.map);
 
-    map.on('click', onMapClick);
-    map.invalidateSize(false);
+    SHOW_CONF.map.on('click', onMapClick);
+    SHOW_CONF.map.invalidateSize(false);
 }
 
 function onMapClick(e) {
