@@ -51,7 +51,11 @@ function loadSpeciesLists(){
 
                 var content = "<dl class='dl-horizontal species-list-dl'>";
                 $.each(specieslist.kvpValues, function (idx, kvpValue) {
-                    content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + kvpValue.value + "</dd>");
+                    var value = kvpValue.value;
+                    if(kvpValue.vocabValue){
+                        value = kvpValue.vocabValue;
+                    }
+                    content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + value + "</dd>");
                 });
                 content += "</dl>";
 
@@ -117,12 +121,13 @@ function loadMap() {
     defaultBaseLayer.addTo(map);
 
     var baseLayers = {
-        "Default": defaultBaseLayer
+        "Base layer": defaultBaseLayer
     };
 
-    var overlays = {
-        "${sciNameFormatted}": taxonLayer
-    };
+    var sciName = SHOW_CONF.scientificName;
+
+    var overlays = {};
+    overlays[sciName] = taxonLayer;
 
     L.control.layers(baseLayers, overlays).addTo(map);
 
@@ -167,13 +172,13 @@ function loadDataProviders(){
     $.getJSON(url, function(data){
 
         if(data.totalRecords > 0) {
-
             $('.datasetCount').html(data.facetResults[0].fieldResult.length);
             $.each(data.facetResults[0].fieldResult, function (idx, facetValue) {
+                if(facetValue.count > 0){
+                    var queryUrl = uiUrl + "&fq=" + facetValue.fq;
+                    $('#data-providers-list tbody').append("<tr><td><a href='" + queryUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a></td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td></tr>");
 
-                var queryUrl = uiUrl + "&fq=" + facetValue.fq;
-
-                $('#data-providers-list tbody').append("<tr><td><a href='" + queryUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a></td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td></tr>");
+                }
             });
         }
     });
@@ -537,8 +542,6 @@ function loadBhl(start, rows, scroll) {
             var pageSize = parseInt(rows, 10);
             var showingFrom = startItem + 1;
             var showingTo = (startItem + pageSize <= maxItems) ? startItem + pageSize : maxItems ;
-            //console.log(startItem, pageSize, showingTo);
-            var pageSize = parseInt(rows, 10);
             buf += '<div class="results-summary">Showing ' + showingFrom + " to " + showingTo + " of " + maxItems +
                 ' results for the query <pre>' + query + '</pre></div>'
             // grab highlight text and store in map/hash

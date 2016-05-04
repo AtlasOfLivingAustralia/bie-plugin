@@ -75,7 +75,7 @@
                     <li><a href="#records" data-toggle="tab">Records</a></li>
                     <li><a href="#literature" data-toggle="tab">Literature</a></li>
                     <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
-                    <li><a href="#data-providers" data-toggle="tab">Data Providers</a></li>
+                    <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
                 </ul>
                 <div class="tab-content">
 
@@ -149,11 +149,11 @@
                                 </div>
                                 <div class="panel panel-default panel-data-providers">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title">Data Providers</h3>
+                                        <h3 class="panel-title">Data partners</h3>
                                     </div>
                                     <div class="panel-body">
                                         <p><strong><span class="datasetCount"></span></strong> datasets have provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.</p>
-                                        <p><a class="tab-link" href="#data-providers">Browse the list of data providers</a> and find organisations you can join if you are
+                                        <p><a class="tab-link" href="#data-partners">Browse the list of data partners</a> and find organisations you can join if you are
                                         interested in participating in a survey for
                                         <g:if test="${tc.taxonConcept?.rankID > 6000}">
                                             species like ${raw(sciNameFormatted)}
@@ -447,12 +447,12 @@
                         <div class="genbank-results result-list">
                         </div>
                     </section>
-                    <section class="tab-pane fade" id="data-providers">
-                        <h2>Data Providers</h2>
+                    <section class="tab-pane fade" id="data-partners">
+                        %{--<h2>Data partners</h2>--}%
                         <table id="data-providers-list"  class="table name-table  table-responsive">
                             <thead>
                             <tr>
-                                <th>Data provider</th>
+                                <th>Data partner</th>
                                 <th>Records</th>
                             </tr>
                             </thead>
