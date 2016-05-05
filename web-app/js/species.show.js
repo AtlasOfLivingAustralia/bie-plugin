@@ -291,52 +291,81 @@ function escapeHtml(string) {
  * Load overview images on the species page. This is separate from the main galleries.
  */
 function loadOverviewImages(){
+    var hasPreferredImage = false; // Could get a race condition where no main image gets loaded due callbacks
+
+    if (SHOW_CONF.preferredImageId) {
+        hasPreferredImage = true;
+        var prefUrl = SHOW_CONF.biocacheServiceUrl  +
+            '/occurrences/search.json?q=image_url:' + SHOW_CONF.preferredImageId +
+            '&im=true&facet=off&pageSize=1&start=0&callback=?';
+        $.getJSON(prefUrl, function(data){
+            //console.log("prefUrl", prefUrl, data);
+            if (data && data.totalRecords > 0) {
+                addOverviewImage(data.occurrences[0]);
+                hasPreferredImage = true;
+            } else {
+                hasPreferredImage = false;
+            }
+
+        }).fail(function(jqxhr, textStatus, error) {
+            alert('Error loading overview image: ' + textStatus + ', ' + error);
+            hasPreferredImage = false;
+        });
+    }
 
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
         '&fq=multimedia:"Image"&im=true&facet=off&pageSize=5&start=0&callback=?';
-
-    console.log('Loading images from: ' + url);
+    //console.log('Loading images from: ' + url);
 
     $.getJSON(url, function(data){
         if (data && data.totalRecords > 0) {
-
-            $('#noOverviewImages').addClass('hide');
-            $('.thumb-row').removeClass('hide');
-            var $categoryTmpl = $('#overviewImages');
-            $categoryTmpl.removeClass('hide');
-
-            var $mainOverviewImage = $('.mainOverviewImage');
-            $mainOverviewImage.attr('src', data.occurrences[0].largeImageUrl);
-            $mainOverviewImage.parent().attr('href', data.occurrences[0].largeImageUrl);
-            $mainOverviewImage.parent().attr('data-title', getImageTitleFromOccurrence(data.occurrences[0]));
-            $mainOverviewImage.parent().attr('data-footer', getImageFooterFromOccurrence(data.occurrences[0]));
-
-            $('.mainOverviewImageInfo').html(getImageTitleFromOccurrence(data.occurrences[0]));
-
-            if(data.occurrences.length >= 2){
-                var $thumb = generateOverviewThumb(data.occurrences[1], "1");
-                $('#overview-thumbs').append($thumb);
-            }
-            if(data.occurrences.length >= 3){
-                var $thumb = generateOverviewThumb(data.occurrences[2], "2");
-                $('#overview-thumbs').append($thumb);
-            }
-            if(data.occurrences.length >= 4){
-                var $thumb = generateOverviewThumb(data.occurrences[3], "3");
-                $('#overview-thumbs').append($thumb);
-            }
-            if(data.occurrences.length >= 5){
-                var occurrence  = data.occurrences[4];
-                $('#more-photo-thumb-link').attr('style', 'background-image:url(' + occurrence.smallImageUrl + ')');
-            }
+            addOverviewImages(data.occurrences, hasPreferredImage);
         }
     }).fail(function(jqxhr, textStatus, error) {
-        alert('Error loading gallery: ' + textStatus + ', ' + error);
+        alert('Error loading overview images: ' + textStatus + ', ' + error);
     }).always(function() {
         $('#gallerySpinner').hide();
     });
+}
+
+function addOverviewImages(imagesArray, hasPreferredImage) {
+
+    if (!hasPreferredImage) {
+        // no preferred image so use first in results set
+        addOverviewImage(imagesArray[0]);
+    }
+
+    for (j = 1; j < 5; j++) {
+        // load smaller thumb images
+        addOverviewThumb(imagesArray[j], j)
+    }
+}
+
+function addOverviewImage(overviewImageRecord) {
+    $('#noOverviewImages').addClass('hide');
+    $('.thumb-row').removeClass('hide');
+    var $categoryTmpl = $('#overviewImages');
+    $categoryTmpl.removeClass('hide');
+
+    var $mainOverviewImage = $('.mainOverviewImage');
+    $mainOverviewImage.attr('src',overviewImageRecord.largeImageUrl);
+    $mainOverviewImage.parent().attr('href', overviewImageRecord.largeImageUrl);
+    $mainOverviewImage.parent().attr('data-title', getImageTitleFromOccurrence(overviewImageRecord));
+    $mainOverviewImage.parent().attr('data-footer', getImageFooterFromOccurrence(overviewImageRecord));
+
+    $('.mainOverviewImageInfo').html(getImageTitleFromOccurrence(overviewImageRecord));
+}
+
+function addOverviewThumb(record, i) {
+
+    if (i < 4) {
+        var $thumb = generateOverviewThumb(record, i);
+        $('#overview-thumbs').append($thumb);
+    } else {
+        $('#more-photo-thumb-link').attr('style', 'background-image:url(' + record.smallImageUrl + ')');
+    }
 }
 
 function generateOverviewThumb(occurrence, id){

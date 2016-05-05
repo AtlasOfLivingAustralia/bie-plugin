@@ -675,7 +675,7 @@
 </div>
 
 <r:script>
-    // global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
+    // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
     var SHOW_CONF = {
         biocacheUrl:        "${grailsApplication.config.biocache.baseURL}",
         biocacheServiceUrl: "${grailsApplication.config.biocacheService.baseURL}",
@@ -685,6 +685,7 @@
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
         taxonRankID:        "${tc?.taxonConcept?.rankID ?: ''}",
         synonymsQuery:      "${synonymsQuery.replaceAll('""','"').encodeAsJavaScript()}",
+        preferredImageId:   "${tc?.imageIdentifier?: ''}",
         citizenSciUrl:      "${citizenSciUrl}",
         serverName:         "${grailsApplication.config.grails.serverURL}",
         speciesListUrl:     "${grailsApplication.config.speciesList.baseURL}",
@@ -708,7 +709,7 @@
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});
 
-    $(function(){ showSpeciesPage(); })
+    //$(function(){ showSpeciesPage(); })
 </r:script>
 
 <r:script type="text/javascript">
