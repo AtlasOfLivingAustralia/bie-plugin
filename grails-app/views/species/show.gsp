@@ -709,7 +709,7 @@
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});
 
-    //$(function(){ showSpeciesPage(); })
+    $(function(){ showSpeciesPage(); })
 </r:script>
 
 <r:script type="text/javascript">
