@@ -701,8 +701,12 @@
         defaultDecimalLongitude: ${grailsApplication.config.defaultDecimalLongitude},
         defaultZoomLevel: ${grailsApplication.config.defaultZoomLevel},
         mapAttribution: "${raw(grailsApplication.config.skin.orgNameLong)}",
-        mapboxId: "${grailsApplication.config.map.mapbox.id}",
-        mapboxToken: "${grailsApplication.config.map.mapbox.token}",
+        defaultMapUrl: "${grailsApplication.config.map.default.url}",
+        defaultMapAttr: "${raw(grailsApplication.config.map.default.attr)}",
+        defaultMapDomain: "${grailsApplication.config.map.default.domain}",
+        defaultMapId: "${grailsApplication.config.map.default.id}",
+        defaultMapToken: "${grailsApplication.config.map.default.token}",
+        recordsMapColour: "${grailsApplication.config.map.records.colour}",
         mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
         map: null
     }

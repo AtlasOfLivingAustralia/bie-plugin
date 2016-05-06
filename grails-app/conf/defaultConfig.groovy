@@ -23,8 +23,12 @@ defaultDecimalLongitude = 133.8
 defaultZoomLevel = 4
 image.thumbnailUrl = "http://images.ala.org.au/image/proxyImageThumbnail?imageId="
 facets = "idxtype,rank,locatedInHubCountry,imageAvailable,speciesGroup"
-map.mapbox.id = "nickdos.kf2g7gpb"
-map.mapbox.token = "pk.eyJ1Ijoibmlja2RvcyIsImEiOiJ2V2dBdEg0In0.Ep2VyMOaOUnOwN1ZVa9uyQ"
+map.default.id = "" // not needed for CartoDB map
+map.default.token = "" // not needed for CartoDB map
+map.default.url = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+map.default.attr = "Map data &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>, imagery &copy; <a href='http://cartodb.com/attributions'>CartoDB</a>"
+map.default.domain = "abcd"
+map.records.colour = "e6704c"
 bieService.queryContext = ""
 googleMapsApiKey = "AIzaSyB0HIkSCV2EdkG50uM7s96IEbO6wUHTqy0"
 

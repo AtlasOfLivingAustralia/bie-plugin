@@ -101,8 +101,8 @@ function loadMap() {
         transparent: true,
         attribution: SHOW_CONF.mapAttribution,
         bgcolor: "0x000000",
-        outline: "true",
-        ENV: "color:5574a6;name:circle;size:4;opacity:1"
+        outline: "false",
+        ENV: "color:"+SHOW_CONF.recordsMapColour+";name:circle;size:4;opacity:0.8"
     });
 
     var speciesLayers = new L.LayerGroup();
@@ -114,11 +114,12 @@ function loadMap() {
         layers: [speciesLayers]
     });
 
-    var mbUrl = 'https://{s}.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={token}';
-    var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="http://mapbox.com">Mapbox</a>';
-    var defaultBaseLayer = L.tileLayer(mbUrl, {mapid: SHOW_CONF.mapboxId, token: SHOW_CONF.mapboxToken, attribution: mbAttr});
+    var defaultBaseLayer = L.tileLayer(SHOW_CONF.defaultMapUrl, {
+        attribution: SHOW_CONF.defaultMapAttr,
+        subdomains: SHOW_CONF.defaultMapDomain,
+        mapid: SHOW_CONF.defaultMapId,
+        token: SHOW_CONF.defaultMapToken
+    });
 
     defaultBaseLayer.addTo(SHOW_CONF.map);
 
