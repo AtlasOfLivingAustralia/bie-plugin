@@ -127,8 +127,17 @@ class SpeciesController {
             response.status = 404
             render(view: '../error', model: [message: "Requested taxon <b>" + guid + "</b> was not found"])
         } else if (taxonDetails instanceof JSONObject && taxonDetails.has("error")) {
-            log.error "Error requesting taxon concept object: " + taxonDetails.error
-            render(view: '../error', model: [message: taxonDetails.error])
+            if (taxonDetails.error?.contains("FileNotFoundException")) {
+                log.error "Error requesting taxon concept object: " + guid
+                response.status = 404
+                render(view: '../error', model: [message: "Requested taxon <b>" + guid + "</b> was not found"])
+            } else {
+                log.error "Error requesting taxon concept object: " + taxonDetails.error
+                render(view: '../error', model: [message: taxonDetails.error])
+            }
+        } else if (taxonDetails.taxonConcept?.guid && taxonDetails.taxonConcept.guid != guid) {
+            // old identifier so redirect to current taxon page
+            redirect(uri: "/species/${taxonDetails.taxonConcept.guid}", permanent: true)
         } else {
             render(view: 'show', model: [
                     tc: taxonDetails,
