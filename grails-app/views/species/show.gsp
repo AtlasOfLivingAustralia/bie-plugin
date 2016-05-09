@@ -174,7 +174,11 @@
                         </div><!-- end col 1 -->
 
                         <div class="col-md-6">
-
+                            <div id="expertDistroDiv" style="display:none;margin-bottom: 10px;">
+                                <h2>Compiled distribution map</h2>
+                                <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg" style="width:316px;" alt="occurrence map" onerror="this.style.display='none'"/>
+                                <div class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></div>
+                            </div>
                             <div class="taxon-map">
                                 <div id="leafletMap"></div>
 
