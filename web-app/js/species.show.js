@@ -33,7 +33,7 @@ function showSpeciesPage() {
 
 function loadSpeciesLists(){
 
-    console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
+    //console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
     $.get(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid, function( data ) {
         for(var i = 0; i < data.length; i++) {
             var specieslist = data[i];
@@ -111,7 +111,8 @@ function loadMap() {
     SHOW_CONF.map = L.map('leafletMap', {
         center: [SHOW_CONF.defaultDecimalLatitude, SHOW_CONF.defaultDecimalLongitude],
         zoom: SHOW_CONF.defaultZoomLevel,
-        layers: [speciesLayers]
+        layers: [speciesLayers],
+        scrollWheelZoom: false
     });
 
     var defaultBaseLayer = L.tileLayer(SHOW_CONF.defaultMapUrl, {
@@ -543,19 +544,20 @@ function loadBhl(start, rows, scroll) {
             query += taxonName;
         }
     }
+
     if (synonyms) {
-        //synonyms = "  " + ((synonyms.indexOf("OR") != -1) ? "(" + synonyms + ")" : synonyms);
-        query += (taxonName) ? ' OR ' + synonyms : synonyms;
+        synonyms = synonyms.replace(/\\\"/g,'"'); // remove escaped quotes
+
+        if (taxonName) {
+            query += ' OR (' + synonyms + ")"
+        } else {
+            query += synonyms
+        }
     }
 
     if (!query) {
         return cancelSearch("No names were found to search BHL");
     }
-    //var tail = "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
-    //var url = bhl.searchUrlStart + query + '&start=' + start + "&rows=" + rows + tail;
-    //  console.log("BHL url: "+url);
-
-        //bhl.searchUrlTail;
 
     var url = "http://bhlidx.ala.org.au/select?q=" + query + '&start=' + start + "&rows=" + rows +
         "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
