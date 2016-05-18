@@ -158,17 +158,7 @@
                                 </div>
 
                                 <div class="panel-body">
-                                    <ul>
-                                        <li><a href="http://www.gbif.org/species/search?q=${tc?.taxonConcept?.nameString}">GBIF</a>
-                                        </li>
-                                        <li><a href="http://eol.org/search?q=${tc?.taxonConcept?.nameString}&show_all=true">Encyclopaedia of Life</a>
-                                        </li>
-                                        <li><a href="http://www.biodiversitylibrary.org/search?searchTerm=${tc?.taxonConcept?.nameString}#/names">Biodiversity Heritage Library</a>
-                                        </li>
-                                        <li><a href="http://www.eu-nomen.eu/portal/">PESI</a></li>
-                                        <li><a href="http://www.arkive.org/explore/species?q=${tc?.taxonConcept?.nameString}">ARKive</a>
-                                        </li>
-                                    </ul>
+                                    <g:render template="onlineResources"/>
                                 </div>
                             </div>
 
@@ -189,7 +179,7 @@
                                        role="button">View Interactive Map</a>
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
-                                       role="button">View Locations</a>
+                                       role="button">View Records</a>
                                 </div>
                             </div>
 
