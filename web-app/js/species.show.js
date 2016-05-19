@@ -447,8 +447,8 @@ function loadGalleryType(category, start) {
 
             if (data.totalRecords > (start + pageSize)) {
                 // add new 'load more images' button if required
-                var spinnerLink = $('#gallerySpinner img').attr('src');
-                var btn = '<div class="loadMore ' + category + '"><br><button class="btn" onCLick="loadGalleryType(\'' + category + '\','
+                var spinnerLink = $('img#gallerySpinner').attr('src');
+                var btn = '<div class="loadMore ' + category + '"><br><button class="btn btn-default" onCLick="loadGalleryType(\'' + category + '\','
                     + (start + pageSize)  + ');">Load more images <img src="' + spinnerLink + '" class="hide"/></button></div>';
                 $categoryTmpl.find('.taxon-gallery').append(btn);
             }

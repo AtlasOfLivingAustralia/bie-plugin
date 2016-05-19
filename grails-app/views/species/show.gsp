@@ -226,23 +226,13 @@
                 </section>
 
                 <section class="tab-pane fade" id="gallery">
-                    <div id="cat_types" class="hide">
-                        <h2>Types</h2>
+                    <g:each in="${["type","specimen","other"]}" var="cat">
+                        <div id="cat_${cat}" class="hide">
+                            <h2><g:message code="images.heading.${cat}" default="${cat}"/></h2>
+                            <div class="taxon-gallery"></div>
+                        </div>
 
-                        <div class="taxon-gallery"></div>
-                    </div>
-
-                    <div id="cat_specimens" class="hide">
-                        <h2>Specimens</h2>
-
-                        <div class="taxon-gallery"></div>
-                    </div>
-
-                    <div id="cat_other" class="hide">
-                        <h2>Images</h2>
-
-                        <div class="taxon-gallery"></div>
-                    </div>
+                    </g:each>
 
                     <div id="cat_nonavailable">
                         <h2>No images available for this taxon</h2>
@@ -253,6 +243,7 @@
                             please upload using the upload tools.
                         </p>
                     </div>
+                    <img src="${resource(dir: 'images', file: 'spinner.gif', plugin: 'biePlugin')}" id="gallerySpinner" class="hide"/>
                 </section>
 
                 <section class="tab-pane fade" id="names">
