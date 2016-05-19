@@ -176,10 +176,10 @@
                                 <div class="map-buttons">
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
-                                       role="button">View Interactive Map</a>
+                                       role="button"><g:message code="overview.map.button.records.map" default="View Interactive Map"/></a>
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
-                                       role="button">View Records</a>
+                                       role="button"><g:message code="overview.map.button.records.list" default="View Locations"/></a>
                                 </div>
                             </div>
 
