@@ -76,7 +76,7 @@ function addAlerts(){
         e.preventDefault();
         var query = "Species: " + SHOW_CONF.scientificName;
         var searchString = "?q=" + SHOW_CONF.guid;
-        var url = SHOW_CONF.alertsUrl + "/ws/createBiocacheNewRecordsAlert?";
+        var url = SHOW_CONF.alertsUrl + "createBiocacheNewRecordsAlert?";
         url += "queryDisplayName=" + encodeURIComponent(query);
         url += "&baseUrlForWS=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
         url += "&baseUrlForUI=" + encodeURIComponent(SHOW_CONF.serverName);
