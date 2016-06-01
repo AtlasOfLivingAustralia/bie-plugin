@@ -89,3 +89,20 @@ span.iucn.extinct {
     border-color: black;
     color: #c33;
 }
+
+/* anchor offset for floating header */
+:target:before {
+    content:"";
+    display:block;
+    height:67px; /* fixed header height*/
+    margin:-67px 0 0; /* negative fixed header height */
+}
+
+.sidebarCol .navbar li {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#gallery > div {
+    margin-bottom: 20px;
+}

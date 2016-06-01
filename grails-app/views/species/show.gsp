@@ -27,7 +27,7 @@
                                                  name="${tc?.taxonConcept?.name}"
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if
-        test="${i < tc.synonyms.size() - 1}">OR</g:if></g:each></g:set>
+        test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,20 +74,19 @@
         </div>
     </header>
 
-    <div id="main-content" class="main-content panel panel-body">
-        <div class="taxon-tabs">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
-                <li><a href="#gallery" data-toggle="tab">Gallery</a></li>
-                <li><a href="#names" data-toggle="tab">Names</a></li>
-                <li><a href="#classification" data-toggle="tab">Classification</a></li>
-                <li><a href="#records" data-toggle="tab">Records</a></li>
-                <li><a href="#literature" data-toggle="tab">Literature</a></li>
-                <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
-                <li><a href="#data-providers" data-toggle="tab">Data Providers</a></li>
-            </ul>
-
-            <div class="tab-content">
+        <div id="main-content" class="main-content panel panel-body">
+            <div class="taxon-tabs">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
+                    <li><a href="#gallery" data-toggle="tab">Gallery</a></li>
+                    <li><a href="#names" data-toggle="tab">Names</a></li>
+                    <li><a href="#classification" data-toggle="tab">Classification</a></li>
+                    <li><a href="#records" data-toggle="tab">Records</a></li>
+                    <li><a href="#literature" data-toggle="tab">Literature</a></li>
+                    <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
+                    <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
+                </ul>
+                <div class="tab-content">
 
                 <section class="tab-pane fade in active" id="overview">
                     <div class="row taxon-row">
@@ -132,6 +131,7 @@
                                                         <a href="${collectoryUrl}/public/showDataResource/${cs.value.dr}"><span
                                                                 class="iucn <bie:colourForStatus
                                                                         status="${cs.value.status}"/>">${cs.key}</span>${cs.value.status}
+                                                        <!-- cs = ${cs} -->
                                                         </a>
                                                     </g:if>
                                                     <g:else>
@@ -157,34 +157,28 @@
                                 </div>
 
                                 <div class="panel-body">
-                                    <ul>
-                                        <li><a href="http://www.gbif.org/species/search?q=${tc?.taxonConcept?.nameString}">GBIF</a>
-                                        </li>
-                                        <li><a href="http://eol.org/search?q=${tc?.taxonConcept?.nameString}&show_all=true">Encyclopaedia of Life</a>
-                                        </li>
-                                        <li><a href="http://www.biodiversitylibrary.org/search?searchTerm=${tc?.taxonConcept?.nameString}#/names">Biodiversity Heritage Library</a>
-                                        </li>
-                                        <li><a href="http://www.eu-nomen.eu/portal/">PESI</a></li>
-                                        <li><a href="http://www.arkive.org/explore/species?q=${tc?.taxonConcept?.nameString}">ARKive</a>
-                                        </li>
-                                    </ul>
+                                    <g:render template="onlineResources"/>
                                 </div>
                             </div>
 
                         </div><!-- end col 1 -->
 
                         <div class="col-md-6">
-
+                            <div id="expertDistroDiv" style="display:none;margin-bottom: 10px;">
+                                <h2>Compiled distribution map</h2>
+                                <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg" style="width:316px;" alt="occurrence map" onerror="this.style.display='none'"/>
+                                <div class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></div>
+                            </div>
                             <div class="taxon-map">
                                 <div id="leafletMap"></div>
 
                                 <div class="map-buttons">
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
-                                       role="button">View Interactive Map</a>
+                                       role="button"><g:message code="overview.map.button.records.map" default="View Interactive Map"/></a>
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
-                                       role="button">View Locations</a>
+                                       role="button"><g:message code="overview.map.button.records.list" default="View Locations"/></a>
                                 </div>
                             </div>
 
@@ -205,7 +199,7 @@
 
                             <div class="panel panel-default panel-data-providers">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Data Providers</h3>
+                                    <h3 class="panel-title">Data partners</h3>
                                 </div>
 
                                 <div class="panel-body">
@@ -214,7 +208,7 @@
                                     </p>
 
                                     <p><a class="tab-link"
-                                          href="#data-providers">Browse the list of data providers</a> and find organisations you can join if you are
+                                          href="#data-partners">Browse the list of data partners</a> and find organisations you can join if you are
                                     interested in participating in a survey for
                                     <g:if test="${tc.taxonConcept?.rankID > 6000}">
                                         species like ${raw(sciNameFormatted)}
@@ -231,23 +225,13 @@
                 </section>
 
                 <section class="tab-pane fade" id="gallery">
-                    <div id="cat_types" class="hide">
-                        <h2>Types</h2>
+                    <g:each in="${["type","specimen","other"]}" var="cat">
+                        <div id="cat_${cat}" class="hide">
+                            <h2><g:message code="images.heading.${cat}" default="${cat}"/></h2>
+                            <div class="taxon-gallery"></div>
+                        </div>
 
-                        <div class="taxon-gallery"></div>
-                    </div>
-
-                    <div id="cat_specimens" class="hide">
-                        <h2>Specimens</h2>
-
-                        <div class="taxon-gallery"></div>
-                    </div>
-
-                    <div id="cat_other" class="hide">
-                        <h2>Images</h2>
-
-                        <div class="taxon-gallery"></div>
-                    </div>
+                    </g:each>
 
                     <div id="cat_nonavailable">
                         <h2>No images available for this taxon</h2>
@@ -258,6 +242,7 @@
                             please upload using the upload tools.
                         </p>
                     </div>
+                    <img src="${resource(dir: 'images', file: 'spinner.gif', plugin: 'biePlugin')}" id="gallerySpinner" class="hide"/>
                 </section>
 
                 <section class="tab-pane fade" id="names">
@@ -569,26 +554,43 @@
                 </section>
 
                 <section class="tab-pane fade" id="literature">
-                    <div id="bhl-integration">
-                        <h2>Name references found in the <a href="http://biodiversityheritagelibrary.com">Biodiversity Heritage Library</a></h2>
+                    <div class="row">
+                        <!--left-->
+                        <div class="col-md-3 sidebarCol">
+                            <div class="side-menu" id="sidebar">
+                                <nav class="navbar navbar-default" role="navigation">
+                                    <ul class="nav nav-stacked">
+                                        <li><a href="#bhl-integration">Biodiversity Heritage Library</a></li>
+                                        <li><a href="#trove-integration">Trove</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div><!--/left-->
 
-                        <div id="bhl-results-list" class="results-list">
-                        </div>
-                    </div>
+                        <!--right-->
+                        <div class="col-md-9" style="padding-top:14px;">
 
-                    <div id="trove-integration" class="column-wrap" style="padding-top:20px;">
-                        <h2>&nbsp;</h2>
-                        <h2>Name references found in <a href="http://trove.nla.gov.au">Trove - NLA</a></h2>
+                            <div id="bhl-integration">
+                                <h3>Name references found in the <a href="http://biodiversityheritagelibrary.com/" target="_blank">Biodiversity Heritage Library</a></h3>
+                                <div id="bhl-results-list" class="results-list">
+                                </div>
+                            </div>
 
-                        <div id="trove-result-list" class="result-list">
-                        </div>
-                       </div>
+                            <div id="trove-integration" class="column-wrap" style="padding-top:50px;">
+                                %{--<h2>&nbsp;</h2>--}%
+                                <hr />
+                                <h3>Name references found in <a href="http://trove.nla.gov.au" target="_blank">Trove - NLA</a></h3>
 
-                    <nav class="floating-menu">
-                        <a href="#bhl-integration">Biodiversity Heritage Library</a>
-                        <a href="#trove-integration">Trove</a>
+                                <div id="trove-result-list" class="result-list">
+                                </div>
+                           </div>
+                        </div><!--/right-->
+                    </div><!--/row-->
+                    %{--<nav class="floating-menu">--}%
+                        %{--<a href="#bhl-integration">Biodiversity Heritage Library</a>--}%
+                        %{--<a href="#trove-integration">Trove</a>--}%
 
-                    </nav>
+                    %{--</nav>--}%
 
                 </section>
 
