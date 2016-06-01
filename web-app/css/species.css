@@ -106,3 +106,38 @@ span.iucn.extinct {
 #gallery > div {
     margin-bottom: 20px;
 }
+
+/*
+ * For content retrieved from the ALA Profiles application
+ */
+.inline-attribute-image.pull-left {
+    margin-right: 5px;
+}
+
+.inline-attribute-image.pull-right {
+    margin-left: 5px;
+}
+
+.inline-attribute-image.small {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.inline-attribute-image.medium {
+    max-width: 275px;
+    max-height: 275px;
+}
+
+.inline-attribute-image.large {
+    max-width: 350px;
+    max-height: 350px;
+}
+
+.collection-logo img {
+    max-width: 250px;
+}
+
+.profile-name {
+    display: inline-block;
+    padding-right: 20px;
+}
