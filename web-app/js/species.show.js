@@ -190,7 +190,6 @@ function loadDataProviders(){
 }
 
 function loadIndigenousData() {
-    console.log("Loading indigenous data...");
     var url = SHOW_CONF.profileServiceUrl + "/api/v1/profiles?summary=true&tags=IEK&guids=" + SHOW_CONF.guid;
     $.getJSON(url, function (data) {
         if (data.total > 0) {
