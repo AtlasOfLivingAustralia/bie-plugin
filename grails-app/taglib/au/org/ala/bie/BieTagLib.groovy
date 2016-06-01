@@ -1,11 +1,16 @@
 package au.org.ala.bie
 
+import groovy.json.JsonSlurper
 import org.apache.commons.lang.StringEscapeUtils
 import au.org.ala.names.parser.PhraseNameParser
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class BieTagLib {
+    def grailsApplication
 
     static namespace = 'bie'     // namespace for headers and footers
+
+    static languages = null      // Lazy iniitalisation
 
     /**
      * Format a scientific name with appropriate italics depending on rank
@@ -177,6 +182,27 @@ class BieTagLib {
     }
 
     /**
+     * Mark a phrase with language, optionally with a specific language marker
+     *
+     * @attr text The text to mark
+     * @attr lang The language code (ISO)
+     * @attr mark Mark the language in text (defaults to true)
+     */
+    def markLanguage = { attrs ->
+        Locale defaultLocale = RequestContextUtils.getLocale(request)
+        String text = attrs.text ?: ""
+        Locale lang = Locale.forLanguageTag(attrs.lang ?: defaultLocale.language)
+        boolean mark = attrs.mark ?: true
+
+        out << "<span lang=\"${lang}\">${text}"
+        if (mark && defaultLocale.language != lang.language) {
+            String name = languageName(lang.language)
+            out << "&nbsp;<span class=\"annotation annotation-language\" title=\"${lang}\">${name}</span>"
+        }
+        out << "</span>"
+    }
+
+    /**
      * Custom function to escape a string for JS use
      *
      * @param value
@@ -213,5 +239,27 @@ class BieTagLib {
         if (rankId < 8000)
             return "species"
         return "subspecies"
+    }
+
+    private String languageName(String lang) {
+        synchronized (this.class) {
+            if (languages == null) {
+                JsonSlurper slurper = new JsonSlurper()
+                def ld = slurper.parse(new URL(grailsApplication.config.languageCodesUrl))
+                languages = [:]
+                ld.codes.each { code ->
+                    if (languages.containsKey(code.code))
+                        log.warn "Duplicate language code ${code.code}"
+                    languages[code.code] = code
+                    if (code.part2b && !languages.containsKey(code.part2b))
+                        languages[code.part2b] = code
+                    if (code.part2t && !languages.containsKey(code.part2t))
+                        languages[code.part2t] = code
+                    if (code.part1 && !languages.containsKey(code.part1))
+                        languages[code.part1] = code
+                }
+            }
+        }
+        return languages[lang]?.name ?: lang
     }
 }
