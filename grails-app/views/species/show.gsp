@@ -86,6 +86,7 @@
                     <li><a href="#literature" data-toggle="tab">Literature</a></li>
                     <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
                     <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
+                    <li class="hide"><a id="indigenous-info-tab" href="#indigenous-info" data-toggle="tab">Indigenous Information</a></li>
                 </ul>
                 <div class="tab-content">
 
@@ -605,6 +606,7 @@
                     <div class="genbank-results result-list">
                     </div>
                 </section>
+
                 <section class="tab-pane fade" id="data-partners">
                     <table id="data-providers-list" class="table name-table  table-responsive">
                         <thead>
@@ -615,6 +617,10 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                </section>
+
+                <section class="tab-pane fade" id="indigenous-info">
+
                 </section>
             </div>
         </div>
@@ -677,12 +683,26 @@
     <p class="furtherDescription"></p>
 </div>
 
+
+<!-- indigenous-profile-summary template -->
+<div id="indigenous-profile-summary-template" class="indigenous-profile-summary hide row padding-bottom-2">
+    <div class="col-md-3 collection-logo"></div>
+    <div class="col-md-9 profile-summary">
+        <h2 class="profile-name"></h2>
+        <span class="collection-name"></span>
+        <div class="profile-link pull-right"></div>
+        <h3 class="other-names"></h3>
+        <div class="summary-text"></div>
+    </div>
+</div>
+
 <r:script>
     // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
     var SHOW_CONF = {
         biocacheUrl:        "${grailsApplication.config.biocache.baseURL}",
         biocacheServiceUrl: "${grailsApplication.config.biocacheService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
+        profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
         guid:               "${guid}",
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
@@ -711,6 +731,7 @@
         defaultMapToken: "${grailsApplication.config.map.default.token}",
         recordsMapColour: "${grailsApplication.config.map.records.colour}",
         mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+        noImage100Url: "${resource(dir: 'images', file: 'noImage100.jpg')}",
         map: null
     }
     // load google charts api

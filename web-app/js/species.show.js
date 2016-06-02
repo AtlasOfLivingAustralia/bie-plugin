@@ -24,6 +24,7 @@ function showSpeciesPage() {
     loadExternalSources();
     loadSpeciesLists();
     loadDataProviders();
+    loadIndigenousData();
     //
     ////setup controls
     addAlerts();
@@ -183,6 +184,46 @@ function loadDataProviders(){
                     $('#data-providers-list tbody').append("<tr><td><a href='" + queryUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a></td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td></tr>");
 
                 }
+            });
+        }
+    });
+}
+
+function loadIndigenousData() {
+    var url = SHOW_CONF.profileServiceUrl + "/api/v1/profiles?summary=true&tags=IEK&guids=" + SHOW_CONF.guid;
+    $.getJSON(url, function (data) {
+        if (data.total > 0) {
+            $("#indigenous-info-tab").parent().removeClass("hide");
+
+            $.each(data.profiles, function(index, profile) {
+                var panel = $('#indigenous-profile-summary-template').clone();
+                panel.removeClass("hide");
+                panel.attr("id", profile.id);
+
+                var logo = profile.collection.logo || SHOW_CONF.noImage100Url;
+                panel.find(".collection-logo").append("<img src='" + logo + "' alt='" + profile.collection.title + " logo'>");
+                panel.find(".collection-logo").append("<div class='caption'>" + profile.collection.title + "</div>");
+
+                panel.find(".profile-name").append(profile.name);
+                panel.find(".collection-name").append("(" + profile.collection.title + ")");
+                var otherNames = "";
+                var summary = "";
+                $.each(profile.attributes, function (index, attribute) {
+                    if (attribute.name) {
+                        otherNames += attribute.text;
+                        if (index < profile.attributes.length - 2) {
+                            otherNames += ", ";
+                        }
+                    }
+                    if (attribute.summary) {
+                        summary = attribute.text;
+                    }
+                });
+                panel.find(".other-names").append(otherNames);
+                panel.find(".summary-text").append(summary);
+                panel.find(".profile-link").append("<a href='" + profile.url + "' title='Click to view the whole profile' target='_blank'>View the full profile</a>");
+
+                panel.appendTo("#indigenous-info");
             });
         }
     });
