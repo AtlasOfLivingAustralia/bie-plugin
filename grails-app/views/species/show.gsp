@@ -28,6 +28,7 @@
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if
         test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
+<g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -602,17 +603,21 @@
                     <div class="genbank-results result-list">
                     </div>
                 </section>
-                <section class="tab-pane fade" id="data-providers">
-                    <h2>Data Providers</h2>
+
+                <section class="tab-pane fade" id="data-partners">
                     <table id="data-providers-list" class="table name-table  table-responsive">
                         <thead>
                         <tr>
-                            <th>Data provider</th>
+                            <th>Data partners</th>
                             <th>Records</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
+                </section>
+
+                <section class="tab-pane fade" id="indigenous-info">
+
                 </section>
             </div>
         </div>
@@ -675,17 +680,32 @@
     <p class="furtherDescription"></p>
 </div>
 
+
+<!-- indigenous-profile-summary template -->
+<div id="indigenous-profile-summary-template" class="indigenous-profile-summary hide row padding-bottom-2">
+    <div class="col-md-3 collection-logo"></div>
+    <div class="col-md-9 profile-summary">
+        <h2 class="profile-name"></h2>
+        <span class="collection-name"></span>
+        <div class="profile-link pull-right"></div>
+        <h3 class="other-names"></h3>
+        <div class="summary-text"></div>
+    </div>
+</div>
+
 <r:script>
-    // global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
+    // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
     var SHOW_CONF = {
         biocacheUrl:        "${grailsApplication.config.biocache.baseURL}",
         biocacheServiceUrl: "${grailsApplication.config.biocacheService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
+        profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
         guid:               "${guid}",
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
         taxonRankID:        "${tc?.taxonConcept?.rankID ?: ''}",
         synonymsQuery:      "${synonymsQuery.replaceAll('""','"').encodeAsJavaScript()}",
+        preferredImageId:   "${tc?.imageIdentifier?: ''}",
         citizenSciUrl:      "${citizenSciUrl}",
         serverName:         "${grailsApplication.config.grails.serverURL}",
         speciesListUrl:     "${grailsApplication.config.speciesList.baseURL}",
@@ -701,14 +721,22 @@
         defaultDecimalLongitude: ${grailsApplication.config.defaultDecimalLongitude},
         defaultZoomLevel: ${grailsApplication.config.defaultZoomLevel},
         mapAttribution: "${raw(grailsApplication.config.skin.orgNameLong)}",
-        mapboxId: "${grailsApplication.config.map.mapbox.id}",
-        mapboxToken: "${grailsApplication.config.map.mapbox.token}",
-        mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}"
+        defaultMapUrl: "${grailsApplication.config.map.default.url}",
+        defaultMapAttr: "${raw(grailsApplication.config.map.default.attr)}",
+        defaultMapDomain: "${grailsApplication.config.map.default.domain}",
+        defaultMapId: "${grailsApplication.config.map.default.id}",
+        defaultMapToken: "${grailsApplication.config.map.default.token}",
+        recordsMapColour: "${grailsApplication.config.map.records.colour}",
+        mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+        noImage100Url: "${resource(dir: 'images', file: 'noImage100.jpg')}",
+        map: null
     }
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});
 
-    $(function(){ showSpeciesPage(); })
+    $(function(){
+        showSpeciesPage();
+    })
 </r:script>
 
 <r:script type="text/javascript">
