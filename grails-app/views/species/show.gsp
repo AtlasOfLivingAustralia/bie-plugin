@@ -576,7 +576,8 @@
 
                             <div id="bhl-integration">
                                 <h3>Name references found in the <a href="http://biodiversityheritagelibrary.com/" target="_blank">Biodiversity Heritage Library</a></h3>
-                                <div id="bhl-results-list" class="results-list">
+                                <div id="bhl-results-list" class="results-listZ">
+                                    <a href='http://www.biodiversitylibrary.org/search?SearchTerm=${tc?.taxonConcept?.nameString}&SearchCat=M#/names' target='bhl'>Search BHL for references to ${tc?.taxonConcept?.nameString}</a>
                                 </div>
                             </div>
 

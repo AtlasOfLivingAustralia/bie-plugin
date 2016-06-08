@@ -153,24 +153,8 @@ function numberWithCommas(x) {
 
 function injectBhlResults() {
 
-    var queryToUse = (SEARCH_CONF.query == "" || SEARCH_CONF.query == "*" ? "*:*" : SEARCH_CONF.query);
-    var url = SEARCH_CONF.bhlUrl + "/select?q={!lucene q.op=AND}" + queryToUse + "&start=0&rows=0" +
-        "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
-        "group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
-
-    $.ajax({
-        url: url,
-        dataType: 'jsonp',
-        jsonp: "json.wrf",
-        success:  function(data) {
-            var maxItems = parseInt(data.grouped.itemId.ngroups, 10);
-
-            //console.log("Using the query: " + queryToUse);
-            var url = SEARCH_CONF.serverName + "/bhl-search?q=" + queryToUse;
-            var html = "<li data-count=\"" + maxItems + "\"><a href=\"" + url + "\" id=\"bhlSearchLink\">BHL Literature</a> (" + numberWithCommas(maxItems) + ")</li>";
-            insertSearchLinks(html);
-        }
-    });
+    var bhlHtml = "<li><a href='http://www.biodiversitylibrary.org/search?SearchTerm=" + SEARCH_CONF.query + "&SearchCat=M#/names' target='bhl'>BHL Literature </a></li>"
+    insertSearchLinks(bhlHtml);
 }
 
 function injectBiocacheResults() {
