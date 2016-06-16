@@ -313,6 +313,7 @@ function loadGalleries() {
     loadGalleryType('type', 0)
     loadGalleryType('specimen', 0)
     loadGalleryType('other', 0)
+    loadGalleryType('uncertain',0)
 }
 
 var entityMap = {
