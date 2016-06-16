@@ -388,6 +388,7 @@ function addOverviewImages(imagesArray, hasPreferredImage) {
 
 function addOverviewImage(overviewImageRecord) {
     $('#noOverviewImages').addClass('hide');
+    $('.main-img').removeClass('hide');
     $('.thumb-row').removeClass('hide');
     var $categoryTmpl = $('#overviewImages');
     $categoryTmpl.removeClass('hide');

@@ -94,7 +94,7 @@
                         <div class="col-md-6">
 
                             <div class="taxon-summary-gallery">
-                                <div class="main-img">
+                                <div class="main-img hide">
                                     <a class="lightbox-img"
                                        data-toggle="lightbox"
                                        data-gallery="taxon-summary-gallery"
