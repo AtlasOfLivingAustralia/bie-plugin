@@ -28,7 +28,7 @@ function showSpeciesPage() {
     //
     ////setup controls
     addAlerts();
-    loadBhl();
+    // loadBhl(); // now an external link to BHL
     loadTrove(SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
