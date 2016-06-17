@@ -21,6 +21,7 @@
 <g:set var="citizenSciUrl" value="${grailsApplication.config.sightings.guidUrl}"/>
 <g:set var="alertsUrl" value="${grailsApplication.config.alerts.url}"/>
 <g:set var="guid" value="${tc?.previousGuid ?: tc?.taxonConcept?.guid ?: ''}"/>
+<g:set var="jsonLink" value="${grailsApplication.config.bie.index.url}/species/${tc?.taxonConcept?.guid}.json"/>
 <g:set var="sciNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
                                                  nameFormatted="${tc?.taxonConcept?.nameFormatted}"
                                                  nameComplete="${tc?.taxonConcept?.nameComplete}"
@@ -59,6 +60,11 @@
             </div>
         </g:if>
         <div class="header-inner">
+            <h5 class="pull-right json">
+                <a href="${jsonLink}" target="data"
+                   title="${message(code:"show.view.json.title")}" type="button" class="btn btn-sm btn-default active"
+                   data-toggle="tooltip" data-placement="bottom"><g:message code="show.json" /></a>
+            </h5>
             <h1><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
                                    nameFormatted="${tc?.taxonConcept?.nameFormatted}"
                                    nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}"
