@@ -708,23 +708,78 @@
             <div class="summary-text"></div>
         </div>
     </div>
-    <div class="hide main-image padding-bottom-2">
-        <div class="row">
-            <div class="col-md-2 ">
-            </div>
-            <div class="col-md-8 panel-heading">
-                <h3 class="panel-title">Main Image</h3>
-            </div>
+
+    <div class="row">
+        <div class="col-md-2 ">
         </div>
-        <div class="row">
-            <div class="col-md-2 ">
+
+        <div class="col-md-5 hide main-image padding-bottom-2">
+            <div class="row">
+
+                <div class="col-md-8 panel-heading">
+                    <h3 class="panel-title">Main Image</h3>
+                </div>
             </div>
-            <div class="col-md-8 ">
-                <div class="image-embedded">
+
+            <div class="row">
+                <div class="col-md-8 ">
+                    <div class="image-embedded">
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-3 hide main-audio padding-bottom-2">
+            <div class="row">
+                <div class="col-md-8 panel-heading">
+                    <h3 class="panel-title">Main Audio</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="audio-embedded embed-responsive embed-responsive-16by9 col-xs-12 text-center">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12 small">
+                    <div class="row">
+                        <div class="col-md-5 ">
+                            <strong>Name</strong>
+                        </div>
+
+                        <div class="col-md-7 audio-name"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 ">
+                            <strong>Attribution</strong>
+                        </div>
+
+                        <div class="col-md-7 audio-attribution"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 ">
+                            <strong>Licence</strong>
+                        </div>
+
+                        <div class="col-md-7 audio-license"></div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-2 "></div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
     </div>
+
     <div class="hide main-video padding-bottom-2">
         <div class="row">
             <div class="col-md-2 ">
@@ -736,7 +791,7 @@
         <div class="row">
             <div class="col-md-2 ">
             </div>
-            <div class="col-md-8 ">
+            <div class="col-md-7 ">
                 <div class="video-embedded embed-responsive embed-responsive-16by9 col-xs-12 text-center">
                 </div>
             </div>
@@ -744,7 +799,7 @@
         <div class="row">
             <div class="col-md-2 "></div>
 
-            <div class="col-md-8 small">
+            <div class="col-md-7 small">
                 <div class="row">
                     <div class="col-md-2 ">
                         <strong>Name</strong>
@@ -773,54 +828,7 @@
             <div class="col-md-2 "></div>
         </div>
     </div>
-    <div class="hide main-audio padding-bottom-2">
-        <div class="row">
-            <div class="col-md-2 ">
-            </div>
-            <div class="col-md-8 panel-heading">
-                <h3 class="panel-title">Main Audio</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 ">
-            </div>
-            <div class="col-md-8 ">
-                <div class="audio-embedded embed-responsive embed-responsive-16by9 col-xs-12 text-center">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 "></div>
 
-            <div class="col-md-8 small">
-                <div class="row">
-                    <div class="col-md-2 ">
-                        <strong>Name</strong>
-                    </div>
-
-                    <div class="col-md-10 audio-name"></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-2 ">
-                        <strong>Attribution</strong>
-                    </div>
-
-                    <div class="col-md-10 audio-attribution"></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-2 ">
-                        <strong>Licence</strong>
-                    </div>
-
-                    <div class="col-md-10 audio-license"></div>
-                </div>
-
-            </div>
-            <div class="col-md-2 "></div>
-        </div>
-    </div>
     <hr/>
 </div>
 
