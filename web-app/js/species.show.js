@@ -202,7 +202,6 @@ function loadIndigenousData() {
 
                 var logo = profile.collection.logo || SHOW_CONF.noImage100Url;
                 panel.find(".collection-logo").append("<img src='" + logo + "' alt='" + profile.collection.title + " logo'>");
-                //panel.find(".collection-logo").append("<div class='caption'>" + profile.collection.title + "</div>");
                 panel.find(".collection-logo-caption").append(profile.collection.title);
 
 
