@@ -107,6 +107,10 @@ span.iucn.extinct {
     margin-bottom: 20px;
 }
 
+h5.json > a {
+    font-size: 14px;
+}
+
 /*
  * For content retrieved from the ALA Profiles application
  */
