@@ -202,7 +202,8 @@ function loadIndigenousData() {
 
                 var logo = profile.collection.logo || SHOW_CONF.noImage100Url;
                 panel.find(".collection-logo").append("<img src='" + logo + "' alt='" + profile.collection.title + " logo'>");
-                panel.find(".collection-logo").append("<div class='caption'>" + profile.collection.title + "</div>");
+                panel.find(".collection-logo-caption").append(profile.collection.title);
+
 
                 panel.find(".profile-name").append(profile.name);
                 panel.find(".collection-name").append("(" + profile.collection.title + ")");
@@ -222,6 +223,28 @@ function loadIndigenousData() {
                 panel.find(".other-names").append(otherNames);
                 panel.find(".summary-text").append(summary);
                 panel.find(".profile-link").append("<a href='" + profile.url + "' title='Click to view the whole profile' target='_blank'>View the full profile</a>");
+
+                if(profile.thumbnailUrl) {
+                    panel.find(".main-image").removeClass("hide");
+
+                    panel.find(".image-embedded").append("<img src='" + profile.thumbnailUrl + "' alt='" + profile.collection.title + " main image'>");
+                }
+
+                if(profile.mainVideo) {
+                    panel.find(".main-video").removeClass("hide");
+                    panel.find(".video-name").append(profile.mainVideo.name);
+                    panel.find(".video-attribution").append(profile.mainVideo.attribution);
+                    panel.find(".video-license").append(profile.mainVideo.license);
+                    panel.find(".video-embedded").append(profile.mainVideo.embeddedVideo);
+                }
+
+                if(profile.mainAudio) {
+                    panel.find(".main-audio").removeClass("hide");
+                    panel.find(".audio-name").append(profile.mainAudio.name);
+                    panel.find(".audio-attribution").append(profile.mainAudio.attribution);
+                    panel.find(".audio-license").append(profile.mainAudio.license);
+                    panel.find(".audio-embedded").append(profile.mainAudio.embeddedAudio);
+                }
 
                 panel.appendTo("#indigenous-info");
             });
