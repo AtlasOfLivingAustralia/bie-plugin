@@ -26,11 +26,11 @@ $(document).ready(function() {
     }
 
     // listeners for sort widgets
-    $("select#sortField").change(function() {
+    $("select#sort-by").change(function() {
         var val = $("option:selected", this).val();
         reloadWithParam('sortField',val);
     });
-    $("select#dir").change(function() {
+    $("select#sort-order").change(function() {
         var val = $("option:selected", this).val();
         reloadWithParam('dir',val);
     });
@@ -94,7 +94,7 @@ function reloadWithParam(paramName, paramValue) {
     var paramList = [];
     var q = $.getQueryParam('q') ? $.getQueryParam('q') : SEARCH_CONF.query ;
     var fqList = $.getQueryParam('fq'); //$.query.get('fq');
-    var sort = $.getQueryParam('sort');
+    var sort = $.getQueryParam('sortField');
     var dir = $.getQueryParam('dir');
     // add query param
     if (q != null) {
@@ -105,14 +105,18 @@ function reloadWithParam(paramName, paramValue) {
         paramList.push("fq=" + fqList.join("&fq="));
     }
     // add sort param if already set
-    if (paramName != 'sort' && sort != null) {
-        paramList.push('sort' + "=" + sort);
+    if (paramName != 'sortField' && sort != null) {
+        paramList.push('sortField' + "=" + sort);
     }
-
+    // add dir param if already set
+    if (paramName != 'dir' && dir != null) {
+        paramList.push('dir' + "=" + dir);
+    }
+    // add the changed value
     if (paramName != null && paramValue != null) {
         paramList.push(paramName + "=" +paramValue);
     }
-
+    //alert("paramName = " + paramName + " and paramValue = " + paramValue);
     //alert("params = "+paramList.join("&"));
     //alert("url = "+window.location.pathname);
     window.location.href = window.location.pathname + '?' + paramList.join('&');

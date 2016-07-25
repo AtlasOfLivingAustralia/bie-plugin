@@ -172,15 +172,15 @@
                             <select class="form-control input-sm" id="sort-by" name="sort-by">
                                 <option value="score" ${(params.sortField == 'score') ? "selected=\"selected\"" : ""}>best match</option>
                                 <option value="scientificName" ${(params.sortField == 'scientificName') ? "selected=\"selected\"" : ""}>scientific name</option>
-                                <option value="commonNameSingle" ${(params.sortField == 'commonNameSingle') ? "selected=\"selected\"" : ""}>common name</option>
+                                %{--<option value="commonNameExact" ${(params.sortField == 'commonNameExact') ? "selected=\"selected\"" : ""}>common name</option>--}%
                                 <option value="rank" ${(params.sortField == 'rank') ? "selected=\"selected\"" : ""}>taxon rank</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="sort-order">Sort order</label>
                             <select class="form-control input-sm" id="sort-order" name="sort-order">
-                                <option value="asc" ${(params.dir == 'asc') ? "selected=\"selected\"" : ""}>normal</option>
-                                <option value="desc" ${(params.dir == 'desc') ? "selected=\"selected\"" : ""}>reverse</option>
+                                <option value="asc" ${(params.dir == 'asc') ? "selected=\"selected\"" : ""}>ascending</option>
+                                <option value="desc" ${(params.dir == 'desc' || !params.dir) ? "selected=\"selected\"" : ""}>descending</option>
                             </select>
                         </div>
                     </form>
