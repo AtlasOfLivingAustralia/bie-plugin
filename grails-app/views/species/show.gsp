@@ -92,7 +92,6 @@
                     <li><a href="#literature" data-toggle="tab">Literature</a></li>
                     <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
                     <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
-                    <li class="hide"><a id="indigenous-info-tab" href="#indigenous-info" data-toggle="tab">Indigenous Information</a></li>
                 </ul>
                 <div class="tab-content">
 
@@ -101,7 +100,7 @@
                         <div class="col-md-6">
 
                             <div class="taxon-summary-gallery">
-                                <div class="main-img">
+                                <div class="main-img hide">
                                     <a class="lightbox-img"
                                        data-toggle="lightbox"
                                        data-gallery="taxon-summary-gallery"
@@ -366,10 +365,8 @@
                             <tr>
                                 <td>
                                     <g:if test="${infoSourceURL && infoSourceURL != datasetURL}"><a
-                                            href="${infoSourceURL}" target="_blank" class="external">${nkey}</a></g:if>
-                                    <g:else>${nkey}</a></g:else>
-                                    <g:if test="${language && !language.startsWith(locale.language)}"><span
-                                            class="annotation annotation-language">${language}</span></g:if>
+                                            href="${infoSourceURL}" target="_blank" class="external"><bie:markLanguage text="${nkey}" lang="${language}"/></a></g:if>
+                                    <g:else><bie:markLanguage text="${nkey}" lang="${language}"/></g:else>
                                 </td>
                                 <td class="source">
                                     <ul>
