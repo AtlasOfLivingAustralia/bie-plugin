@@ -67,13 +67,13 @@ class SpeciesController {
         def startIndex = params.offset?:0
         def rows = params.rows?:10
         def sortField = params.sortField?:""
-        def sortDirection = params.dir?:"asc"
-        def sort = ""
-        if(sortField){
-            sort = sortField + "+" + sortDirection
+        def sortDirection = params.dir?:"desc"
+
+        if (params.dir && !params.sortField) {
+            sortField = "score" // default sort (field) of "score" when order is defined on its own
         }
 
-        def requestObj = new SearchRequestParamsDTO(query, filterQuery, startIndex, rows, sort, sortDirection)
+        def requestObj = new SearchRequestParamsDTO(query, filterQuery, startIndex, rows, sortField, sortDirection)
         def searchResults = bieService.searchBie(requestObj)
         log.debug "SearchRequestParamsDTO = " + requestObj
 
