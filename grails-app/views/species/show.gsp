@@ -26,6 +26,7 @@
                                                  nameFormatted="${tc?.taxonConcept?.nameFormatted}"
                                                  nameComplete="${tc?.taxonConcept?.nameComplete}"
                                                  name="${tc?.taxonConcept?.name}"
+                                                 taxonomicStatus="${tc?.taxonConcept?.taxonomicStatus}"
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if
         test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
@@ -65,15 +66,13 @@
                    title="${message(code:"show.view.json.title")}" type="button" class="btn btn-sm btn-default active"
                    data-toggle="tooltip" data-placement="bottom"><g:message code="show.json" /></a>
             </h5>
-            <h1><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                   nameFormatted="${tc?.taxonConcept?.nameFormatted}"
-                                   nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}"
-                                   acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></h1>
+            <h1>${raw(sciNameFormatted)}</h1>
             <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.opt(0)?.nameString : ''}"/>
             <g:if test="${commonNameDisplay}">
-                <h2>${commonNameDisplay}</h2>
+                <h2>${raw(commonNameDisplay)}</h2>
             </g:if>
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
+            <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
             <h5 class="inline-head name-authority">
                 <strong>Name authority:</strong>
                 <span class="name-authority">${tc?.taxonConcept.nameAuthority ?: grailsApplication.config.defaultNameAuthority}</span>
@@ -253,11 +252,12 @@
                 </section>
 
                 <section class="tab-pane fade" id="names">
+                    <g:set var="acceptedName" value="${tc.taxonConcept.taxonomicStatus == 'accepted'}"/>
                     <h2>Names and sources</h2>
                     <table class="table name-table  table-responsive">
                         <thead>
                         <tr>
-                            <th>Accepted name</th>
+                            <th><g:if test="${acceptedName}">Accepted name</g:if><g:else>Name</g:else></th>
                             <th>Source</th>
                         </tr>
                         </thead>
@@ -266,16 +266,8 @@
                             <td>
                                 <g:if test="${tc.taxonConcept.infoSourceURL && tc.taxonConcept.infoSourceURL != tc.taxonConcept.datasetURL}"><a
                                         href="${tc.taxonConcept.infoSourceURL}" target="_blank"
-                                        class="external"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                                                            nameFormatted="${tc?.taxonConcept?.nameFormatted}"
-                                                                            nameComplete="${tc?.taxonConcept?.nameComplete}"
-                                                                            name="${tc?.taxonConcept?.name}"
-                                                                            acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></a></g:if>
-                                <g:else><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                                           nameFormatted="${tc?.taxonConcept?.nameFormatted}"
-                                                           nameComplete="${tc?.taxonConcept?.nameComplete}"
-                                                           name="${tc?.taxonConcept?.name}"
-                                                           acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:else>
+                                        class="external">${raw(sciNameFormatted)}</a></g:if>
+                                <g:else>${raw(sciNameFormatted)}</g:else>
                             </td>
                             <td class="source">
                                 <ul><li>
@@ -283,6 +275,7 @@
                                                                                   target="_blank"
                                                                                   class="external">${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</a></g:if>
                                     <g:else>${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</g:else>
+                                    <g:if test="${!acceptedName}"><span class="annotation annotation-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}.annotation" default="${tc.taxonConcept.taxonomicStatus}"/></span></g:if>
                                 </li></ul>
                             </td>
                         </tr>
@@ -310,16 +303,15 @@
                             <g:each in="${tc.synonyms}" var="synonym">
                                 <tr>
                                     <td>
-                                        <g:if test="${synonym.infoSourceURL && synonym.infoSourceURL != synonym.datasetURL}"><a
-                                                href="${synonym.infoSourceURL}" target="_blank"
-                                                class="external"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
+                                        <g:set var="synonymNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
                                                                                     nameFormatted="${synonym.nameFormatted}"
                                                                                     nameComplete="${synonym.nameComplete}"
-                                                                                    name="${synonym.nameString}"/></a></g:if>
-                                        <g:else><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                                                   nameFormatted="${synonym.nameFormatted}"
-                                                                   nameComplete="${synonym.nameComplete}"
-                                                                   name="${synonym.nameString}"/></g:else>
+                                                                                    taxonomicStatus="name"
+                                                                                    name="${synonym.nameString}"/></g:set>
+                                        <g:if test="${synonym.infoSourceURL && synonym.infoSourceURL != synonym.datasetURL}"><a
+                                                href="${synonym.infoSourceURL}" target="_blank"
+                                                class="external">${raw(synonymNameFormatted)}</a></g:if>
+                                        <g:else>${raw(synonymNameFormatted)}</g:else>
                                     </td>
                                     <td class="source">
                                         <ul><li>
@@ -327,6 +319,7 @@
                                                                                   target="_blank"
                                                                                   class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></g:if>
                                             <g:else>${synonym.nameAuthority ?: synonym.infoSourceName}</g:else>
+                                            <span class="annotation annotation-status" title="${message(code: 'taxonomicStatus.' + synonym.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${synonym.taxonomicStatus}.annotation" default="${synonym.taxonomicStatus}"/></span>
                                         </li></ul>
                                     </td>
                                 </tr>
@@ -376,7 +369,7 @@
                                                                                          onclick="window.open(this.href);
                                                                                          return false;">${commonName.infoSourceName}</a></g:if>
                                                 <g:else>${commonName.infoSourceName}</g:else>
-                                                <g:if test="${commonName.status && commonName.status != 'common'}"><span
+                                                <g:if test="${commonName.status && commonName.status != 'common'}"><span title="${message(code: 'identifierStatus.' + commonName.status + '.detail', default: '')}"
                                                         class="annotation annotation-status">${commonName.status}</span></g:if>
                                             </li>
                                         </g:each>
@@ -408,12 +401,56 @@
                                                 href="${tc.taxonConcept.datasetURL}" onclick="window.open(this.href);
                                                 return false;">${tc.taxonConcept.nameAuthority}</a></g:if>
                                         <g:else>${tc.taxonConcept.nameAuthority}</g:else>
-                                        <span class="annotation annotation-status">current</span>
+                                        <span class="annotation annotation-type" title="${message(code: 'identifierType.taxon.detail', default: '')}"><g:message code="identifierType.taxon"/></span>
+                                        <span class="annotation annotation-status" title="${message(code: 'identifierStatus.current.detail', default: '')}"><g:message code="identifierStatus.current"/></span>
                                     </li>
                                 </ul>
                             </td>
-
                         </tr>
+                        <g:if test="${tc.taxonConcept.taxonConceptID && tc.taxonConcept.taxonConceptID != tc.taxonConcept.guid}">
+                            <tr>
+                                <td>
+                                    <g:if test="${tc.taxonConcept.taxonConceptSourceURL && tc.taxonConcept.taxonConceptSourceURL != tc.taxonConcept.datasetURL}"><a
+                                            href="${tc.taxonConcept.taxonConceptSourceURL}" target="_blank"
+                                            class="external">${tc.taxonConcept.taxonConceptID}</a></g:if>
+                                    <g:else>${tc.taxonConcept.taxonConceptID}</g:else>
+                                </td>
+                                <td class="source">
+                                    <ul>
+                                        <li>
+                                            <g:if test="${tc.taxonConcept.datasetURL}"><a
+                                                    href="${tc.taxonConcept.datasetURL}" onclick="window.open(this.href);
+                                                    return false;">${tc.taxonConcept.nameAuthority}</a></g:if>
+                                            <g:else>${tc.taxonConcept.nameAuthority}</g:else>
+                                            <span class="annotation annotation-type" title="${message(code: 'identifierType.taxonConcept.detail', default: '')}"><g:message code="identifierType.taxonConcept"/></span>
+                                            <span class="annotation annotation-status" title="${message(code: 'identifierStatus.current.detail', default: '')}"><g:message code="identifierStatus.current"/></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:if test="${tc.taxonConcept.scientificNameID && tc.taxonConcept.scientificNameID != tc.taxonConcept.guid && tc.taxonConcept.scientificNameID != tc.taxonConcept.taxonConceptID}">
+                            <tr>
+                                <td>
+                                    <g:if test="${tc.taxonConcept.scientificNameSourceURL && tc.taxonConcept.scientificNameSourceURL != tc.taxonConcept.datasetURL}"><a
+                                            href="${tc.taxonConcept.scientificNameSourceURL}" target="_blank"
+                                            class="external">${tc.taxonConcept.scientificNameID}</a></g:if>
+                                    <g:else>${tc.taxonConcept.scientificNameID}</g:else>
+                                </td>
+                                <td class="source">
+                                    <ul>
+                                        <li>
+                                            <g:if test="${tc.taxonConcept.datasetURL}"><a
+                                                    href="${tc.taxonConcept.datasetURL}" onclick="window.open(this.href);
+                                                    return false;">${tc.taxonConcept.nameAuthority}</a></g:if>
+                                            <g:else>${tc.taxonConcept.nameAuthority}</g:else>
+                                            <span class="annotation annotation-type" title="${message(code: 'identifierType.name.detail', default: '')}"><g:message code="identifierType.name"/></span>
+                                            <span class="annotation annotation-status" title="${message(code: 'identifierStatus.current.detail', default: '')}"><g:message code="identifierStatus.current"/></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </g:if>
                         <g:if test="${tc.identifiers && !tc.identifiers.isEmpty()}">
                             <g:each in="${tc.identifiers}" var="identifier">
                                 <tr>
@@ -430,10 +467,10 @@
                                                                                          onclick="window.open(this.href);
                                                                                          return false;">${identifier.nameString ?: identifier.infoSourceName}</a></g:if>
                                                 <g:else>${identifier.nameString ?: identifier.infoSourceName}</g:else>
-                                                <g:if test="${identifier.format}"><span
-                                                        class="annotation annotation-format">${identifier.format}</span></g:if>
-                                                <g:if test="${identifier.status}"><span
-                                                        class="annotation annotation-status">${identifier.status}</span></g:if>
+                                                <g:if test="${identifier.format}"><span title="${message(code: 'identifierFormat.' + identifier.format + '.detail', default: '')}"
+                                                        class="annotation annotation-format"><g:message code="identifierFormat.${identifier.format}" default="${identifier.format}"/></span></g:if>
+                                                <g:if test="${identifier.status}"><span title="${message(code: 'identifierStatus.' + identifier.status + '.detail', default: '')}"
+                                                        class="annotation annotation-status"><g:message code="identifierFormat.${identifier.status}" default="${identifier.status}"/></span></g:if>
                                             </li>
                                         </ul>
                                     </td>
@@ -479,7 +516,7 @@
                             <dd><a href="${request?.contextPath}/species/${taxon.guid}#classification"
                                    title="${taxon.rank}">
                                 <bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}"
-                                                   nameComplete="${taxon.nameComplete}" name="${taxon.scientificName}"/>
+                                                   nameComplete="${taxon.nameComplete}" taxonomicStatus="name" name="${taxon.scientificName}"/>
                                 <g:if test="${taxon.commonNameSingle}">: ${taxon.commonNameSingle}</g:if></a>
                             </dd>
                         </g:if>
@@ -487,6 +524,7 @@
                             <dl><dt id="currentTaxonConcept">${taxon.rank}</dt>
                             <dd><span><bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}"
                                                          nameComplete="${taxon.nameComplete}"
+                                                         taxonomicStatus="name"
                                                          name="${taxon.scientificName}"/>
                                 <g:if test="${taxon.commonNameSingle}">: ${taxon.commonNameSingle}</g:if></span>
                                 <g:if test="${taxon.isAustralian || tc.isAustralian}">
@@ -507,6 +545,7 @@
                             <g:set var="taxonLabel"><bie:formatSciName rankId="${child.rankID}"
                                                                        nameFormatted="${child.nameFormatted}"
                                                                        nameComplete="${child.nameComplete}"
+                                                                       taxonomicStatus="name"
                                                                        name="${child.name}"/><g:if
                                     test="${child.commonNameSingle}">: ${child.commonNameSingle}</g:if></g:set>
                             <dd><a href="${request?.contextPath}/species/${child.guid}#classification">${raw(taxonLabel.trim())}</a>&nbsp;
