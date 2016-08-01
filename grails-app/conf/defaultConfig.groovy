@@ -21,6 +21,7 @@ collectory.threatenedSpeciesCodesUrl = collectory.baseURL + "/public/showDataRes
 skin.layout = "generic"
 eol.lang = "en"
 bie.index.url = "http://bie.ala.org.au/ws"
+//bie.index.url = "http://localhost:8110/bie-index"
 defaultDecimalLatitude=-25.61
 defaultDecimalLongitude=134.35
 defaultZoomLevel=4

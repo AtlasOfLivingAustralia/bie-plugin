@@ -5,6 +5,8 @@ import org.apache.commons.lang.StringEscapeUtils
 import au.org.ala.names.parser.PhraseNameParser
 import org.springframework.web.servlet.support.RequestContextUtils
 
+import java.text.MessageFormat
+
 class BieTagLib {
     def grailsApplication
 
@@ -20,6 +22,7 @@ class BieTagLib {
      * @attr acceptedName OPTIONAL The accepted name
      * @attr name REQUIRED the scientific name
      * @attr rankId REQUIRED The rank ID
+     * @attr taxonomicStatus OPTIONAL The taxonomic status (Use "name" for a plain name and "synonym" for a plain synonym with accepted name)
      */
     def formatSciName = { attrs ->
         def nameFormatted = attrs.nameFormatted
@@ -27,6 +30,7 @@ class BieTagLib {
         def name = attrs.nameComplete ?: attrs.name
         def rank = cssRank(rankId)
         def accepted = attrs.acceptedName
+        def taxonomicStatus = attrs.taxonomicStatus
         def parsed = { n, r, incAuthor ->
             PhraseNameParser pnp = new PhraseNameParser()
             try {
@@ -39,19 +43,19 @@ class BieTagLib {
             }
             n
         }
-
-        if (nameFormatted)
-            out << nameFormatted
-        else {
+        if (!taxonomicStatus)
+            taxonomicStatus = accepted ? "synonym" : "name"
+        def format = message(code: "taxonomicStatus.${taxonomicStatus}.format", default: "<span class=\"taxon-name\">{0}<span>")
+        if (!nameFormatted) {
             def output = "<span class=\"scientific-name rank-${rank}\"><span class=\"name\">${name}</span></span>"
             if (rankId >= 6000)
                 output = parsed(name, rank, true)
-             out << output
+            nameFormatted = output
         }
         if (accepted) {
             accepted = parsed(accepted, rank, false)
-            out << " <span class=\"accepted-name\">(accepted name:&nbsp;${accepted})</span> "
         }
+        out << MessageFormat.format(format, nameFormatted, accepted)
     }
 
     /**
