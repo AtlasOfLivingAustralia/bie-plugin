@@ -264,10 +264,16 @@
                         <tbody>
                         <tr>
                             <td>
+                                <g:set var="baseNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
+                                                                                 nameFormatted="${tc?.taxonConcept?.nameFormatted}"
+                                                                                 nameComplete="${tc?.taxonConcept?.nameComplete}"
+                                                                                 name="${tc?.taxonConcept?.name}"
+                                                                                 taxonomicStatus="name"
+                                                                                 acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
                                 <g:if test="${tc.taxonConcept.infoSourceURL && tc.taxonConcept.infoSourceURL != tc.taxonConcept.datasetURL}"><a
                                         href="${tc.taxonConcept.infoSourceURL}" target="_blank"
-                                        class="external">${raw(sciNameFormatted)}</a></g:if>
-                                <g:else>${raw(sciNameFormatted)}</g:else>
+                                        class="external">${raw(baseNameFormatted)}</a></g:if>
+                                <g:else>${raw(baseNameFormatted)}</g:else>
                             </td>
                             <td class="source">
                                 <ul><li>
@@ -275,7 +281,8 @@
                                                                                   target="_blank"
                                                                                   class="external">${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</a></g:if>
                                     <g:else>${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</g:else>
-                                    <g:if test="${!acceptedName}"><span class="annotation annotation-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}.annotation" default="${tc.taxonConcept.taxonomicStatus}"/></span></g:if>
+                                    <g:if test="${!acceptedName}"><span class="annotation annotation-taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}.annotation" default="${tc.taxonConcept.taxonomicStatus}"/></span></g:if>
+                                    <g:if test="${tc.taxonConcept.nomenclaturalStatus && tc.taxonConcept.nomenclaturalStatus != tc.taxonConcept.taxonomicStatus}"><span class="annotation annotation-nomenclatural-status">${tc.taxonConcept.nomenclaturalStatus}</span></g:if>
                                 </li></ul>
                             </td>
                         </tr>
@@ -319,15 +326,25 @@
                                                                                   target="_blank"
                                                                                   class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></g:if>
                                             <g:else>${synonym.nameAuthority ?: synonym.infoSourceName}</g:else>
-                                            <span class="annotation annotation-status" title="${message(code: 'taxonomicStatus.' + synonym.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${synonym.taxonomicStatus}.annotation" default="${synonym.taxonomicStatus}"/></span>
+                                            <span class="annotation annotation-taxonomic-status" title="${message(code: 'taxonomicStatus.' + synonym.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${synonym.taxonomicStatus}.annotation" default="${synonym.taxonomicStatus}"/></span>
+                                            <g:if test="${synonym.nomenclaturalStatus && synonym.nomenclaturalStatus != synonym.taxonomicStatus}"><span class="annotation annotation-nomenclatural-status">${synonym.nomenclaturalStatus}</span></g:if>
                                         </li></ul>
                                     </td>
                                 </tr>
-                                <g:if test="${synonym.namePublishedIn || synonym.referencedIn}">
+                                <g:if test="${synonym.namePublishedIn && synonym.namePublishedIn != tc?.taxonConcept?.namePublishedIn}">
                                     <tr class="cite">
                                         <td colspan="2">
                                             <cite>Published in: <span
-                                                    class="publishedIn">${synonym.namePublishedIn ?: synonym.referencedIn}</span>
+                                                    class="publishedIn">${synonym.namePublishedIn}</span>
+                                            </cite>
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${synonym.referencedIn }">
+                                    <tr class="cite">
+                                        <td colspan="2">
+                                            <cite>Referenced in: <span
+                                                    class="publishedIn">${synonym.referencedIn}</span>
                                             </cite>
                                         </td>
                                     </tr>

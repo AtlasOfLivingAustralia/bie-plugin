@@ -20,13 +20,13 @@ sightings.guidUrl = "http://sightings.ala.org.au/"
 collectory.threatenedSpeciesCodesUrl = collectory.baseURL + "/public/showDataResource"
 skin.layout = "generic"
 eol.lang = "en"
-bie.index.url = "http://bie.ala.org.au/ws"
-//bie.index.url = "http://localhost:8110/bie-index"
+//bie.index.url = "http://bie.ala.org.au/ws"
+bie.index.url = "http://localhost:8110/bie-index"
 defaultDecimalLatitude=-25.61
 defaultDecimalLongitude=134.35
 defaultZoomLevel=4
 image.thumbnailUrl = "http://images.ala.org.au/image/proxyImageThumbnail?imageId="
-facets = "idxtype,rank,locatedInHubCountry,imageAvailable,speciesGroup"
+facets = "idxtype,rank,locatedInHubCountry,imageAvailable,speciesGroup,taxonomicStatus"
 map.default.id = "" // not needed for CartoDB map
 map.default.token = "" // not needed for CartoDB map
 map.default.url = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
