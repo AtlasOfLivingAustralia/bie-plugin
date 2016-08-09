@@ -26,7 +26,7 @@ defaultDecimalLatitude=-25.61
 defaultDecimalLongitude=134.35
 defaultZoomLevel=4
 image.thumbnailUrl = "http://images.ala.org.au/image/proxyImageThumbnail?imageId="
-facets = "idxtype,rank,locatedInHubCountry,imageAvailable,speciesGroup"
+facets = "idxtype,rank,locatedInHubCountry,imageAvailable,speciesGroup,taxonomicStatus"
 map.default.id = "" // not needed for CartoDB map
 map.default.token = "" // not needed for CartoDB map
 map.default.url = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
