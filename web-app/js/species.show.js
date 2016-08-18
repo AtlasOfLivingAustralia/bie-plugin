@@ -359,6 +359,7 @@ function loadGalleries() {
     loadGalleryType('type', 0)
     loadGalleryType('specimen', 0)
     loadGalleryType('other', 0)
+    loadGalleryType('uncertain',0)
 }
 
 var entityMap = {
@@ -444,6 +445,8 @@ function addOverviewImage(overviewImageRecord) {
     $mainOverviewImage.parent().attr('href', overviewImageRecord.largeImageUrl);
     $mainOverviewImage.parent().attr('data-title', getImageTitleFromOccurrence(overviewImageRecord));
     $mainOverviewImage.parent().attr('data-footer', getImageFooterFromOccurrence(overviewImageRecord));
+    $mainOverviewImage.parent().attr('data-image-id', overviewImageRecord.image);
+    $mainOverviewImage.parent().attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + overviewImageRecord.uuid);
 
     $('.mainOverviewImageInfo').html(getImageTitleFromOccurrence(overviewImageRecord));
 }
@@ -467,6 +470,8 @@ function generateOverviewThumb(occurrence, id){
     $taxonSummaryThumbLink.attr('data-title', getImageTitleFromOccurrence(occurrence));
     $taxonSummaryThumbLink.attr('data-footer', getImageFooterFromOccurrence(occurrence));
     $taxonSummaryThumbLink.attr('href', occurrence.largeImageUrl);
+    $taxonSummaryThumbLink.attr('data-image-id', occurrence.image);
+    $taxonSummaryThumbLink.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + occurrence.uuid);
     return $taxonSummaryThumb;
 }
 
@@ -483,7 +488,8 @@ function loadGalleryType(category, start) {
     var imageCategoryParams = {
         type: '&fq=type_status:*',
         specimen: '&fq=basis_of_record:PreservedSpecimen&fq=-type_status:*',
-        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen'
+        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=identification_qualifier_s:("Certain" OR "Not recognised" OR "Not provided")&sort=identification_qualifier_s&dir=asc',
+        uncertain: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=identification_qualifier_s:"Uncertain"'
     };
 
     var pageSize = 20;
@@ -528,6 +534,8 @@ function loadGalleryType(category, start) {
 
                 // write to DOM
                 $taxonThumb.attr('data-footer', getImageFooterFromOccurrence(el));
+                $taxonThumb.attr('data-image-id', el.image);
+                $taxonThumb.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid);
                 $categoryTmpl.find('.taxon-gallery').append($taxonThumb);
             });
 
@@ -751,4 +759,22 @@ function loadExpertDistroMap() {
             $("#expertDistroDiv").show();
         }
     })
+}
+
+function expandImageGallery(btn) {
+    if(!$(btn).hasClass('.expand-image-gallery')){
+        $(btn).parent().find('.collapse-image-gallery').removeClass('btn-primary');
+        $(btn).addClass('btn-primary');
+
+        $(btn).parents('.image-section').find('.taxon-gallery').slideDown(400)
+    }
+}
+
+function collapseImageGallery(btn) {
+    if(!$(btn).hasClass('.collapse-image-gallery')){
+        $(btn).parent().find('.expand-image-gallery').removeClass('btn-primary');
+        $(btn).addClass('btn-primary');
+
+        $(btn).parents('.image-section').find('.taxon-gallery').slideUp(400)
+    }
 }

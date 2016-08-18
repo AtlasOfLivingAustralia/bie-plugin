@@ -31,6 +31,8 @@
 <g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if
         test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
 <g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}"/>
+<g:set bean="authService" var="authService"></g:set>
+<g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType?:'LEAFLET'}"></g:set>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +41,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <r:require modules="show, charts"/>
+    <r:require modules="show, charts, image-viewer"/>
 </head>
 
 <body class="page-taxon">
@@ -232,9 +234,15 @@
                 </section>
 
                 <section class="tab-pane fade" id="gallery">
-                    <g:each in="${["type","specimen","other"]}" var="cat">
-                        <div id="cat_${cat}" class="hide">
-                            <h2><g:message code="images.heading.${cat}" default="${cat}"/></h2>
+                    <g:each in="${["type","specimen","other","uncertain"]}" var="cat">
+                        <div id="cat_${cat}" class="hide image-section">
+                            <h2><g:message code="images.heading.${cat}" default="${cat}"/>&nbsp;
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-sm btn-default collapse-image-gallery" onclick="collapseImageGallery(this)">Collapse</button>
+                                    <button type="button" class="btn btn-sm btn-default btn-primary expand-image-gallery" onclick="expandImageGallery(this)">Expand</button>
+                                </div>
+                            </h2>
+
                             <div class="taxon-gallery"></div>
                         </div>
 
@@ -892,6 +900,17 @@
     <hr/>
 </div>
 
+<div id="imageDialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="viewerContainerId">
+
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <r:script>
     // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
     var SHOW_CONF = {
@@ -899,6 +918,7 @@
         biocacheServiceUrl: "${grailsApplication.config.biocacheService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
         profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
+        imageServiceBaseUrl:"${grailsApplication.config.image.baseURL}",
         guid:               "${guid}",
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
@@ -915,7 +935,7 @@
         genbankUrl:         "${createLink(controller: 'externalSite', action: 'genbank', params: [s: tc?.taxonConcept?.nameString ?: ''])}",
         scholarUrl:         "${createLink(controller: 'externalSite', action: 'scholar', params: [s: tc?.taxonConcept?.nameString ?: ''])}",
         soundUrl:           "${createLink(controller: 'species', action: 'soundSearch', params: [s: tc?.taxonConcept?.nameString ?: ''])}",
-        eolLanguage:        "${grailsApplication.config.eol.lang}",
+            eolLanguage:        "${grailsApplication.config.eol.lang}",
         defaultDecimalLatitude: ${grailsApplication.config.defaultDecimalLatitude},
         defaultDecimalLongitude: ${grailsApplication.config.defaultDecimalLongitude},
         defaultZoomLevel: ${grailsApplication.config.defaultZoomLevel},
@@ -928,7 +948,17 @@
         recordsMapColour: "${grailsApplication.config.map.records.colour}",
         mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
         noImage100Url: "${resource(dir: 'images', file: 'noImage100.jpg')}",
-        map: null
+        map: null,
+        imageDialog: '${imageViewerType}',
+        likeUrl: "${createLink(controller: 'imageClient', action: 'likeImage')}",
+        dislikeUrl: "${createLink(controller: 'imageClient', action: 'dislikeImage')}",
+        userRatingUrl: "${createLink(controller: 'imageClient', action: 'userRating')}",
+        disableLikeDislikeButton: ${authService.getUserId() ? false : true},
+        userRatingHelpText: '<div><b>Up vote (<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>) an image:</b>'+
+        ' Image supports the identification of the species or is representative of the species.  Subject is clearly visible including identifying features.<br/><br/>'+
+        '<b>Down vote (<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>) an image:</b>'+
+        ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/>'+
+        'If this image is incorrectly identified please flag an issue on the <a href="RECORD_URL">record</a></div>'
     }
     // load google charts api
     google.load("visualization", "1", {packages:["corechart"]});
@@ -954,6 +984,5 @@
     }
 });
 </r:script>
-
 </body>
 </html>

@@ -1,6 +1,7 @@
 $(function(){
 	// Sticky footer
 	var footerHeight = $(".site-footer").outerHeight();
+	var imageId, attribution, recordUrl;
 	$(".wrap").css("margin-bottom", -footerHeight);
 	$(".push").height(footerHeight);
 	
@@ -21,9 +22,48 @@ $(function(){
 
 	// Lightbox
 	$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) { 
-		event.preventDefault(); 
-		$(this).ekkoLightbox(); 
+		event.preventDefault();
+		switch (SHOW_CONF.imageDialog){
+			case 'MODAL':
+				$(this).ekkoLightbox();
+				break;
+			case 'LEAFLET':
+				imageId = $(this).attr('data-image-id');
+				attribution = $(this).attr('data-footer');
+				recordUrl = $(this).attr('data-record-url');
+				setDialogSize();
+				$('#imageDialog').modal('show');
+				break;
+		}
 	});
+
+	// show image only after modal dialog is shown. otherwise, image position will be off the viewing area.
+	$('#imageDialog').on('shown.bs.modal',function () {
+		imgvwr.viewImage($("#viewerContainerId"), imageId, {
+			imageServiceBaseUrl: SHOW_CONF.imageServiceBaseUrl,
+			addSubImageToggle: false,
+			addCalibration: false,
+			addDrawer: false,
+			addCloseButton: true,
+			addAttribution: true,
+			addLikeDislikeButton: true,
+			attribution: attribution,
+			disableLikeDislikeButton: SHOW_CONF.disableLikeDislikeButton,
+			likeUrl: SHOW_CONF.likeUrl + '?id=' + imageId,
+			dislikeUrl: SHOW_CONF.dislikeUrl + '?id=' + imageId,
+			userRatingUrl: SHOW_CONF.userRatingUrl + '?id=' + imageId,
+			userRatingHelpText: SHOW_CONF.userRatingHelpText.replace('RECORD_URL', recordUrl)
+		});
+	});
+
+
+	// set size of modal dialog during a resize
+	$(window).on('resize', setDialogSize)
+	function setDialogSize() {
+		var height = $(window).height()
+		height *= 0.8
+		$("#viewerContainerId").height(height);
+	}
 
 	// Tooltips
 	$("[data-toggle='tooltip']").tooltip();
