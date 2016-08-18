@@ -151,9 +151,6 @@
                                 </div>
                             </g:if>
 
-                            <div id="listContent">
-                            </div>
-
                             <div id="descriptiveContent">
                             </div>
 
@@ -226,7 +223,11 @@
                                 </div>
                             </div>
 
-                        </div><!-- end col 2 -->
+                            <div id="listContent">
+                            </div>
+
+
+                    </div><!-- end col 2 -->
                     </div>
                 </section>
 
