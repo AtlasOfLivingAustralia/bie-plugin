@@ -1,11 +1,18 @@
 package au.org.ala.bie
 
+import groovy.json.JsonSlurper
 import org.apache.commons.lang.StringEscapeUtils
 import au.org.ala.names.parser.PhraseNameParser
+import org.springframework.web.servlet.support.RequestContextUtils
+
+import java.text.MessageFormat
 
 class BieTagLib {
+    def grailsApplication
 
     static namespace = 'bie'     // namespace for headers and footers
+
+    static languages = null      // Lazy iniitalisation
 
     /**
      * Format a scientific name with appropriate italics depending on rank
@@ -15,6 +22,7 @@ class BieTagLib {
      * @attr acceptedName OPTIONAL The accepted name
      * @attr name REQUIRED the scientific name
      * @attr rankId REQUIRED The rank ID
+     * @attr taxonomicStatus OPTIONAL The taxonomic status (Use "name" for a plain name and "synonym" for a plain synonym with accepted name)
      */
     def formatSciName = { attrs ->
         def nameFormatted = attrs.nameFormatted
@@ -22,6 +30,7 @@ class BieTagLib {
         def name = attrs.nameComplete ?: attrs.name
         def rank = cssRank(rankId)
         def accepted = attrs.acceptedName
+        def taxonomicStatus = attrs.taxonomicStatus
         def parsed = { n, r, incAuthor ->
             PhraseNameParser pnp = new PhraseNameParser()
             try {
@@ -34,19 +43,19 @@ class BieTagLib {
             }
             n
         }
-
-        if (nameFormatted)
-            out << nameFormatted
-        else {
+        if (!taxonomicStatus)
+            taxonomicStatus = accepted ? "synonym" : "name"
+        def format = message(code: "taxonomicStatus.${taxonomicStatus}.format", default: "<span class=\"taxon-name\">{0}<span>")
+        if (!nameFormatted) {
             def output = "<span class=\"scientific-name rank-${rank}\"><span class=\"name\">${name}</span></span>"
             if (rankId >= 6000)
                 output = parsed(name, rank, true)
-             out << output
+            nameFormatted = output
         }
         if (accepted) {
             accepted = parsed(accepted, rank, false)
-            out << " <span class=\"accepted-name\">(accepted name:&nbsp;${accepted})</span> "
         }
+        out << MessageFormat.format(format, nameFormatted, accepted)
     }
 
     /**
@@ -177,6 +186,27 @@ class BieTagLib {
     }
 
     /**
+     * Mark a phrase with language, optionally with a specific language marker
+     *
+     * @attr text The text to mark
+     * @attr lang The language code (ISO)
+     * @attr mark Mark the language in text (defaults to true)
+     */
+    def markLanguage = { attrs ->
+        Locale defaultLocale = RequestContextUtils.getLocale(request)
+        String text = attrs.text ?: ""
+        Locale lang = Locale.forLanguageTag(attrs.lang ?: defaultLocale.language)
+        boolean mark = attrs.mark ?: true
+
+        out << "<span lang=\"${lang}\">${text}"
+        if (mark && defaultLocale.language != lang.language) {
+            String name = languageName(lang.language)
+            out << "&nbsp;<span class=\"annotation annotation-language\" title=\"${lang}\">${name}</span>"
+        }
+        out << "</span>"
+    }
+
+    /**
      * Custom function to escape a string for JS use
      *
      * @param value
@@ -213,5 +243,27 @@ class BieTagLib {
         if (rankId < 8000)
             return "species"
         return "subspecies"
+    }
+
+    private String languageName(String lang) {
+        synchronized (this.class) {
+            if (languages == null) {
+                JsonSlurper slurper = new JsonSlurper()
+                def ld = slurper.parse(new URL(grailsApplication.config.languageCodesUrl))
+                languages = [:]
+                ld.codes.each { code ->
+                    if (languages.containsKey(code.code))
+                        log.warn "Duplicate language code ${code.code}"
+                    languages[code.code] = code
+                    if (code.part2b && !languages.containsKey(code.part2b))
+                        languages[code.part2b] = code
+                    if (code.part2t && !languages.containsKey(code.part2t))
+                        languages[code.part2t] = code
+                    if (code.part1 && !languages.containsKey(code.part1))
+                        languages[code.part1] = code
+                }
+            }
+        }
+        return languages[lang]?.name ?: lang
     }
 }

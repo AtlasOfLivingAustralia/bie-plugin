@@ -14,7 +14,7 @@
  */
 function showSpeciesPage() {
 
-    console.log("Starting show species page");
+    //console.log("Starting show species page");
 
     //load content
     loadOverviewImages();
@@ -28,7 +28,7 @@ function showSpeciesPage() {
     //
     ////setup controls
     addAlerts();
-    loadBhl();
+    // loadBhl(); // now an external link to BHL
     loadTrove(SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
@@ -38,6 +38,7 @@ function loadSpeciesLists(){
     $.get(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid, function( data ) {
         for(var i = 0; i < data.length; i++) {
             var specieslist = data[i];
+            var maxListFields = 10;
 
             if (specieslist.list.isBIE) {
 
@@ -49,6 +50,9 @@ function loadSpeciesLists(){
 
                 var content = "<dl class='dl-horizontal species-list-dl'>";
                 $.each(specieslist.kvpValues, function (idx, kvpValue) {
+                    if (idx >= maxListFields) {
+                        return false;
+                    }
                     var value = kvpValue.value;
                     if(kvpValue.vocabValue){
                         value = kvpValue.vocabValue;
@@ -202,7 +206,8 @@ function loadIndigenousData() {
 
                 var logo = profile.collection.logo || SHOW_CONF.noImage100Url;
                 panel.find(".collection-logo").append("<img src='" + logo + "' alt='" + profile.collection.title + " logo'>");
-                panel.find(".collection-logo").append("<div class='caption'>" + profile.collection.title + "</div>");
+                panel.find(".collection-logo-caption").append(profile.collection.title);
+
 
                 panel.find(".profile-name").append(profile.name);
                 panel.find(".collection-name").append("(" + profile.collection.title + ")");
@@ -223,6 +228,28 @@ function loadIndigenousData() {
                 panel.find(".summary-text").append(summary);
                 panel.find(".profile-link").append("<a href='" + profile.url + "' title='Click to view the whole profile' target='_blank'>View the full profile</a>");
 
+                if(profile.thumbnailUrl) {
+                    panel.find(".main-image").removeClass("hide");
+
+                    panel.find(".image-embedded").append("<img src='" + profile.thumbnailUrl + "' alt='" + profile.collection.title + " main image'>");
+                }
+
+                if(profile.mainVideo) {
+                    panel.find(".main-video").removeClass("hide");
+                    panel.find(".video-name").append(profile.mainVideo.name);
+                    panel.find(".video-attribution").append(profile.mainVideo.attribution);
+                    panel.find(".video-license").append(profile.mainVideo.license);
+                    panel.find(".video-embedded").append(profile.mainVideo.embeddedVideo);
+                }
+
+                if(profile.mainAudio) {
+                    panel.find(".main-audio").removeClass("hide");
+                    panel.find(".audio-name").append(profile.mainAudio.name);
+                    panel.find(".audio-attribution").append(profile.mainAudio.attribution);
+                    panel.find(".audio-license").append(profile.mainAudio.license);
+                    panel.find(".audio-embedded").append(profile.mainAudio.embeddedAudio);
+                }
+
                 panel.appendTo("#indigenous-info");
             });
         }
@@ -231,22 +258,41 @@ function loadIndigenousData() {
 
 function loadExternalSources(){
     //load EOL content
-    console.log('####### Loading EOL content - ' + SHOW_CONF.eolUrl);
+    //console.log('####### Loading EOL content - ' + SHOW_CONF.eolUrl);
     $.ajax({url: SHOW_CONF.eolUrl}).done(function ( data ) {
-        console.log(data);
+        //console.log(data);
         //clone a description template...
         if(data.dataObjects){
-            console.log('Loading EOL content - ' + data.dataObjects.length);
+            //console.log('Loading EOL content - ' + data.dataObjects.length);
             $.each(data.dataObjects, function(idx, dataObject){
-                if(dataObject.language == SHOW_CONF.eolLanguage){
+                //console.log('Loading EOL content -> ' + dataObject.description);
+                if(dataObject.language == SHOW_CONF.eolLanguage || !dataObject.language){
                     var $description = $('#descriptionTemplate').clone();
                     $description.css({'display':'block'});
                     $description.attr('id', dataObject.id);
                     $description.find(".title").html(dataObject.title ?  dataObject.title : 'Description');
-                    $description.find(".content").html(dataObject.description);
+
+                    var descriptionDom = $.parseHTML( dataObject.description );
+                    var body = $(descriptionDom).find('#bodyContent > p:lt(2)').html(); // for really long EOL blocks
+
+                    if (body) {
+                        $description.find(".content").html(body);
+                    } else {
+                        $description.find(".content").html(dataObject.description);
+                    }
+
 
                     if(dataObject.source && dataObject.source.trim().length != 0){
-                        $description.find(".sourceText").html(dataObject.source);
+                        var sourceText = dataObject.source;
+                        var sourceHtml = "";
+
+                        if (sourceText.match("^http")) {
+                            sourceHtml = "<a href='" + sourceText + "' target='eol'>"  + sourceText + "</a>"
+                        } else {
+                            sourceHtml = sourceText;
+                        }
+
+                        $description.find(".sourceText").html(sourceHtml);
                     } else {
                         $description.find(".source").css({'display':'none'});
                     }
@@ -308,7 +354,7 @@ function loadExternalSources(){
  * Trigger loading of the 3 gallery sections
  */
 function loadGalleries() {
-    console.log('loading galleries');
+    //console.log('loading galleries');
     $('#gallerySpinner').show();
     loadGalleryType('type', 0)
     loadGalleryType('specimen', 0)
@@ -389,6 +435,7 @@ function addOverviewImages(imagesArray, hasPreferredImage) {
 
 function addOverviewImage(overviewImageRecord) {
     $('#noOverviewImages').addClass('hide');
+    $('.main-img').removeClass('hide');
     $('.thumb-row').removeClass('hide');
     var $categoryTmpl = $('#overviewImages');
     $categoryTmpl.removeClass('hide');
@@ -436,7 +483,7 @@ function generateOverviewThumb(occurrence, id){
  */
 function loadGalleryType(category, start) {
 
-    console.log("Loading images category: " + category);
+    //console.log("Loading images category: " + category);
 
     var imageCategoryParams = {
         type: '&fq=type_status:*',
@@ -459,11 +506,11 @@ function loadGalleryType(category, start) {
         '&fq=multimedia:"Image"&pageSize=' + pageSize +
         '&facet=off&start=' + start + imageCategoryParams[category] + '&im=true&callback=?';
 
-    console.log("URL: " + url);
+    //console.log("URL: " + url);
 
     $.getJSON(url, function(data){
 
-        console.log('Total images: ' + data.totalRecords + ", category: " + category);
+        //console.log('Total images: ' + data.totalRecords + ", category: " + category);
 
         if (data && data.totalRecords > 0) {
             var br = "<br>";

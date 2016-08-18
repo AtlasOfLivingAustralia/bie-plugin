@@ -107,6 +107,10 @@ span.iucn.extinct {
     margin-bottom: 20px;
 }
 
+h5.json > a {
+    font-size: 14px;
+}
+
 /*
  * For content retrieved from the ALA Profiles application
  */
@@ -153,3 +157,7 @@ span.iucn.extinct {
 #imageDialog .modal-body{overflow-y: hidden;position:static;top:50px;bottom:50px;right:0px;left:0px;}
 
 #imageDialog .modal-footer {position: absolute;bottom: 0;right: 0;left: 0;}
+=======
+/* Default Bootstrap H3 font-weight: 500 will break profile-name on Chrome */
+    font-weight: bold;
+}

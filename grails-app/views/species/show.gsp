@@ -21,10 +21,12 @@
 <g:set var="citizenSciUrl" value="${grailsApplication.config.sightings.guidUrl}"/>
 <g:set var="alertsUrl" value="${grailsApplication.config.alerts.url}"/>
 <g:set var="guid" value="${tc?.previousGuid ?: tc?.taxonConcept?.guid ?: ''}"/>
+<g:set var="jsonLink" value="${grailsApplication.config.bie.index.url}/species/${tc?.taxonConcept?.guid}.json"/>
 <g:set var="sciNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
                                                  nameFormatted="${tc?.taxonConcept?.nameFormatted}"
                                                  nameComplete="${tc?.taxonConcept?.nameComplete}"
                                                  name="${tc?.taxonConcept?.name}"
+                                                 taxonomicStatus="${tc?.taxonConcept?.taxonomicStatus}"
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if
         test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
@@ -61,15 +63,18 @@
             </div>
         </g:if>
         <div class="header-inner">
-            <h1><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                   nameFormatted="${tc?.taxonConcept?.nameFormatted}"
-                                   nameComplete="${tc?.taxonConcept?.nameComplete}" name="${tc?.taxonConcept?.name}"
-                                   acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></h1>
+            <h5 class="pull-right json">
+                <a href="${jsonLink}" target="data"
+                   title="${message(code:"show.view.json.title")}" type="button" class="btn btn-sm btn-default active"
+                   data-toggle="tooltip" data-placement="bottom"><g:message code="show.json" /></a>
+            </h5>
+            <h1>${raw(sciNameFormatted)}</h1>
             <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.opt(0)?.nameString : ''}"/>
             <g:if test="${commonNameDisplay}">
-                <h2>${commonNameDisplay}</h2>
+                <h2>${raw(commonNameDisplay)}</h2>
             </g:if>
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
+            <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
             <h5 class="inline-head name-authority">
                 <strong>Name authority:</strong>
                 <span class="name-authority">${tc?.taxonConcept.nameAuthority ?: grailsApplication.config.defaultNameAuthority}</span>
@@ -88,7 +93,6 @@
                     <li><a href="#literature" data-toggle="tab">Literature</a></li>
                     <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
                     <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
-                    <li class="hide"><a id="indigenous-info-tab" href="#indigenous-info" data-toggle="tab">Indigenous Information</a></li>
                 </ul>
                 <div class="tab-content">
 
@@ -97,7 +101,7 @@
                         <div class="col-md-6">
 
                             <div class="taxon-summary-gallery">
-                                <div class="main-img">
+                                <div class="main-img hide">
                                     <a class="lightbox-img"
                                        data-toggle="lightbox"
                                        data-gallery="taxon-summary-gallery"
@@ -148,9 +152,6 @@
                                     </div>
                                 </div>
                             </g:if>
-
-                            <div id="listContent">
-                            </div>
 
                             <div id="descriptiveContent">
                             </div>
@@ -224,7 +225,11 @@
                                 </div>
                             </div>
 
-                        </div><!-- end col 2 -->
+                            <div id="listContent">
+                            </div>
+
+
+                    </div><!-- end col 2 -->
                     </div>
                 </section>
 
@@ -256,29 +261,28 @@
                 </section>
 
                 <section class="tab-pane fade" id="names">
+                    <g:set var="acceptedName" value="${tc.taxonConcept.taxonomicStatus == 'accepted'}"/>
                     <h2>Names and sources</h2>
                     <table class="table name-table  table-responsive">
                         <thead>
                         <tr>
-                            <th>Accepted name</th>
+                            <th><g:if test="${acceptedName}">Accepted name</g:if><g:else>Name</g:else></th>
                             <th>Source</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>
+                                <g:set var="baseNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
+                                                                                 nameFormatted="${tc?.taxonConcept?.nameFormatted}"
+                                                                                 nameComplete="${tc?.taxonConcept?.nameComplete}"
+                                                                                 name="${tc?.taxonConcept?.name}"
+                                                                                 taxonomicStatus="name"
+                                                                                 acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
                                 <g:if test="${tc.taxonConcept.infoSourceURL && tc.taxonConcept.infoSourceURL != tc.taxonConcept.datasetURL}"><a
                                         href="${tc.taxonConcept.infoSourceURL}" target="_blank"
-                                        class="external"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                                                            nameFormatted="${tc?.taxonConcept?.nameFormatted}"
-                                                                            nameComplete="${tc?.taxonConcept?.nameComplete}"
-                                                                            name="${tc?.taxonConcept?.name}"
-                                                                            acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></a></g:if>
-                                <g:else><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                                           nameFormatted="${tc?.taxonConcept?.nameFormatted}"
-                                                           nameComplete="${tc?.taxonConcept?.nameComplete}"
-                                                           name="${tc?.taxonConcept?.name}"
-                                                           acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:else>
+                                        class="external">${raw(baseNameFormatted)}</a></g:if>
+                                <g:else>${raw(baseNameFormatted)}</g:else>
                             </td>
                             <td class="source">
                                 <ul><li>
@@ -286,6 +290,8 @@
                                                                                   target="_blank"
                                                                                   class="external">${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</a></g:if>
                                     <g:else>${tc.taxonConcept.nameAuthority ?: tc.taxonConcept.infoSourceName}</g:else>
+                                    <g:if test="${!acceptedName}"><span class="annotation annotation-taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}.annotation" default="${tc.taxonConcept.taxonomicStatus}"/></span></g:if>
+                                    <g:if test="${tc.taxonConcept.nomenclaturalStatus && tc.taxonConcept.nomenclaturalStatus != tc.taxonConcept.taxonomicStatus}"><span class="annotation annotation-nomenclatural-status">${tc.taxonConcept.nomenclaturalStatus}</span></g:if>
                                 </li></ul>
                             </td>
                         </tr>
@@ -313,16 +319,15 @@
                             <g:each in="${tc.synonyms}" var="synonym">
                                 <tr>
                                     <td>
-                                        <g:if test="${synonym.infoSourceURL && synonym.infoSourceURL != synonym.datasetURL}"><a
-                                                href="${synonym.infoSourceURL}" target="_blank"
-                                                class="external"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
+                                        <g:set var="synonymNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
                                                                                     nameFormatted="${synonym.nameFormatted}"
                                                                                     nameComplete="${synonym.nameComplete}"
-                                                                                    name="${synonym.nameString}"/></a></g:if>
-                                        <g:else><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
-                                                                   nameFormatted="${synonym.nameFormatted}"
-                                                                   nameComplete="${synonym.nameComplete}"
-                                                                   name="${synonym.nameString}"/></g:else>
+                                                                                    taxonomicStatus="name"
+                                                                                    name="${synonym.nameString}"/></g:set>
+                                        <g:if test="${synonym.infoSourceURL && synonym.infoSourceURL != synonym.datasetURL}"><a
+                                                href="${synonym.infoSourceURL}" target="_blank"
+                                                class="external">${raw(synonymNameFormatted)}</a></g:if>
+                                        <g:else>${raw(synonymNameFormatted)}</g:else>
                                     </td>
                                     <td class="source">
                                         <ul><li>
@@ -330,14 +335,25 @@
                                                                                   target="_blank"
                                                                                   class="external">${synonym.nameAuthority ?: synonym.infoSourceName}</a></g:if>
                                             <g:else>${synonym.nameAuthority ?: synonym.infoSourceName}</g:else>
+                                            <span class="annotation annotation-taxonomic-status" title="${message(code: 'taxonomicStatus.' + synonym.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${synonym.taxonomicStatus}.annotation" default="${synonym.taxonomicStatus}"/></span>
+                                            <g:if test="${synonym.nomenclaturalStatus && synonym.nomenclaturalStatus != synonym.taxonomicStatus}"><span class="annotation annotation-nomenclatural-status">${synonym.nomenclaturalStatus}</span></g:if>
                                         </li></ul>
                                     </td>
                                 </tr>
-                                <g:if test="${synonym.namePublishedIn || synonym.referencedIn}">
+                                <g:if test="${synonym.namePublishedIn && synonym.namePublishedIn != tc?.taxonConcept?.namePublishedIn}">
                                     <tr class="cite">
                                         <td colspan="2">
                                             <cite>Published in: <span
-                                                    class="publishedIn">${synonym.namePublishedIn ?: synonym.referencedIn}</span>
+                                                    class="publishedIn">${synonym.namePublishedIn}</span>
+                                            </cite>
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${synonym.referencedIn }">
+                                    <tr class="cite">
+                                        <td colspan="2">
+                                            <cite>Referenced in: <span
+                                                    class="publishedIn">${synonym.referencedIn}</span>
                                             </cite>
                                         </td>
                                     </tr>
@@ -368,10 +384,8 @@
                             <tr>
                                 <td>
                                     <g:if test="${infoSourceURL && infoSourceURL != datasetURL}"><a
-                                            href="${infoSourceURL}" target="_blank" class="external">${nkey}</a></g:if>
-                                    <g:else>${nkey}</a></g:else>
-                                    <g:if test="${language && !language.startsWith(locale.language)}"><span
-                                            class="annotation annotation-language">${language}</span></g:if>
+                                            href="${infoSourceURL}" target="_blank" class="external"><bie:markLanguage text="${nkey}" lang="${language}"/></a></g:if>
+                                    <g:else><bie:markLanguage text="${nkey}" lang="${language}"/></g:else>
                                 </td>
                                 <td class="source">
                                     <ul>
@@ -381,7 +395,7 @@
                                                                                          onclick="window.open(this.href);
                                                                                          return false;">${commonName.infoSourceName}</a></g:if>
                                                 <g:else>${commonName.infoSourceName}</g:else>
-                                                <g:if test="${commonName.status && commonName.status != 'common'}"><span
+                                                <g:if test="${commonName.status && commonName.status != 'common'}"><span title="${message(code: 'identifierStatus.' + commonName.status + '.detail', default: '')}"
                                                         class="annotation annotation-status">${commonName.status}</span></g:if>
                                             </li>
                                         </g:each>
@@ -413,12 +427,56 @@
                                                 href="${tc.taxonConcept.datasetURL}" onclick="window.open(this.href);
                                                 return false;">${tc.taxonConcept.nameAuthority}</a></g:if>
                                         <g:else>${tc.taxonConcept.nameAuthority}</g:else>
-                                        <span class="annotation annotation-status">current</span>
+                                        <span class="annotation annotation-type" title="${message(code: 'identifierType.taxon.detail', default: '')}"><g:message code="identifierType.taxon"/></span>
+                                        <span class="annotation annotation-status" title="${message(code: 'identifierStatus.current.detail', default: '')}"><g:message code="identifierStatus.current"/></span>
                                     </li>
                                 </ul>
                             </td>
-
                         </tr>
+                        <g:if test="${tc.taxonConcept.taxonConceptID && tc.taxonConcept.taxonConceptID != tc.taxonConcept.guid}">
+                            <tr>
+                                <td>
+                                    <g:if test="${tc.taxonConcept.taxonConceptSourceURL && tc.taxonConcept.taxonConceptSourceURL != tc.taxonConcept.datasetURL}"><a
+                                            href="${tc.taxonConcept.taxonConceptSourceURL}" target="_blank"
+                                            class="external">${tc.taxonConcept.taxonConceptID}</a></g:if>
+                                    <g:else>${tc.taxonConcept.taxonConceptID}</g:else>
+                                </td>
+                                <td class="source">
+                                    <ul>
+                                        <li>
+                                            <g:if test="${tc.taxonConcept.datasetURL}"><a
+                                                    href="${tc.taxonConcept.datasetURL}" onclick="window.open(this.href);
+                                                    return false;">${tc.taxonConcept.nameAuthority}</a></g:if>
+                                            <g:else>${tc.taxonConcept.nameAuthority}</g:else>
+                                            <span class="annotation annotation-type" title="${message(code: 'identifierType.taxonConcept.detail', default: '')}"><g:message code="identifierType.taxonConcept"/></span>
+                                            <span class="annotation annotation-status" title="${message(code: 'identifierStatus.current.detail', default: '')}"><g:message code="identifierStatus.current"/></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:if test="${tc.taxonConcept.scientificNameID && tc.taxonConcept.scientificNameID != tc.taxonConcept.guid && tc.taxonConcept.scientificNameID != tc.taxonConcept.taxonConceptID}">
+                            <tr>
+                                <td>
+                                    <g:if test="${tc.taxonConcept.scientificNameSourceURL && tc.taxonConcept.scientificNameSourceURL != tc.taxonConcept.datasetURL}"><a
+                                            href="${tc.taxonConcept.scientificNameSourceURL}" target="_blank"
+                                            class="external">${tc.taxonConcept.scientificNameID}</a></g:if>
+                                    <g:else>${tc.taxonConcept.scientificNameID}</g:else>
+                                </td>
+                                <td class="source">
+                                    <ul>
+                                        <li>
+                                            <g:if test="${tc.taxonConcept.datasetURL}"><a
+                                                    href="${tc.taxonConcept.datasetURL}" onclick="window.open(this.href);
+                                                    return false;">${tc.taxonConcept.nameAuthority}</a></g:if>
+                                            <g:else>${tc.taxonConcept.nameAuthority}</g:else>
+                                            <span class="annotation annotation-type" title="${message(code: 'identifierType.name.detail', default: '')}"><g:message code="identifierType.name"/></span>
+                                            <span class="annotation annotation-status" title="${message(code: 'identifierStatus.current.detail', default: '')}"><g:message code="identifierStatus.current"/></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </g:if>
                         <g:if test="${tc.identifiers && !tc.identifiers.isEmpty()}">
                             <g:each in="${tc.identifiers}" var="identifier">
                                 <tr>
@@ -435,10 +493,10 @@
                                                                                          onclick="window.open(this.href);
                                                                                          return false;">${identifier.nameString ?: identifier.infoSourceName}</a></g:if>
                                                 <g:else>${identifier.nameString ?: identifier.infoSourceName}</g:else>
-                                                <g:if test="${identifier.format}"><span
-                                                        class="annotation annotation-format">${identifier.format}</span></g:if>
-                                                <g:if test="${identifier.status}"><span
-                                                        class="annotation annotation-status">${identifier.status}</span></g:if>
+                                                <g:if test="${identifier.format}"><span title="${message(code: 'identifierFormat.' + identifier.format + '.detail', default: '')}"
+                                                        class="annotation annotation-format"><g:message code="identifierFormat.${identifier.format}" default="${identifier.format}"/></span></g:if>
+                                                <g:if test="${identifier.status}"><span title="${message(code: 'identifierStatus.' + identifier.status + '.detail', default: '')}"
+                                                        class="annotation annotation-status"><g:message code="identifierFormat.${identifier.status}" default="${identifier.status}"/></span></g:if>
                                             </li>
                                         </ul>
                                     </td>
@@ -484,7 +542,7 @@
                             <dd><a href="${request?.contextPath}/species/${taxon.guid}#classification"
                                    title="${taxon.rank}">
                                 <bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}"
-                                                   nameComplete="${taxon.nameComplete}" name="${taxon.scientificName}"/>
+                                                   nameComplete="${taxon.nameComplete}" taxonomicStatus="name" name="${taxon.scientificName}"/>
                                 <g:if test="${taxon.commonNameSingle}">: ${taxon.commonNameSingle}</g:if></a>
                             </dd>
                         </g:if>
@@ -492,6 +550,7 @@
                             <dl><dt id="currentTaxonConcept">${taxon.rank}</dt>
                             <dd><span><bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}"
                                                          nameComplete="${taxon.nameComplete}"
+                                                         taxonomicStatus="name"
                                                          name="${taxon.scientificName}"/>
                                 <g:if test="${taxon.commonNameSingle}">: ${taxon.commonNameSingle}</g:if></span>
                                 <g:if test="${taxon.isAustralian || tc.isAustralian}">
@@ -512,6 +571,7 @@
                             <g:set var="taxonLabel"><bie:formatSciName rankId="${child.rankID}"
                                                                        nameFormatted="${child.nameFormatted}"
                                                                        nameComplete="${child.nameComplete}"
+                                                                       taxonomicStatus="name"
                                                                        name="${child.name}"/><g:if
                                     test="${child.commonNameSingle}">: ${child.commonNameSingle}</g:if></g:set>
                             <dd><a href="${request?.contextPath}/species/${child.guid}#classification">${raw(taxonLabel.trim())}</a>&nbsp;
@@ -584,7 +644,8 @@
 
                             <div id="bhl-integration">
                                 <h3>Name references found in the <a href="http://biodiversityheritagelibrary.com/" target="_blank">Biodiversity Heritage Library</a></h3>
-                                <div id="bhl-results-list" class="results-list">
+                                <div id="bhl-results-list" class="results-listZ">
+                                    <a href='http://www.biodiversitylibrary.org/search?SearchTerm=${tc?.taxonConcept?.nameString}&SearchCat=M#/names' target='bhl'>Search BHL for references to ${tc?.taxonConcept?.nameString}</a>
                                 </div>
                             </div>
 
@@ -693,15 +754,150 @@
 
 
 <!-- indigenous-profile-summary template -->
-<div id="indigenous-profile-summary-template" class="indigenous-profile-summary hide row padding-bottom-2">
-    <div class="col-md-3 collection-logo"></div>
-    <div class="col-md-9 profile-summary">
-        <h2 class="profile-name"></h2>
-        <span class="collection-name"></span>
-        <div class="profile-link pull-right"></div>
-        <h3 class="other-names"></h3>
-        <div class="summary-text"></div>
+<div id="indigenous-profile-summary-template" class="hide padding-bottom-2">
+
+    <div class="indigenous-profile-summary row">
+        <div class="col-md-2">
+            <div class="collection-logo embed-responsive embed-responsive-16by9 col-xs-11">
+            </div>
+
+            <div class="collection-logo-caption small">
+            </div>
+        </div>
+
+        <div class="col-md-10 profile-summary">
+            <h3 class="profile-name"></h3>
+            <span class="collection-name"></span>
+
+            <div class="profile-link pull-right"></div>
+
+            <h3 class="other-names"></h3>
+
+            <div class="summary-text"></div>
+        </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-2 ">
+        </div>
+
+        <div class="col-md-5 hide main-image padding-bottom-2">
+            <div class="row">
+
+                <div class="col-md-8 panel-heading">
+                    <h3 class="panel-title">Main Image</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8 ">
+                    <div class="image-embedded">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-3 hide main-audio padding-bottom-2">
+            <div class="row">
+                <div class="col-md-8 panel-heading">
+                    <h3 class="panel-title">Main Audio</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="audio-embedded embed-responsive embed-responsive-16by9 col-xs-12 text-center">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12 small">
+                    <div class="row">
+                        <div class="col-md-5 ">
+                            <strong>Name</strong>
+                        </div>
+
+                        <div class="col-md-7 audio-name"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 ">
+                            <strong>Attribution</strong>
+                        </div>
+
+                        <div class="col-md-7 audio-attribution"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 ">
+                            <strong>Licence</strong>
+                        </div>
+
+                        <div class="col-md-7 audio-license"></div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-2 "></div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+
+    <div class="hide main-video padding-bottom-2">
+        <div class="row">
+            <div class="col-md-2 ">
+            </div>
+            <div class="col-md-8 panel-heading">
+                <h3 class="panel-title">Main Video</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 ">
+            </div>
+            <div class="col-md-7 ">
+                <div class="video-embedded embed-responsive embed-responsive-16by9 col-xs-12 text-center">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 "></div>
+
+            <div class="col-md-7 small">
+                <div class="row">
+                    <div class="col-md-2 ">
+                        <strong>Name</strong>
+                    </div>
+
+                    <div class="col-md-10 video-name"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 ">
+                        <strong>Attribution</strong>
+                    </div>
+
+                    <div class="col-md-10 video-attribution"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 ">
+                        <strong>Licence</strong>
+                    </div>
+
+                    <div class="col-md-10 video-license"></div>
+                </div>
+
+            </div>
+            <div class="col-md-2 "></div>
+        </div>
+    </div>
+
+    <hr/>
 </div>
 
 <div id="imageDialog" class="modal fade" tabindex="-1" role="dialog">

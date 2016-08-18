@@ -24,7 +24,7 @@ grails.project.dependency.resolution = {
 
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-        compile("au.org.ala:ala-name-matching:2.3") {
+        compile("au.org.ala:ala-name-matching:2.4.0") {
             excludes "lucene-core", "lucene-analyzers-common", "lucene-queryparser", "simmetrics"
         }
         compile "commons-httpclient:commons-httpclient:3.1",
