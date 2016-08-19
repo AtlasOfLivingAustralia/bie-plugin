@@ -41,27 +41,32 @@ function loadSpeciesLists(){
             var maxListFields = 10;
 
             if (specieslist.list.isBIE) {
-
+                //console.log("specieslist", specieslist);
                 var $description = $('#descriptionTemplate').clone();
                 $description.css({'display': 'block'});
                 $description.attr('id', '#specieslist-block-' + specieslist.dataResourceUid);
                 $description.addClass('species-list-block');
                 $description.find(".title").html(specieslist.list.listName);
 
-                var content = "<dl class='dl-horizontal species-list-dl'>";
-                $.each(specieslist.kvpValues, function (idx, kvpValue) {
-                    if (idx >= maxListFields) {
-                        return false;
-                    }
-                    var value = kvpValue.value;
-                    if(kvpValue.vocabValue){
-                        value = kvpValue.vocabValue;
-                    }
-                    content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + value + "</dd>");
-                });
-                content += "</dl>";
+                if (specieslist.kvpValues.length > 0) {
+                    var content = "<dl class='dl-horizontal species-list-dl'>";
+                    $.each(specieslist.kvpValues, function (idx, kvpValue) {
+                        if (idx >= maxListFields) {
+                            return false;
+                        }
+                        var value = kvpValue.value;
+                        if(kvpValue.vocabValue){
+                            value = kvpValue.vocabValue;
+                        }
+                        content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + value + "</dd>");
+                    });
+                    content += "</dl>";
+                    $description.find(".content").html(content);
+                } else {
+                    $description.find(".content").html("A species list provided by " + specieslist.list.listName);
+                }
 
-                $description.find(".content").html(content);
+
 
                 $description.find(".source").css({'display':'none'});
                 $description.find(".rights").css({'display':'none'});
