@@ -21,9 +21,10 @@ class ExternalSiteController {
 
     def eol = {
         def searchString = params.s
+        def filterString  = java.net.URLEncoder.encode(params.f?:"", "UTF-8")
         def nameEncoded = java.net.URLEncoder.encode(searchString, "UTF-8")
-        def searchURL = "http://eol.org/api/search/1.0.json?q=${nameEncoded}&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl="
-
+        def searchURL = "http://eol.org/api/search/1.0.json?q=${nameEncoded}&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=${filterString}&cache_ttl="
+        log.debug "Initial EOL url = ${searchURL}"
         def js = new JsonSlurper()
         def jsonText = new java.net.URL(searchURL).text
 
