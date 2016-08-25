@@ -35,9 +35,9 @@ class BieTagLib {
             PhraseNameParser pnp = new PhraseNameParser()
             try {
                 def pn = pnp.parse(n) // attempt to parse phrase name
-                log.debug "name = ${n} || rankId = ${pn.canonicalName()}"
+                log.debug "format name = ${n} || canonicalNameWithMarker = ${pn.canonicalNameWithMarker()} || incAuthor = ${incAuthor}"
                 def author = incAuthor ? " <span class=\"author\">${pn.authorshipComplete()}</span>" : ""
-                n = "<span class=\"scientific-name rank-${r}\"><span class=\"name\">${pn.canonicalName()}</span>${author}</span>"
+                n = "<span class=\"scientific-name rank-${r}\"><span class=\"name\">${pn.canonicalNameWithMarker()}</span>${author}</span>"
             } catch (Exception ex) {
                 log.warn "Error parsing name (${n}): ${ex}", ex
             }
