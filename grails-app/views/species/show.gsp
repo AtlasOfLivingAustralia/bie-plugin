@@ -153,8 +153,9 @@
                                 </div>
                             </g:if>
 
-                            <div id="descriptiveContent">
-                            </div>
+                            <div id="descriptiveContent"></div>
+
+                            <div id="sounds" style="padding-bottom:20px;"></div>
 
                             <div class="panel panel-default panel-resources">
                                 <div class="panel-heading">

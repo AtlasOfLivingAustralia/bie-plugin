@@ -336,22 +336,46 @@ function loadExternalSources(){
     //load sound content
     $.ajax({url: SHOW_CONF.soundUrl}).done(function ( data ) {
         if(data.sounds){
-            $('#sounds').append('<h3 style="clear:left;">Sounds</h3>');
-            $('#sounds').append('<audio src="' + data.sounds[0].alternativeFormats['audio/mpeg'] + '" preload="auto" />' );
+            var soundsDiv = "<div class='panel panel-default '><div class='panel-heading'>";
+            soundsDiv += '<h3 class="panel-title">Sounds</h3></div><div class="panel-body">';
+            soundsDiv += '<audio src="' + data.sounds[0].alternativeFormats['audio/mpeg'] + '" preload="auto" />';
             audiojs.events.ready(function() {
                 var as = audiojs.createAll();
             });
             var source = "";
-            if(data.processed.attribution.collectionName){
-                source = data.processed.attribution.collectionName
+
+            if (data.processed.attribution.collectionName) {
+                var attrUrl = "";
+                var attrUrlPrefix = SHOW_CONF.collectoryUrl + "/public/show/";
+                if (data.raw.attribution.dataResourceUid) {
+                    attrUrl = attrUrlPrefix + data.raw.attribution.dataResourceUid;
+                } else if (data.processed.attribution.collectionUid) {
+                    attrUrl = attrUrlPrefix + data.processed.attribution.collectionUid;
+                }
+
+                if (data.raw.attribution.dataResourceUid == "dr341") {
+                    // hard-coded copyright as most sounds are from ANWC and are missing attribution data fields
+                    source += "&copy; " + data.processed.attribution.collectionName + " " + data.processed.event.year + "<br>";
+                }
+
+                if (attrUrl) {
+                    source += "Source: <a href='" + attrUrl + "' target='biocache'>" + data.processed.attribution.collectionName + "</a>";
+                } else {
+                    source += data.processed.attribution.collectionName;
+                }
+
+
             } else {
-                source = data.processed.attribution.dataResourceName
+                source += "Source: " + data.processed.attribution.dataResourceName
             }
-            $('#sounds').append('<span>Source: ' + source + '</span><br/>' );
-            $('#sounds').append('<span><a href="${biocacheUrl}/occurrence/'+ data.raw.uuid +'">View more details of this audio</a></span>' );
+
+            soundsDiv += '</div><div class="panel-footer"><p>' + source + '<br>';
+            soundsDiv += '<a href="' + SHOW_CONF.biocacheUrl + '/occurrence/'+ data.raw.uuid +'">View more details of this audio</a></p>';
+            soundsDiv += '</div></div>';
+            $('#sounds').append(soundsDiv);
         }
     }).fail(function(jqXHR, textStatus, errorThrown) {
-        //alert( "error" + errorThrown);
+        console.warn("AUDIO Error", errorThrown, textStatus);
     });
 }
 
