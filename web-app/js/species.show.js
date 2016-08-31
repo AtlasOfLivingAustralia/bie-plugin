@@ -553,7 +553,7 @@ function loadGalleryType(category, start) {
                 $taxonThumb.removeClass('hide');
                 $taxonThumb.attr('id','thumb_' + category + i);
                 $taxonThumb.attr('href', el.largeImageUrl);
-                $taxonThumb.find('img').attr('src', el.smallImageUrl);
+                $taxonThumb.find('img').attr('src', el.smallImageUrl).attr('onerror',"$(this).parent().hide();"); // hide broken images
 
                 // brief metadata
                 var briefHtml = getImageTitleFromOccurrence(el);

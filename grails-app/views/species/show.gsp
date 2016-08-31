@@ -136,7 +136,7 @@
                                             <g:each in="${tc.conservationStatuses.entrySet().sort { it.key }}" var="cs">
                                                 <li>
                                                     <g:if test="${cs.value.dr}">
-                                                        <a href="${collectoryUrl}/public/showDataResource/${cs.value.dr}"><span
+                                                        <a href="${collectoryUrl}/public/show/${cs.value.dr}"><span
                                                                 class="iucn <bie:colourForStatus
                                                                         status="${cs.value.status}"/>">${cs.key}</span>${cs.value.status}
                                                         <!-- cs = ${cs} -->
