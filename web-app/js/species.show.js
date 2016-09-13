@@ -176,8 +176,13 @@ function loadDataProviders(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&pageSize=0&flimit=-1' +
-        '&facet=on&facets=data_resource_uid&callback=?';
+        '&pageSize=0&flimit=-1';
+
+    if(SHOW_CONF.mapQueryContext){
+       url = url + '&fq=' + SHOW_CONF.mapQueryContext;
+    }
+
+    url = url + '&facet=on&facets=data_resource_uid&callback=?';
 
     var uiUrl = SHOW_CONF.biocacheUrl  +
         '/occurrences/search?q=lsid:' +
