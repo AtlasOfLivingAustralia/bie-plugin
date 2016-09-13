@@ -191,11 +191,13 @@
                             <div class="panel panel-default panel-actions">
                                 <div class="panel-body">
                                     <ul class="list-unstyled">
-                                        <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
-                                                class="glyphicon glyphicon-map-marker"></span> Record a sighting</a>
-                                        </li>
-                                        <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
-                                                class="glyphicon glyphicon-camera"></span> Submit a photo</a></li>
+                                        <g:if test="${citizenSciUrl}">
+                                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
+                                                    class="glyphicon glyphicon-map-marker"></span> Record a sighting</a>
+                                            </li>
+                                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
+                                                    class="glyphicon glyphicon-camera"></span> Submit a photo</a></li>
+                                        </g:if>
                                         <li><a id="alertsButton" href="#"><span
                                                 class="glyphicon glyphicon-bell"></span> Receive alerts when new records are added
                                         </a></li>
@@ -973,6 +975,7 @@
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target).attr("href");
         if(target == "#records"){
+            $('#charts').html(''); //prevent multiple loads
             <charts:biocache
         biocacheServiceUrl="${grailsApplication.config.biocacheService.baseURL}"
         biocacheWebappUrl="${grailsApplication.config.biocache.baseURL}"

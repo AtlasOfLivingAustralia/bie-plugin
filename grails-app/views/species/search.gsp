@@ -31,7 +31,8 @@
             biocacheUrl: "${grailsApplication.config.biocache.baseURL}",
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
             bhlUrl: "${grailsApplication.config.bhl.baseURL}",
-            biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}"
+            biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+            geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
         }
     </r:script>
 </head>
@@ -43,7 +44,7 @@
         <div class="row">
             <div class="col-sm-9">
                 <h1>
-                    Search for <strong>${searchResults.queryTitle}</strong>
+                    Search for <strong>${searchResults.queryTitle == "*:*" ? 'everything' : searchResults.queryTitle}</strong>
                     returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
                     results.
                  </h1>
@@ -172,7 +173,7 @@
                             <select class="form-control input-sm" id="sort-by" name="sort-by">
                                 <option value="score" ${(params.sortField == 'score') ? "selected=\"selected\"" : ""}>best match</option>
                                 <option value="scientificName" ${(params.sortField == 'scientificName') ? "selected=\"selected\"" : ""}>scientific name</option>
-                                %{--<option value="commonNameExact" ${(params.sortField == 'commonNameExact') ? "selected=\"selected\"" : ""}>common name</option>--}%
+                                <option value="commonNameSingle" ${(params.sortField == 'commonNameSingle') ? "selected=\"selected\"" : ""}>common name</option>
                                 <option value="rank" ${(params.sortField == 'rank') ? "selected=\"selected\"" : ""}>taxon rank</option>
                             </select>
                         </div>
@@ -285,7 +286,10 @@
                                     <g:if test="${result.rankID < 7000}">
                                         <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
                                     </g:if>
-                                    <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
+
+                                    <g:if test="${grailsApplication.config.sightings.guidUrl}">
+                                        <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
+                                    </g:if>
                                     <g:if test="${result?.occurrenceCount?:0 > 0}">
                                         <li>
                                         <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">Occurrences:
@@ -324,8 +328,8 @@
 <g:if test="${searchResults.totalRecords == 0}">
     <r:script>
         $(function(){
-            console.log(SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query);
-            $.get( SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query, function( searchResults ) {
+            console.log(SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix);
+            $.get( SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query  + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix, function( searchResults ) {
                 for(var i=0; i< searchResults.length; i++){
                     var $results = $('#result-template').clone(true);
                     $results.attr('id', 'results-lists');
