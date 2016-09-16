@@ -290,7 +290,7 @@
                                     <g:if test="${grailsApplication.config.sightings.guidUrl}">
                                         <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
                                     </g:if>
-                                    <g:if test="${result?.occurrenceCount?:0 > 0}">
+                                    <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
                                         <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">Occurrences:
                                         <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
