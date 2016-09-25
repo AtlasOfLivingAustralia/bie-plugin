@@ -963,8 +963,6 @@
         ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/>'+
         'If this image is incorrectly identified please flag an issue on the <a href="RECORD_URL">record</a></div>'
     }
-    // load google charts api
-    google.load("visualization", "1", {packages:["corechart"]});
 
     $(function(){
         showSpeciesPage();
