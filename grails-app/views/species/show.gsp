@@ -36,8 +36,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
@@ -65,7 +64,7 @@
         <div class="header-inner">
             <h5 class="pull-right json">
                 <a href="${jsonLink}" target="data"
-                   title="${message(code:"show.view.json.title")}" type="button" class="btn btn-sm btn-default active"
+                   title="${message(code:"show.view.json.title")}" class="btn btn-sm btn-default active"
                    data-toggle="tooltip" data-placement="bottom"><g:message code="show.json" /></a>
             </h5>
             <h1>${raw(sciNameFormatted)}</h1>
@@ -82,19 +81,19 @@
         </div>
     </header>
 
-        <div id="main-content" class="main-content panel panel-body">
-            <div class="taxon-tabs">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
-                    <li><a href="#gallery" data-toggle="tab">Gallery</a></li>
-                    <li><a href="#names" data-toggle="tab">Names</a></li>
-                    <li><a href="#classification" data-toggle="tab">Classification</a></li>
-                    <li><a href="#records" data-toggle="tab">Records</a></li>
-                    <li><a href="#literature" data-toggle="tab">Literature</a></li>
-                    <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
-                    <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
-                </ul>
-                <div class="tab-content">
+    <div id="main-content" class="main-content panel panel-body">
+        <div class="taxon-tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
+                <li><a href="#gallery" data-toggle="tab">Gallery</a></li>
+                <li><a href="#names" data-toggle="tab">Names</a></li>
+                <li><a href="#classification" data-toggle="tab">Classification</a></li>
+                <li><a href="#records" data-toggle="tab">Records</a></li>
+                <li><a href="#literature" data-toggle="tab">Literature</a></li>
+                <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
+                <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
+            </ul>
+            <div class="tab-content">
 
                 <section class="tab-pane fade in active" id="overview">
                     <div class="row taxon-row">
@@ -231,8 +230,7 @@
                             <div id="listContent">
                             </div>
 
-
-                    </div><!-- end col 2 -->
+                        </div><!-- end col 2 -->
                     </div>
                 </section>
 
@@ -260,7 +258,7 @@
                             please upload using the upload tools.
                         </p>
                     </div>
-                    <img src="${resource(dir: 'images', file: 'spinner.gif', plugin: 'biePlugin')}" id="gallerySpinner" class="hide"/>
+                    <img src="${resource(dir: 'images', file: 'spinner.gif', plugin: 'biePlugin')}" id="gallerySpinner" class="hide" alt="spinner icon"/>
                 </section>
 
                 <section class="tab-pane fade" id="names">
@@ -497,9 +495,9 @@
                                                                                          return false;">${identifier.nameString ?: identifier.infoSourceName}</a></g:if>
                                                 <g:else>${identifier.nameString ?: identifier.infoSourceName}</g:else>
                                                 <g:if test="${identifier.format}"><span title="${message(code: 'identifierFormat.' + identifier.format + '.detail', default: '')}"
-                                                        class="annotation annotation-format"><g:message code="identifierFormat.${identifier.format}" default="${identifier.format}"/></span></g:if>
+                                                                                        class="annotation annotation-format"><g:message code="identifierFormat.${identifier.format}" default="${identifier.format}"/></span></g:if>
                                                 <g:if test="${identifier.status}"><span title="${message(code: 'identifierStatus.' + identifier.status + '.detail', default: '')}"
-                                                        class="annotation annotation-status"><g:message code="identifierFormat.${identifier.status}" default="${identifier.status}"/></span></g:if>
+                                                                                        class="annotation annotation-status"><g:message code="identifierFormat.${identifier.status}" default="${identifier.status}"/></span></g:if>
                                             </li>
                                         </ul>
                                     </td>
@@ -659,15 +657,9 @@
 
                                 <div id="trove-result-list" class="result-list">
                                 </div>
-                           </div>
+                            </div>
                         </div><!--/right-->
                     </div><!--/row-->
-                    %{--<nav class="floating-menu">--}%
-                        %{--<a href="#bhl-integration">Biodiversity Heritage Library</a>--}%
-                        %{--<a href="#trove-integration">Trove</a>--}%
-
-                    %{--</nav>--}%
-
                 </section>
 
                 <section class="tab-pane fade" id="sequences">
@@ -962,24 +954,22 @@
         '<b>Down vote (<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>) an image:</b>'+
         ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/>'+
         'If this image is incorrectly identified please flag an issue on the <a href="RECORD_URL">record</a></div>'
-    }
+    };
 
     $(function(){
         showSpeciesPage();
-    })
-</r:script>
+    });
 
-<r:script type="text/javascript">
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target).attr("href");
         if(target == "#records"){
             $('#charts').html(''); //prevent multiple loads
             <charts:biocache
-        biocacheServiceUrl="${grailsApplication.config.biocacheService.baseURL}"
-        biocacheWebappUrl="${grailsApplication.config.biocache.baseURL}"
-        q="lsid:${guid}"
-        qc="${grailsApplication.config.biocacheService.queryContext ?: ''}"
-        fq=""/>
+                biocacheServiceUrl="${grailsApplication.config.biocacheService.baseURL}"
+                biocacheWebappUrl="${grailsApplication.config.biocache.baseURL}"
+                q="lsid:${guid}"
+                qc="${grailsApplication.config.biocacheService.queryContext ?: ''}"
+                fq=""/>
     }
     if(target == '#overview'){
         loadMap();
