@@ -2,13 +2,13 @@ modules = {
     bootstrap {
         dependsOn 'jquery'
         resource url: [dir: 'bootstrap3/js', file: 'bootstrap.js', plugin:'bie-plugin'], disposition: 'head', exclude: '*'
-        resource url: [dir: 'bootstrap3/css', file: 'bootstrap.min.css', plugin:'bie-plugin'], attrs: [media: 'screen, projection, print']
+        resource url: [dir: 'bootstrap3/css', file: 'bootstrap.min.css', plugin:'bie-plugin'], attrs: [media: 'screen, print']
     }
 
     bie {
         dependsOn 'bootstrap', 'ekko'
         resource url: [dir: 'js', file: 'atlas.js', plugin:'bie-plugin'], disposition: 'head', exclude: '*'
-        resource url: [dir: 'css', file: 'atlas.css', plugin:'bie-plugin'], attrs: [media: 'screen, projection, print']
+        resource url: [dir: 'css', file: 'atlas.css', plugin:'bie-plugin'], attrs: [media: 'screen, print']
     }
 
     application {
