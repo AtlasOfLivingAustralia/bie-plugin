@@ -512,16 +512,16 @@
                     <g:if test="${tc.taxonConcept.rankID < 7000}">
                         <div class="pull-right btn-group btn-group-vertical">
                             <a href="${grailsApplication.config.bie.index.url}/download?q=rkid_${tc.taxonConcept.rankString}:${tc.taxonConcept.guid}&${grailsApplication.config.bieService.queryContext}"
-                               class="btn btn-default">
+                               class="btn btn-default" style="text-align:left;">
                                 <i class="glyphicon glyphicon-arrow-down"></i>
                                 Download child taxa of ${tc.taxonConcept.nameString}
                             </a>
                             <a href="${grailsApplication.config.bie.index.url}/download?q=rkid_${tc.taxonConcept.rankString}:${tc.taxonConcept.guid}&fq=rank:species&${grailsApplication.config.bieService.queryContext}"
-                               class="btn btn-default">
+                               class="btn btn-default" style="text-align:left;">
                                 <i class="glyphicon glyphicon-arrow-down"></i>
                                 Download species of ${tc.taxonConcept.nameString}
                             </a>
-                            <a class="btn btn-default"
+                            <a class="btn btn-default"  style="text-align:left;"
                                href="${createLink(controller: 'species', action: 'search')}?q=${'rkid_' + tc.taxonConcept.rankString + ':' + tc.taxonConcept.guid}">
                                 Search for child taxa of ${tc.taxonConcept.nameString}
                             </a>

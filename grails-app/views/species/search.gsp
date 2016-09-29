@@ -151,10 +151,10 @@
                     <g:if test="${idxTypes.contains("TAXON")}">
                         <div class="download-button pull-right">
                             <g:set var="downloadUrl" value="${grailsApplication.config.bie.index.url}/download?${request.queryString?:''}${grailsApplication.config.bieService.queryContext}"/>
-                            <button class="btn btn-default active btn-small" onclick="window.location='${downloadUrl}'" value="Download" title="Download a list of taxa for your search">
+                            <a class="btn btn-default active btn-small" href="${downloadUrl}" title="Download a list of taxa for your search">
                                 <i class="glyphicon glyphicon-download"></i>
                                 Download
-                            </button>
+                            </a>
                         </div>
                     </g:if>
 
