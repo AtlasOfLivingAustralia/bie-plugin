@@ -39,7 +39,7 @@ $(function(){
 
 	// show image only after modal dialog is shown. otherwise, image position will be off the viewing area.
 	$('#imageDialog').on('shown.bs.modal',function () {
-		imgvwr.viewImage($("#viewerContainerId"), imageId, {
+		imgvwr.viewImage($("#viewerContainerId"), imageId, SHOW_CONF.scientificName, undefined, SHOW_CONF.guid, {
 			imageServiceBaseUrl: SHOW_CONF.imageServiceBaseUrl,
 			addSubImageToggle: false,
 			addCalibration: false,
@@ -47,12 +47,15 @@ $(function(){
 			addCloseButton: true,
 			addAttribution: true,
 			addLikeDislikeButton: true,
+			addPreferenceButton: SHOW_CONF.addPreferenceButton,
 			attribution: attribution,
 			disableLikeDislikeButton: SHOW_CONF.disableLikeDislikeButton,
 			likeUrl: SHOW_CONF.likeUrl + '?id=' + imageId,
 			dislikeUrl: SHOW_CONF.dislikeUrl + '?id=' + imageId,
 			userRatingUrl: SHOW_CONF.userRatingUrl + '?id=' + imageId,
-			userRatingHelpText: SHOW_CONF.userRatingHelpText.replace('RECORD_URL', recordUrl)
+			userRatingHelpText: SHOW_CONF.userRatingHelpText.replace('RECORD_URL', recordUrl),
+			savePreferredSpeciesListUrl: SHOW_CONF.savePreferredSpeciesListUrl + '?id=' + imageId + '&scientificName=' + SHOW_CONF.scientificName,
+			getPreferredSpeciesListUrl: SHOW_CONF.getPreferredSpeciesListUrl
 		});
 	});
 
