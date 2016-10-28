@@ -29,6 +29,7 @@ class SpeciesController {
     def utilityService
     def biocacheService
     def grailsApplication
+    def authService
 
     def geoSearch = {
 

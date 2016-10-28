@@ -906,6 +906,21 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+<div id="alertModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="alertContent">
+
+                </div>
+                <!-- dialog buttons -->
+                <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
 <r:script>
     // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
     var SHOW_CONF = {
@@ -955,7 +970,7 @@
         ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/></div>',
         savePreferredSpeciesListUrl: "${createLink(controller: 'imageClient', action: 'saveImageToSpeciesList')}",
         getPreferredSpeciesListUrl: "${grailsApplication.config.speciesList.baseURL}",
-        addPreferenceButton: true
+        addPreferenceButton: ${authService?.getUserId() ? (authService.getUserForUserId(authService.getUserId())?.roles?.contains("ROLE_ADMIN") ? true : false) : false}
     };
 
     $(function(){

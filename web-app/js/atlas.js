@@ -39,7 +39,7 @@ $(function(){
 
 	// show image only after modal dialog is shown. otherwise, image position will be off the viewing area.
 	$('#imageDialog').on('shown.bs.modal',function () {
-		imgvwr.viewImage($("#viewerContainerId"), imageId, SHOW_CONF.scientificName, undefined, SHOW_CONF.guid, {
+		imgvwr.viewImage($("#viewerContainerId"), imageId, SHOW_CONF.scientificName, SHOW_CONF.guid, {
 			imageServiceBaseUrl: SHOW_CONF.imageServiceBaseUrl,
 			addSubImageToggle: false,
 			addCalibration: false,
