@@ -58,7 +58,7 @@ $(function(){
 			userRatingUrl: SHOW_CONF.userRatingUrl + '?id=' + imageId,
 			userRatingHelpText: SHOW_CONF.userRatingHelpText.replace('RECORD_URL', recordUrl),
 			imageUrl: imageUrl,
-			showOnlyImage: BC_CONF.showOnlyImage
+			showOnlyImage: SHOW_CONF.showOnlyImage,
 			savePreferredSpeciesListUrl: SHOW_CONF.savePreferredSpeciesListUrl + '?id=' + imageId + '&scientificName=' + SHOW_CONF.scientificName,
 			getPreferredSpeciesListUrl: SHOW_CONF.getPreferredSpeciesListUrl
 		});
