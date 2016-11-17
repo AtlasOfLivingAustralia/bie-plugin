@@ -1,7 +1,7 @@
 $(function(){
 	// Sticky footer
 	var footerHeight = $(".site-footer").outerHeight();
-	var imageId, attribution, recordUrl;
+	var imageId, attribution, recordUrl, imageUrl, image;
 	$(".wrap").css("margin-bottom", -footerHeight);
 	$(".push").height(footerHeight);
 	
@@ -21,16 +21,19 @@ $(function(){
 	})
 
 	// Lightbox
-	$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) { 
+	$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
 		event.preventDefault();
+
+		var $this = $(this);
 		switch (SHOW_CONF.imageDialog){
 			case 'MODAL':
-				$(this).ekkoLightbox();
+				$this.ekkoLightbox();
 				break;
 			case 'LEAFLET':
-				imageId = $(this).attr('data-image-id');
-				attribution = $(this).attr('data-footer');
-				recordUrl = $(this).attr('data-record-url');
+				imageId = $this.attr('data-image-id');
+				attribution = $this.attr('data-footer');
+				recordUrl = $this.attr('data-record-url');
+				imageUrl = $this.attr('href');
 				setDialogSize();
 				$('#imageDialog').modal('show');
 				break;
@@ -52,7 +55,9 @@ $(function(){
 			likeUrl: SHOW_CONF.likeUrl + '?id=' + imageId,
 			dislikeUrl: SHOW_CONF.dislikeUrl + '?id=' + imageId,
 			userRatingUrl: SHOW_CONF.userRatingUrl + '?id=' + imageId,
-			userRatingHelpText: SHOW_CONF.userRatingHelpText.replace('RECORD_URL', recordUrl)
+			userRatingHelpText: SHOW_CONF.userRatingHelpText.replace('RECORD_URL', recordUrl),
+			imageUrl: imageUrl,
+			showOnlyImage: BC_CONF.showOnlyImage
 		});
 	});
 
