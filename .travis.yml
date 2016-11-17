@@ -13,7 +13,10 @@ before_install:
 - ala_travis_grails_setup_env
 
 script:
-- ala_travis_grails_build
+- ala_travis_grails_test
+
+after_success:
+- ala_travis_grails_deploy
 
 env:
   global:

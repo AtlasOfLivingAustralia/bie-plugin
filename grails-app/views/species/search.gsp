@@ -31,7 +31,8 @@
             biocacheUrl: "${grailsApplication.config.biocache.baseURL}",
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
             bhlUrl: "${grailsApplication.config.bhl.baseURL}",
-            biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}"
+            biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+            geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
         }
     </r:script>
 </head>
@@ -43,7 +44,7 @@
         <div class="row">
             <div class="col-sm-9">
                 <h1>
-                    Search for <strong>${searchResults.queryTitle}</strong>
+                    Search for <strong>${searchResults.queryTitle == "*:*" ? 'everything' : searchResults.queryTitle}</strong>
                     returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
                     results.
                  </h1>
@@ -150,10 +151,10 @@
                     <g:if test="${idxTypes.contains("TAXON")}">
                         <div class="download-button pull-right">
                             <g:set var="downloadUrl" value="${grailsApplication.config.bie.index.url}/download?${request.queryString?:''}${grailsApplication.config.bieService.queryContext}"/>
-                            <button class="btn btn-default active btn-small" onclick="window.location='${downloadUrl}'" value="Download" title="Download a list of taxa for your search">
+                            <a class="btn btn-default active btn-small" href="${downloadUrl}" title="Download a list of taxa for your search">
                                 <i class="glyphicon glyphicon-download"></i>
                                 Download
-                            </button>
+                            </a>
                         </div>
                     </g:if>
 
@@ -179,8 +180,8 @@
                         <div class="form-group">
                             <label for="sort-order">Sort order</label>
                             <select class="form-control input-sm" id="sort-order" name="sort-order">
-                                <option value="asc" ${(params.dir == 'asc') ? "selected=\"selected\"" : ""}>normal</option>
-                                <option value="desc" ${(params.dir == 'desc') ? "selected=\"selected\"" : ""}>reverse</option>
+                                <option value="asc" ${(params.dir == 'asc') ? "selected=\"selected\"" : ""}>ascending</option>
+                                <option value="desc" ${(params.dir == 'desc' || !params.dir) ? "selected=\"selected\"" : ""}>descending</option>
                             </select>
                         </div>
                     </form>
@@ -206,7 +207,7 @@
                                 </g:if>
 
                                 <h3>${result.rank}:
-                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a>
+                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}" taxonomicStatus="${result.taxonomicStatus}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a>
                                     <g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
                                 </h3>
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
@@ -285,10 +286,13 @@
                                     <g:if test="${result.rankID < 7000}">
                                         <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
                                     </g:if>
-                                    <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
-                                    <g:if test="${result?.occurrenceCount?:0 > 0}">
+
+                                    <g:if test="${grailsApplication.config.sightings.guidUrl}">
+                                        <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
+                                    </g:if>
+                                    <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
-                                        <a href="${biocacheUrl}/occurrences/taxa/${result.guid}">Occurrences:
+                                        <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">Occurrences:
                                         <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
                                         </li>
                                     </g:if>
@@ -324,8 +328,8 @@
 <g:if test="${searchResults.totalRecords == 0}">
     <r:script>
         $(function(){
-            console.log(SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query);
-            $.get( SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query, function( searchResults ) {
+            console.log(SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix);
+            $.get( SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query  + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix, function( searchResults ) {
                 for(var i=0; i< searchResults.length; i++){
                     var $results = $('#result-template').clone(true);
                     $results.attr('id', 'results-lists');

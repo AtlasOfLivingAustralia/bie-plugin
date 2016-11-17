@@ -26,11 +26,11 @@ $(document).ready(function() {
     }
 
     // listeners for sort widgets
-    $("select#sortField").change(function() {
+    $("select#sort-by").change(function() {
         var val = $("option:selected", this).val();
         reloadWithParam('sortField',val);
     });
-    $("select#dir").change(function() {
+    $("select#sort-order").change(function() {
         var val = $("option:selected", this).val();
         reloadWithParam('dir',val);
     });
@@ -94,7 +94,7 @@ function reloadWithParam(paramName, paramValue) {
     var paramList = [];
     var q = $.getQueryParam('q') ? $.getQueryParam('q') : SEARCH_CONF.query ;
     var fqList = $.getQueryParam('fq'); //$.query.get('fq');
-    var sort = $.getQueryParam('sort');
+    var sort = $.getQueryParam('sortField');
     var dir = $.getQueryParam('dir');
     // add query param
     if (q != null) {
@@ -105,14 +105,18 @@ function reloadWithParam(paramName, paramValue) {
         paramList.push("fq=" + fqList.join("&fq="));
     }
     // add sort param if already set
-    if (paramName != 'sort' && sort != null) {
-        paramList.push('sort' + "=" + sort);
+    if (paramName != 'sortField' && sort != null) {
+        paramList.push('sortField' + "=" + sort);
     }
-
+    // add dir param if already set
+    if (paramName != 'dir' && dir != null) {
+        paramList.push('dir' + "=" + dir);
+    }
+    // add the changed value
     if (paramName != null && paramValue != null) {
         paramList.push(paramName + "=" +paramValue);
     }
-
+    //alert("paramName = " + paramName + " and paramValue = " + paramValue);
     //alert("params = "+paramList.join("&"));
     //alert("url = "+window.location.pathname);
     window.location.href = window.location.pathname + '?' + paramList.join('&');
@@ -153,24 +157,8 @@ function numberWithCommas(x) {
 
 function injectBhlResults() {
 
-    var queryToUse = (SEARCH_CONF.query == "" || SEARCH_CONF.query == "*" ? "*:*" : SEARCH_CONF.query);
-    var url = SEARCH_CONF.bhlUrl + "/select?q={!lucene q.op=AND}" + queryToUse + "&start=0&rows=0" +
-        "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
-        "group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
-
-    $.ajax({
-        url: url,
-        dataType: 'jsonp',
-        jsonp: "json.wrf",
-        success:  function(data) {
-            var maxItems = parseInt(data.grouped.itemId.ngroups, 10);
-
-            //console.log("Using the query: " + queryToUse);
-            var url = SEARCH_CONF.serverName + "/bhl-search?q=" + queryToUse;
-            var html = "<li data-count=\"" + maxItems + "\"><a href=\"" + url + "\" id=\"bhlSearchLink\">BHL Literature</a> (" + numberWithCommas(maxItems) + ")</li>";
-            insertSearchLinks(html);
-        }
-    });
+    var bhlHtml = "<li><a href='http://www.biodiversitylibrary.org/search?SearchTerm=" + SEARCH_CONF.query + "&SearchCat=M#/names' target='bhl'>BHL Literature </a></li>"
+    insertSearchLinks(bhlHtml);
 }
 
 function injectBiocacheResults() {

@@ -2,13 +2,13 @@ modules = {
     bootstrap {
         dependsOn 'jquery'
         resource url: [dir: 'bootstrap3/js', file: 'bootstrap.js', plugin:'bie-plugin'], disposition: 'head', exclude: '*'
-        resource url: [dir: 'bootstrap3/css', file: 'bootstrap.min.css', plugin:'bie-plugin'], attrs: [media: 'screen, projection, print']
+        resource url: [dir: 'bootstrap3/css', file: 'bootstrap.min.css', plugin:'bie-plugin'], attrs: [media: 'screen, print']
     }
 
     bie {
         dependsOn 'bootstrap', 'ekko'
         resource url: [dir: 'js', file: 'atlas.js', plugin:'bie-plugin'], disposition: 'head', exclude: '*'
-        resource url: [dir: 'css', file: 'atlas.css', plugin:'bie-plugin'], attrs: [media: 'screen, projection, print']
+        resource url: [dir: 'css', file: 'atlas.css', plugin:'bie-plugin'], attrs: [media: 'screen, print']
     }
 
     application {
@@ -22,12 +22,13 @@ modules = {
 
     show {
         dependsOn 'cleanHtml, ekko'
-        resource url: 'https://ajax.googleapis.com/jsapi', attrs: [type: 'js'], disposition: 'head'
+//        resource url: 'https://ajax.googleapis.com/jsapi', attrs: [type: 'js'], disposition: 'head'
         resource url:[dir:'js/leaflet', file:'leaflet.css', plugin:'bie-plugin'], attrs: [ media: 'all' ]
         resource url:[dir:'js/leaflet', file:'leaflet.js', plugin:'bie-plugin']
 
         resource url: [dir: 'css', file: 'species.css', plugin:'bie-plugin']
         resource url: [dir: 'css', file: 'jquery.qtip.min.css', plugin:'bie-plugin']
+
         resource url: [dir: 'js', file: 'jquery.sortElemets.js', plugin:'bie-plugin', disposition: 'head']
         resource url: [dir: 'js', file: 'jquery.jsonp-2.3.1.min.js', plugin:'bie-plugin', disposition: 'head']
         resource url: [dir: 'js', file: 'trove.js', plugin:'bie-plugin', disposition: 'head']

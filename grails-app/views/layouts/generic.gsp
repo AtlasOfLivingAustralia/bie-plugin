@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><g:layoutTitle /></title>
     <r:require modules="bie"/>
+    <!-- Resources -->
     <r:layoutResources/>
+    <!-- Head -->
     <g:layoutHead />
     <script src="http://use.typekit.net/whd1tbp.js"></script>
     <script>try{Typekit.load();}catch(e){}</script>
@@ -58,6 +60,7 @@
     <!-- end generic footer -->
 
 </div><!-- end wrap -->
+<!-- Resources -->
 <r:layoutResources/>
 </body>
 </html>
