@@ -38,3 +38,4 @@ googleMapsApiKey = "AIzaSyB0HIkSCV2EdkG50uM7s96IEbO6wUHTqy0"
 languageCodesUrl = defaultConfig.class.getResource("/languages.json").toString()
 geocode.querySuffix = ""
 occurrenceCounts.enabled = true
+additionalResultsFields = "kingdom"

@@ -210,8 +210,13 @@
                                     <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}" taxonomicStatus="${result.taxonomicStatus}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a>
                                     <g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
                                 </h3>
+
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
-                                <g:if test="${result.kingdom}"><p class="summmary-info"><strong>Kingdom:</strong> ${result.kingdom}</p></g:if>
+                                <g:each var="fieldToDisplay" in="${grailsApplication.config.additionalResultsFields.split(",")}">
+                                    <g:if test='${result."${fieldToDisplay}"}'>
+                                        <p class="summary-info"><strong><g:message code="${fieldToDisplay}" default="${fieldToDisplay}"/>:</strong> ${result."${fieldToDisplay}"}</p>
+                                    </g:if>
+                                </g:each>
                             </g:if>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'COMMON'}">
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
@@ -279,7 +284,7 @@
                                 <h4><g:message code="idxtype.${result.idxtype}"/> TEST: <a href="${result.guid}">${result.name}</a></h4>
                             </g:else>
                             <g:if test="${result.has("highlight")}">
-                                <p>${raw(result.highlight)}</p>
+                                <p><bie:displaySearchHighlights highlight="${result.highlight}"/></p>
                             </g:if>
                             <g:if test="${result.has("idxtype") && result.idxtype == 'TAXON'}">
                                 <ul class="summary-actions list-inline">
