@@ -12,8 +12,14 @@ class BieService {
         def queryUrl = grailsApplication.config.bie.index.url + "/search?" + requestObj.getQueryString() +
                 "&facets=" + grailsApplication.config.facets + "&q.op=OR"
 
+        //add a query context for BIE - to reduce taxa to a subset
         if(grailsApplication.config.bieService.queryContext){
             queryUrl = queryUrl + "&" + grailsApplication.config.bieService.queryContext
+        }
+
+        //add a query context for biocache - this will influence record counts
+        if(grailsApplication.config.biocacheService.queryContext){
+            queryUrl = queryUrl + "&bqc=" + grailsApplication.config.biocacheService.queryContext
         }
 
         def json = webService.get(queryUrl)
