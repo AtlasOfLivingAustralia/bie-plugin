@@ -91,7 +91,7 @@
                 <li><a href="#records" data-toggle="tab">Records</a></li>
                 <li><a href="#literature" data-toggle="tab">Literature</a></li>
                 <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
-                <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
+                <li><a href="#data-partners" data-toggle="tab">Datasets</a></li>
             </ul>
             <div class="tab-content">
 
@@ -177,9 +177,16 @@
                             <div class="taxon-map">
                                 <div id="leafletMap"></div>
 
+                                <g:if test="${grailsApplication.config.spatial.baseURL}">
+                                    <g:set var="mapUrl">${grailsApplication.config.spatial.baseURL}?q=lsid:${tc?.taxonConcept?.guid}</g:set>
+                                </g:if>
+                                <g:else>
+                                    <g:set var="mapUrl">${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView</g:set>
+                                </g:else>
+
                                 <div class="map-buttons">
                                     <a class="btn btn-primary btn-lg"
-                                       href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
+                                       href="${mapUrl}"
                                        role="button"><g:message code="overview.map.button.records.map" default="View Interactive Map"/></a>
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
@@ -206,7 +213,7 @@
 
                             <div class="panel panel-default panel-data-providers">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Data partners</h3>
+                                    <h3 class="panel-title">Datasets</h3>
                                 </div>
 
                                 <div class="panel-body">
@@ -215,7 +222,7 @@
                                     </p>
 
                                     <p><a class="tab-link"
-                                          href="#data-partners">Browse the list of data partners</a> and find organisations you can join if you are
+                                          href="#data-partners">Browse the list of datasets</a> and find organisations you can join if you are
                                     interested in participating in a survey for
                                     <g:if test="${tc.taxonConcept?.rankID > 6000}">
                                         species like ${raw(sciNameFormatted)}
@@ -675,7 +682,8 @@
                     <table id="data-providers-list" class="table name-table  table-responsive">
                         <thead>
                         <tr>
-                            <th>Data partners</th>
+                            <th>Data sets</th>
+                            <th>Licence</th>
                             <th>Records</th>
                         </tr>
                         </thead>
@@ -970,7 +978,9 @@
         ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/></div>',
         savePreferredSpeciesListUrl: "${createLink(controller: 'imageClient', action: 'saveImageToSpeciesList')}",
         getPreferredSpeciesListUrl: "${grailsApplication.config.speciesList.baseURL}",
-        addPreferenceButton: ${authService?.getUserId() ? (authService.getUserForUserId(authService.getUserId())?.roles?.contains("ROLE_ADMIN") ? true : false) : false}
+        addPreferenceButton: ${authService?.getUserId() ? (authService.getUserForUserId(authService.getUserId())?.roles?.contains("ROLE_ADMIN") ? true : false) : false},
+        mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
+        mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}"
     };
 
     $(function(){

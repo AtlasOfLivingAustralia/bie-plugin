@@ -41,7 +41,6 @@ function loadSpeciesLists(){
             var maxListFields = 10;
 
             if (specieslist.list.isBIE) {
-                //console.log("specieslist", specieslist);
                 var $description = $('#descriptionTemplate').clone();
                 $description.css({'display': 'block'});
                 $description.attr('id', '#specieslist-block-' + specieslist.dataResourceUid);
@@ -49,7 +48,7 @@ function loadSpeciesLists(){
                 $description.find(".title").html(specieslist.list.listName);
 
                 if (specieslist.kvpValues.length > 0) {
-                    var content = "<dl class='dl-horizontal species-list-dl'>";
+                    var content = "<table class='table'>";
                     $.each(specieslist.kvpValues, function (idx, kvpValue) {
                         if (idx >= maxListFields) {
                             return false;
@@ -58,15 +57,13 @@ function loadSpeciesLists(){
                         if(kvpValue.vocabValue){
                             value = kvpValue.vocabValue;
                         }
-                        content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + value + "</dd>");
+                        content += "<tr><td>" + (kvpValue.key + "</td><td>" + value + "</td></tr>");
                     });
-                    content += "</dl>";
+                    content += "</table>";
                     $description.find(".content").html(content);
                 } else {
                     $description.find(".content").html("A species list provided by " + specieslist.list.listName);
                 }
-
-
 
                 $description.find(".source").css({'display':'none'});
                 $description.find(".rights").css({'display':'none'});
@@ -111,8 +108,8 @@ function loadMap() {
         transparent: true,
         attribution: SHOW_CONF.mapAttribution,
         bgcolor: "0x000000",
-        outline: "false",
-        ENV: "color:"+SHOW_CONF.recordsMapColour+";name:circle;size:4;opacity:0.8"
+        outline: SHOW_CONF.mapOutline,
+        ENV: SHOW_CONF.mapEnvOptions
     });
 
     var speciesLayers = new L.LayerGroup();
@@ -193,10 +190,28 @@ function loadDataProviders(){
         if(data.totalRecords > 0) {
             $('.datasetCount').html(data.facetResults[0].fieldResult.length);
             $.each(data.facetResults[0].fieldResult, function (idx, facetValue) {
+                //console.log(data.facetResults[0].fieldResult);
                 if(facetValue.count > 0){
-                    var queryUrl = uiUrl + "&fq=" + facetValue.fq;
-                    $('#data-providers-list tbody').append("<tr><td><a href='" + queryUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a></td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td></tr>");
 
+                    var uid = facetValue.fq.replace(/data_resource_uid:/, '').replace(/[\\"]*/, '').replace(/[\\"]/, '');
+                    var dataResourceUrl =  SHOW_CONF.collectoryUrl + "/public/show/" + uid;
+                    var tableRow = "<tr><td><a href='" + dataResourceUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a>";
+
+                    //console.log(uid);
+                    $.getJSON(SHOW_CONF.collectoryUrl + "/ws/dataResource/" + uid, function(collectoryData) {
+
+
+                        if(collectoryData.provider){
+                            tableRow += "<br/><small><a href='" + SHOW_CONF.collectoryUrl + '/public/show/' + uid + "'>" + collectoryData.provider.name + "</a></small>";
+                        }
+                        tableRow += "</td>";
+                        tableRow += "<td>" + collectoryData.licenseType + "</td>";
+
+                        var queryUrl = uiUrl + "&fq=" + facetValue.fq;
+                        tableRow += "</td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td>"
+                        tableRow += "</tr>";
+                        $('#data-providers-list tbody').append(tableRow);
+                    });
                 }
             });
         }
