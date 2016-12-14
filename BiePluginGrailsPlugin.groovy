@@ -11,7 +11,6 @@ class BiePluginGrailsPlugin {
         "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
     def title = "Bie Plugin Plugin" // Headline display name of the plugin
     def author = "Dave Martin"
     def authorEmail = "david.martin@csiro.au"
@@ -19,7 +18,7 @@ class BiePluginGrailsPlugin {
 A plugin providing basic species page functionality and site search.
 '''
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/bie-plugin"
+    def documentation = "https://github.com/atlasoflivingaustralia/bie-plugin"
 
     // License: one of 'APACHE', 'GPL2', 'GPL3'
     def license = "MPL1.1"
@@ -33,14 +32,11 @@ A plugin providing basic species page functionality and site search.
     // Location of the plugin's issue tracker.
     def issueManagement = [ system: "GitHub", url: "http://github.com/AtlasOfLivingAustralia/bie-plugin/issues" ]
 
-    // Online location of the plugin's browseable source code.
+    // Online location of the plugin's browse-able source code.
     def scm = [ url: "git://github.com/AtlasOfLivingAustralia/bie-plugin" ]
 
     def doWithSpring = {
         def config = application.config
-
-        // Load the "sensible defaults"
-        //println "config.skin = ${config.skin}"
         def loadConfig = new ConfigSlurper(Environment.current.name).parse(application.classLoader.loadClass("defaultConfig"))
         application.config = loadConfig.merge(config) // client app will now override the defaultConfig version
     }
