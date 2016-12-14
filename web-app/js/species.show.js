@@ -83,7 +83,7 @@ function addAlerts(){
         e.preventDefault();
         var query = "Species: " + SHOW_CONF.scientificName;
         var searchString = "?q=" + SHOW_CONF.guid;
-        var url = SHOW_CONF.alertsUrl + "createBiocacheNewRecordsAlert?";
+        var url = SHOW_CONF.alertsUrl + "/webservice/createBiocacheNewRecordsAlert?";
         url += "queryDisplayName=" + encodeURIComponent(query);
         url += "&baseUrlForWS=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
         url += "&baseUrlForUI=" + encodeURIComponent(SHOW_CONF.serverName);
@@ -483,7 +483,9 @@ function addOverviewImages(imagesArray, hasPreferredImage) {
 
     for (j = 1; j < 5; j++) {
         // load smaller thumb images
-        addOverviewThumb(imagesArray[j], j)
+        if(imagesArray.length > j) {
+            addOverviewThumb(imagesArray[j], j)
+        }
     }
 }
 
