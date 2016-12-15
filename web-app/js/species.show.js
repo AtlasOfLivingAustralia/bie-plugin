@@ -806,7 +806,7 @@ function cancelSearch(msg) {
 }
 
 function loadExpertDistroMap() {
-    var url = "http://spatial.ala.org.au/layers-service/distribution/map/" + SHOW_CONF.guid + "?callback=?";
+    var url = SHOW_CONF.layersServiceUrl + "/distribution/map/" + SHOW_CONF.guid + "?callback=?";
     $.getJSON(url, function(data){
         if (data.available) {
             $("#expertDistroDiv img").attr("src", data.url);
