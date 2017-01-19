@@ -379,7 +379,7 @@
                                     <th>Source</th>
                                 </tr>
                             </thead>
-                            <tbody
+                            <tbody>
                         <g:each in="${sortCommonNameSources}" var="cn">
                             <g:set var="cNames" value="${cn.value}"/>
                             <g:set var="nkey" value="${cn.key}"/>
