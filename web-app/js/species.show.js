@@ -578,6 +578,7 @@ function loadGalleryType(category, start) {
                 // clone template div & populate with metadata
                 var $taxonThumb = $('#taxon-thumb-template').clone();
                 $taxonThumb.removeClass('hide');
+                $taxonThumb.show(); // IE11 needs this
                 $taxonThumb.attr('id','thumb_' + category + i);
                 $taxonThumb.attr('href', el.largeImageUrl);
                 $taxonThumb.find('img').attr('src', el.smallImageUrl).attr('onerror',"$(this).parent().hide();"); // hide broken images
