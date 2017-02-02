@@ -35,7 +35,7 @@ function showSpeciesPage() {
 function loadSpeciesLists(){
 
     //console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
-    $.get(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid, function( data ) {
+    $.getJSON(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid + '?callback=?', function( data ) {
         for(var i = 0; i < data.length; i++) {
             var specieslist = data[i];
             var maxListFields = 10;
@@ -578,10 +578,11 @@ function loadGalleryType(category, start) {
                 // clone template div & populate with metadata
                 var $taxonThumb = $('#taxon-thumb-template').clone();
                 $taxonThumb.removeClass('hide');
-                $taxonThumb.show(); // IE11 needs this
                 $taxonThumb.attr('id','thumb_' + category + i);
                 $taxonThumb.attr('href', el.largeImageUrl);
-                $taxonThumb.find('img').attr('src', el.smallImageUrl).attr('onerror',"$(this).parent().hide();"); // hide broken images
+                $taxonThumb.find('img').attr('src', el.smallImageUrl);
+                // turned off 'onerror' below as IE11 hides all images
+                //$taxonThumb.find('img').attr('onerror',"$(this).parent().hide();"); // hide broken images
 
                 // brief metadata
                 var briefHtml = getImageTitleFromOccurrence(el);
