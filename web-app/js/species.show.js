@@ -146,6 +146,7 @@ function loadMap() {
     SHOW_CONF.map.invalidateSize(false);
 
     updateOccurrenceCount();
+    fitMapToBounds();
 }
 
 /**
@@ -160,6 +161,30 @@ function updateOccurrenceCount() {
                     return false;
                 }
             });
+        }
+    });
+}
+
+function fitMapToBounds() {
+    var jsonUrl = SHOW_CONF.biocacheServiceUrl + "/mapping/bounds.json?q=lsid:" + SHOW_CONF.guid + "&callback=?";
+    $.getJSON(jsonUrl, function(data) {
+        if (data.length == 4) {
+            //console.log("data", data);
+            var sw = L.latLng(data[1],data[0]);
+            var ne = L.latLng(data[3],data[2]);
+            //console.log("sw", sw.toString());
+            var dataBounds = L.latLngBounds(sw, ne);
+            //var centre = dataBounds.getCenter();
+            var mapBounds = SHOW_CONF.map.getBounds();
+
+            if (!mapBounds.contains(dataBounds) && !mapBounds.intersects(dataBounds)) {
+                SHOW_CONF.map.fitBounds(dataBounds);
+                if (SHOW_CONF.map.getZoom() > 3) {
+                    SHOW_CONF.map.setZoom(3);
+                }
+            }
+            
+            SHOW_CONF.map.invalidateSize(true);
         }
     });
 }
