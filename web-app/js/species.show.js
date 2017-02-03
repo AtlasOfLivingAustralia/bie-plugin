@@ -144,6 +144,24 @@ function loadMap() {
 
     SHOW_CONF.map.on('click', onMapClick);
     SHOW_CONF.map.invalidateSize(false);
+
+    updateOccurrenceCount();
+}
+
+/**
+ * Update the total records count for the occurrence map in heading text
+ */
+function updateOccurrenceCount() {
+    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid, function( data ) {
+        if (data) {
+            $.each( data, function( key, value ) {
+                if (value && typeof value == "number") {
+                    $('.occurrenceRecordCount').html(value.toLocaleString());
+                    return false;
+                }
+            });
+        }
+    });
 }
 
 function onMapClick(e) {
@@ -163,7 +181,7 @@ function onMapClick(e) {
             var popup = L.popup()
                 .setLatLng(e.latlng)
                 .setContent("Occurrences at this point: " + response.count)
-                .openOn(map);
+                .openOn(SHOW_CONF.map);
         }
     });
 }

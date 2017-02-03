@@ -169,12 +169,13 @@
                         </div><!-- end col 1 -->
 
                         <div class="col-md-6">
-                            <div id="expertDistroDiv" style="display:none;margin-bottom: 10px;">
-                                <h2>Compiled distribution map</h2>
+                            <div id="expertDistroDiv" style="display:none;margin-bottom: 20px;">
+                                <h3>Compiled distribution map</h3>
                                 <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg" style="width:316px;" alt="occurrence map" onerror="this.style.display='none'"/>
-                                <div class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></div>
+                                <p class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></p>
                             </div>
                             <div class="taxon-map">
+                                <h3>Occurrence records map (<span class="occurrenceRecordCount">0</span> records)</h3>
                                 <div id="leafletMap"></div>
 
                                 <g:if test="${grailsApplication.config.spatial.baseURL}">
@@ -614,19 +615,19 @@
                            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}">
                             <i class="glyphicon glyphicon-th-list"></i>
                             View list of all
-                            occurrence records for this taxon
+                            occurrence records for this taxon (<span class="occurrenceRecordCount">0</span> records)
                         </a>
                         <a class="btn btn-default"
                            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}#tab_mapView">
                             <i class="glyphicon glyphicon-map-marker"></i>
                             View map of all
-                            occurrence records for this taxon
+                            occurrence records for this taxon (<span class="occurrenceRecordCount">0</span> records)
                         </a>
                     </div>
 
                     <div id="occurrenceRecords">
                         <div id="recordBreakdowns" style="display: block;">
-                            <h2>Charts showing breakdown of occurrence records</h2>
+                            <h2>Charts showing breakdown of occurrence records (<span class="occurrenceRecordCount">0</span> records)</h2>
                             %{--<div id="chartsHint">Hint: click on chart elements to view that subset of records</div>--}%
                             <div id="charts"></div>
                         </div>
