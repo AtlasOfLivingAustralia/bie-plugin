@@ -14,7 +14,7 @@ class BieService {
 
         //add a query context for BIE - to reduce taxa to a subset
         if(grailsApplication.config.bieService.queryContext){
-            queryUrl = queryUrl + "&" + grailsApplication.config.bieService.queryContext
+            queryUrl = queryUrl + "&" + URLEncoder.encode(grailsApplication.config.bieService.queryContext, "UTF-8")
         }
 
         //add a query context for biocache - this will influence record counts
@@ -71,7 +71,7 @@ class BieService {
         def url = grailsApplication.config.bie.index.url + "/childConcepts/" + guid.replaceAll(/\s+/,'+')
 
         if(grailsApplication.config.bieService.queryContext){
-            url = url + "?" + grailsApplication.config.bieService.queryContext
+            url = url + "?" + URLEncoder.encode(grailsApplication.config.bieService.queryContext, "UTF-8")
         }
 
         def json = webService.getJson(url).sort() { it.rankID?:0 }
