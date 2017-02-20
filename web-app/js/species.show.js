@@ -142,7 +142,7 @@ function loadMap() {
 
     L.control.layers(baseLayers, overlays).addTo(SHOW_CONF.map);
 
-    SHOW_CONF.map.on('click', onMapClick);
+    //SHOW_CONF.map.on('click', onMapClick);
     SHOW_CONF.map.invalidateSize(false);
 
     updateOccurrenceCount();
@@ -153,7 +153,7 @@ function loadMap() {
  * Update the total records count for the occurrence map in heading text
  */
 function updateOccurrenceCount() {
-    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid, function( data ) {
+    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid + "&fq=" + SHOW_CONF.mapQueryContext, function( data ) {
         if (data) {
             $.each( data, function( key, value ) {
                 if (value && typeof value == "number") {
@@ -189,27 +189,27 @@ function fitMapToBounds() {
     });
 }
 
-function onMapClick(e) {
-    $.ajax({
-        url: SHOW_CONF.biocacheServiceUrl + "/occurrences/info",
-        jsonp: "callback",
-        dataType: "jsonp",
-        data: {
-            q: SHOW_CONF.scientificName,
-            zoom: "6",
-            lat: e.latlng.lat,
-            lon: e.latlng.lng,
-            radius: 20,
-            format: "json"
-        },
-        success: function (response) {
-            var popup = L.popup()
-                .setLatLng(e.latlng)
-                .setContent("Occurrences at this point: " + response.count)
-                .openOn(SHOW_CONF.map);
-        }
-    });
-}
+//function onMapClick(e) {
+//    $.ajax({
+//        url: SHOW_CONF.biocacheServiceUrl + "/occurrences/info",
+//        jsonp: "callback",
+//        dataType: "jsonp",
+//        data: {
+//            q: SHOW_CONF.scientificName,
+//            zoom: "6",
+//            lat: e.latlng.lat,
+//            lon: e.latlng.lng,
+//            radius: 20,
+//            format: "json"
+//        },
+//        success: function (response) {
+//            var popup = L.popup()
+//                .setLatLng(e.latlng)
+//                .setContent("Occurrences at this point: " + response.count)
+//                .openOn(SHOW_CONF.map);
+//        }
+//    });
+//}
 
 function loadDataProviders(){
 
