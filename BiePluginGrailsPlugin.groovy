@@ -1,4 +1,5 @@
 import grails.util.Environment
+import au.org.ala.bie.ExtendedPluginAwareResourceBundleMessageSource
 
 class BiePluginGrailsPlugin {
 
@@ -39,5 +40,12 @@ A plugin providing basic species page functionality and site search.
         def config = application.config
         def loadConfig = new ConfigSlurper(Environment.current.name).parse(application.classLoader.loadClass("defaultConfig"))
         application.config = loadConfig.merge(config) // client app will now override the defaultConfig version
+
+        // Custom message source
+        messageSource(ExtendedPluginAwareResourceBundleMessageSource) {
+            basenames = ["WEB-INF/grails-app/i18n/messages"] as String[]
+            cacheSeconds = (60 * 60 * 6) // 6 hours
+            useCodeAsDefaultMessage = false
+        }
     }
 }
