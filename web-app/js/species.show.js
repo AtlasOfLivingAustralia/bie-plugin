@@ -484,7 +484,7 @@ function loadOverviewImages(){
         hasPreferredImage = true;
         var prefUrl = SHOW_CONF.biocacheServiceUrl  +
             '/occurrences/search.json?q=image_url:' + SHOW_CONF.preferredImageId +
-            '&im=true&facet=off&pageSize=1&start=0&callback=?';
+            '&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
         $.getJSON(prefUrl, function(data){
             //console.log("prefUrl", prefUrl, data);
             if (data && data.totalRecords > 0) {
@@ -503,7 +503,7 @@ function loadOverviewImages(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&im=true&facet=off&pageSize=5&start=0&callback=?';
+        '&fq=multimedia:"Image"&fq=-assertion_user_id:*&im=true&facet=off&pageSize=5&start=0&callback=?';
     //console.log('Loading images from: ' + url);
 
     $.getJSON(url, function(data){
@@ -587,7 +587,7 @@ function loadGalleryType(category, start) {
     var imageCategoryParams = {
         type: '&fq=type_status:*',
         specimen: '&fq=basis_of_record:PreservedSpecimen&fq=-type_status:*',
-        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:"Uncertain"&sort=identification_qualifier_s&dir=asc',
+        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:"Uncertain"&fq=-assertion_user_id:*&sort=identification_qualifier_s&dir=asc',
         uncertain: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=identification_qualifier_s:"Uncertain"'
     };
 

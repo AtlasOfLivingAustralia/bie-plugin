@@ -41,3 +41,4 @@ languageCodesUrl = defaultConfig.class.getResource("/languages.json").toString()
 geocode.querySuffix = ""
 occurrenceCounts.enabled = true
 additionalResultsFields = "kingdom"
+admin_role = "ROLE_ADMIN"
