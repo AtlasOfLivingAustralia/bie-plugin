@@ -188,10 +188,18 @@
                                 <div class="map-buttons">
                                     <a class="btn btn-primary btn-lg"
                                        href="${mapUrl}"
+                                       title="${g.message(code:'overview.map.button.records.map.title', default:'View interactive map')}"
                                        role="button"><g:message code="overview.map.button.records.map" default="View Interactive Map"/></a>
+                                    <g:if test="${grailsApplication.config.map.simpleMapButton.toBoolean()}">
+                                        <a class="btn btn-primary btn-lg"
+                                           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
+                                           title="${g.message(code:'overview.map.button.records.simplemap.title', default:'View map')}"
+                                           role="button"><g:message code="overview.map.button.records.simplemap" default="View map"/></a>
+                                    </g:if>
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
-                                       role="button"><g:message code="overview.map.button.records.list" default="View Locations"/></a>
+                                       title="${g.message(code:'overview.map.button.records.list.title', default:'View records')}"
+                                       role="button"><g:message code="overview.map.button.records.list" default="View records"/></a>
                                 </div>
                             </div>
 

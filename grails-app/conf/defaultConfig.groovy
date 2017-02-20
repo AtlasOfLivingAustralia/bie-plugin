@@ -34,6 +34,7 @@ map.default.url = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
 map.default.attr = "Map data &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>, imagery &copy; <a href='http://cartodb.com/attributions'>CartoDB</a>"
 map.default.domain = "abcd"
 map.records.colour = "e6704c"
+map.simpleMapButton = false
 bieService.queryContext = ""
 googleMapsApiKey = "AIzaSyB0HIkSCV2EdkG50uM7s96IEbO6wUHTqy0"
 languageCodesUrl = defaultConfig.class.getResource("/languages.json").toString()
