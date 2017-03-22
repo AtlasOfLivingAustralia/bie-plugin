@@ -988,6 +988,7 @@
         ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/></div>',
         savePreferredSpeciesListUrl: "${createLink(controller: 'imageClient', action: 'saveImageToSpeciesList')}",
         getPreferredSpeciesListUrl: "${grailsApplication.config.speciesList.baseURL}",
+        druid: "${grailsApplication.config.speciesList.preferredSpeciesListDruid}",
         addPreferenceButton: ${authService?.getUserId() ? (authService.getUserForUserId(authService.getUserId())?.roles?.contains("ROLE_ADMIN") ? true : false) : false},
         mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
         mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}"
