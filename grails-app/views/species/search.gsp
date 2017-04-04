@@ -19,7 +19,7 @@
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <title>${query} | Search</title>
+    <title>${query} | Search | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <r:require modules="search"/>
     <r:script disposition='head'>
         // global var to pass GSP vars into JS file

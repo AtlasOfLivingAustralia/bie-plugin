@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <title>Biodiversity Information Explorer</title>
+    <title>Species search | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
 </head>
 <body class="page-search">
 
@@ -15,6 +15,7 @@
     <div class="section">
         <form id="search-inpage" action="search" method="get" name="search-form">
             <div class="form-group">
+                <input id="taxaFilter" name="fq" type="hidden" value="idxtype:TAXON">
                 <input id="search" class="form-control ac_input general-search" name="q" type="text" placeholder="Search the Atlas" autocomplete="off">
             </div>
             <div class="form-group">
