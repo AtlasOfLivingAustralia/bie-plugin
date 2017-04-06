@@ -989,7 +989,7 @@
         savePreferredSpeciesListUrl: "${createLink(controller: 'imageClient', action: 'saveImageToSpeciesList')}",
         getPreferredSpeciesListUrl: "${grailsApplication.config.speciesList.baseURL}",
         druid: "${grailsApplication.config.speciesList.preferredSpeciesListDruid}",
-        addPreferenceButton: ${imageTag.checkAllowableEditRole()},
+        addPreferenceButton: ${imageClient.checkAllowableEditRole()},
         mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
         mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}"
     };
