@@ -227,7 +227,7 @@
 
                                 <div class="panel-body">
                                     <p><strong><span class="datasetCount"></span>
-                                    </strong> datasets have provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
+                                    </strong> <span class="datasetLabel">datasets have</span> provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
                                     </p>
 
                                     <p><a class="tab-link"

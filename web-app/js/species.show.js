@@ -231,7 +231,19 @@ function loadDataProviders(){
     $.getJSON(url, function(data){
 
         if(data.totalRecords > 0) {
-            $('.datasetCount').html(data.facetResults[0].fieldResult.length);
+
+            var datasetCount = data.facetResults[0].fieldResult.length;
+
+            //exclude the "Unknown facet value"
+            if(data.facetResults[0].fieldResult[datasetCount - 1].label == "Unknown"){
+                datasetCount = datasetCount - 1;
+            }
+
+            if(datasetCount == 1){
+                $('.datasetLabel').html("dataset has");
+            }
+
+            $('.datasetCount').html(datasetCount);
             $.each(data.facetResults[0].fieldResult, function (idx, facetValue) {
                 //console.log(data.facetResults[0].fieldResult);
                 if(facetValue.count > 0){
