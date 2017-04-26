@@ -974,7 +974,7 @@
         defaultMapToken: "${grailsApplication.config.map.default.token}",
         recordsMapColour: "${grailsApplication.config.map.records.colour}",
         mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
-        additionalMapFilter: "${grailsApplication.config.additionalMapFilter}",
+        additionalMapFilter: "${raw(grailsApplication.config.additionalMapFilter)}",
         noImage100Url: "${resource(dir: 'images', file: 'noImage100.jpg')}",
         map: null,
         imageDialog: '${imageViewerType}',
