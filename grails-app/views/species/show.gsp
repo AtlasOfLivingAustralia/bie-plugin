@@ -91,7 +91,7 @@
                 <li><a href="#records" data-toggle="tab">Records</a></li>
                 <li><a href="#literature" data-toggle="tab">Literature</a></li>
                 <li><a href="#sequences" data-toggle="tab">Sequences</a></li>
-                <li><a href="#data-partners" data-toggle="tab">Data partners</a></li>
+                <li><a href="#data-partners" data-toggle="tab">Datasets</a></li>
             </ul>
             <div class="tab-content">
 
@@ -169,21 +169,37 @@
                         </div><!-- end col 1 -->
 
                         <div class="col-md-6">
-                            <div id="expertDistroDiv" style="display:none;margin-bottom: 10px;">
-                                <h2>Compiled distribution map</h2>
+                            <div id="expertDistroDiv" style="display:none;margin-bottom: 20px;">
+                                <h3>Compiled distribution map</h3>
                                 <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg" style="width:316px;" alt="occurrence map" onerror="this.style.display='none'"/>
-                                <div class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></div>
+                                <p class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></p>
                             </div>
                             <div class="taxon-map">
+                                <h3>Occurrence records map (<span class="occurrenceRecordCount">0</span> records)</h3>
                                 <div id="leafletMap"></div>
+
+                                <g:if test="${grailsApplication.config.spatial.baseURL}">
+                                    <g:set var="mapUrl">${grailsApplication.config.spatial.baseURL}?q=lsid:${tc?.taxonConcept?.guid}</g:set>
+                                </g:if>
+                                <g:else>
+                                    <g:set var="mapUrl">${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView</g:set>
+                                </g:else>
 
                                 <div class="map-buttons">
                                     <a class="btn btn-primary btn-lg"
-                                       href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
+                                       href="${mapUrl}"
+                                       title="${g.message(code:'overview.map.button.records.map.title', default:'View interactive map')}"
                                        role="button"><g:message code="overview.map.button.records.map" default="View Interactive Map"/></a>
+                                    <g:if test="${grailsApplication.config.map.simpleMapButton.toBoolean()}">
+                                        <a class="btn btn-primary btn-lg"
+                                           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
+                                           title="${g.message(code:'overview.map.button.records.simplemap.title', default:'View map')}"
+                                           role="button"><g:message code="overview.map.button.records.simplemap" default="View map"/></a>
+                                    </g:if>
                                     <a class="btn btn-primary btn-lg"
                                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
-                                       role="button"><g:message code="overview.map.button.records.list" default="View Locations"/></a>
+                                       title="${g.message(code:'overview.map.button.records.list.title', default:'View records')}"
+                                       role="button"><g:message code="overview.map.button.records.list" default="View records"/></a>
                                 </div>
                             </div>
 
@@ -206,16 +222,16 @@
 
                             <div class="panel panel-default panel-data-providers">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Data partners</h3>
+                                    <h3 class="panel-title">Datasets</h3>
                                 </div>
 
                                 <div class="panel-body">
                                     <p><strong><span class="datasetCount"></span>
-                                    </strong> datasets have provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
+                                    </strong> <span class="datasetLabel">datasets have</span> provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
                                     </p>
 
                                     <p><a class="tab-link"
-                                          href="#data-partners">Browse the list of data partners</a> and find organisations you can join if you are
+                                          href="#data-partners">Browse the list of datasets</a> and find organisations you can join if you are
                                     interested in participating in a survey for
                                     <g:if test="${tc.taxonConcept?.rankID > 6000}">
                                         species like ${raw(sciNameFormatted)}
@@ -229,7 +245,6 @@
 
                             <div id="listContent">
                             </div>
-
                         </div><!-- end col 2 -->
                     </div>
                 </section>
@@ -372,7 +387,7 @@
                                     <th>Source</th>
                                 </tr>
                             </thead>
-                            <tbody
+                            <tbody>
                         <g:each in="${sortCommonNameSources}" var="cn">
                             <g:set var="cNames" value="${cn.value}"/>
                             <g:set var="nkey" value="${cn.key}"/>
@@ -607,19 +622,19 @@
                            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}">
                             <i class="glyphicon glyphicon-th-list"></i>
                             View list of all
-                            occurrence records for this taxon
+                            occurrence records for this taxon (<span class="occurrenceRecordCount">0</span> records)
                         </a>
                         <a class="btn btn-default"
                            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}#tab_mapView">
                             <i class="glyphicon glyphicon-map-marker"></i>
                             View map of all
-                            occurrence records for this taxon
+                            occurrence records for this taxon (<span class="occurrenceRecordCount">0</span> records)
                         </a>
                     </div>
 
                     <div id="occurrenceRecords">
                         <div id="recordBreakdowns" style="display: block;">
-                            <h2>Charts showing breakdown of occurrence records</h2>
+                            <h2>Charts showing breakdown of occurrence records (<span class="occurrenceRecordCount">0</span> records)</h2>
                             %{--<div id="chartsHint">Hint: click on chart elements to view that subset of records</div>--}%
                             <div id="charts"></div>
                         </div>
@@ -675,7 +690,8 @@
                     <table id="data-providers-list" class="table name-table  table-responsive">
                         <thead>
                         <tr>
-                            <th>Data partners</th>
+                            <th>Data sets</th>
+                            <th>Licence</th>
                             <th>Records</th>
                         </tr>
                         </thead>
@@ -926,6 +942,7 @@
     var SHOW_CONF = {
         biocacheUrl:        "${grailsApplication.config.biocache.baseURL}",
         biocacheServiceUrl: "${grailsApplication.config.biocacheService.baseURL}",
+        layersServiceUrl:   "${grailsApplication.config.layersService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
         profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
         imageServiceBaseUrl:"${grailsApplication.config.image.baseURL}",
@@ -957,6 +974,7 @@
         defaultMapToken: "${grailsApplication.config.map.default.token}",
         recordsMapColour: "${grailsApplication.config.map.records.colour}",
         mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+        additionalMapFilter: "${raw(grailsApplication.config.additionalMapFilter)}",
         noImage100Url: "${resource(dir: 'images', file: 'noImage100.jpg')}",
         map: null,
         imageDialog: '${imageViewerType}',
@@ -969,9 +987,11 @@
         '<b>Down vote (<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>) an image:</b>'+
         ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/>',
         savePreferredSpeciesListUrl: "${createLink(controller: 'imageClient', action: 'saveImageToSpeciesList')}",
-        getPreferredSpeciesListUrl: "${grailsApplication.config.speciesList.baseURL}",
-        addPreferenceButton: ${authService?.getUserId() ? (authService.getUserForUserId(authService.getUserId())?.roles?.contains("ROLE_ADMIN") ? true : false) : false},
-        showOnlyImage: ${Boolean.parseBoolean(grailsApplication.config.showImageFromUrl?.toString()?:"true")}
+        getPreferredSpeciesListUrl: "${grailsApplication.config.speciesList.baseURL}",showOnlyImage: ${Boolean.parseBoolean(grailsApplication.config.showImageFromUrl?.toString()?:"true")}
+        druid: "${grailsApplication.config.speciesList.preferredSpeciesListDruid}",
+        addPreferenceButton: ${imageClient.checkAllowableEditRole()},
+        mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
+        mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}"
     };
 
     $(function(){

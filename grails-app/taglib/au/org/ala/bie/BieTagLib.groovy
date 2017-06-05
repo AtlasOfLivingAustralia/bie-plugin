@@ -206,6 +206,26 @@ class BieTagLib {
         out << "</span>"
     }
 
+    def displaySearchHighlights = {  attrs, body ->
+        if(attrs.highlight) {
+            def parts = attrs.highlight.split("<br>")
+            //remove duplicates
+            def cleaned = [:]
+            parts.each {
+                def cleanedKey = it.replaceAll("</b>", "").replaceAll("<b>", "")
+                if(!cleaned.containsKey(cleanedKey)){
+                    cleaned.put(cleanedKey, it)
+                }
+            }
+            cleaned.eachWithIndex { entry, index ->
+                if(index > 0){
+                    out << "<br/>"
+                }
+                out << entry.value
+            }
+        }
+    }
+
     /**
      * Custom function to escape a string for JS use
      *

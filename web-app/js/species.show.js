@@ -35,13 +35,12 @@ function showSpeciesPage() {
 function loadSpeciesLists(){
 
     //console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
-    $.get(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid, function( data ) {
+    $.getJSON(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid + '?callback=?', function( data ) {
         for(var i = 0; i < data.length; i++) {
             var specieslist = data[i];
             var maxListFields = 10;
 
             if (specieslist.list.isBIE) {
-                //console.log("specieslist", specieslist);
                 var $description = $('#descriptionTemplate').clone();
                 $description.css({'display': 'block'});
                 $description.attr('id', '#specieslist-block-' + specieslist.dataResourceUid);
@@ -49,7 +48,7 @@ function loadSpeciesLists(){
                 $description.find(".title").html(specieslist.list.listName);
 
                 if (specieslist.kvpValues.length > 0) {
-                    var content = "<dl class='dl-horizontal species-list-dl'>";
+                    var content = "<table class='table'>";
                     $.each(specieslist.kvpValues, function (idx, kvpValue) {
                         if (idx >= maxListFields) {
                             return false;
@@ -58,15 +57,13 @@ function loadSpeciesLists(){
                         if(kvpValue.vocabValue){
                             value = kvpValue.vocabValue;
                         }
-                        content += "<dt style='white-space: normal;'>" + (kvpValue.key + "</dt><dd>" + value + "</dd>");
+                        content += "<tr><td>" + (kvpValue.key + "</td><td>" + value + "</td></tr>");
                     });
-                    content += "</dl>";
+                    content += "</table>";
                     $description.find(".content").html(content);
                 } else {
                     $description.find(".content").html("A species list provided by " + specieslist.list.listName);
                 }
-
-
 
                 $description.find(".source").css({'display':'none'});
                 $description.find(".rights").css({'display':'none'});
@@ -86,7 +83,7 @@ function addAlerts(){
         e.preventDefault();
         var query = "Species: " + SHOW_CONF.scientificName;
         var searchString = "?q=" + SHOW_CONF.guid;
-        var url = SHOW_CONF.alertsUrl + "createBiocacheNewRecordsAlert?";
+        var url = SHOW_CONF.alertsUrl + "/webservice/createBiocacheNewRecordsAlert?";
         url += "queryDisplayName=" + encodeURIComponent(query);
         url += "&baseUrlForWS=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
         url += "&baseUrlForUI=" + encodeURIComponent(SHOW_CONF.serverName);
@@ -105,14 +102,14 @@ function loadMap() {
 
     //add an occurrence layer for this taxon
     var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=lsid:" +
-        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext, {
+        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter, {
         layers: 'ALA:occurrences',
         format: 'image/png',
         transparent: true,
         attribution: SHOW_CONF.mapAttribution,
         bgcolor: "0x000000",
-        outline: "false",
-        ENV: "color:"+SHOW_CONF.recordsMapColour+";name:circle;size:4;opacity:0.8"
+        outline: SHOW_CONF.mapOutline,
+        ENV: SHOW_CONF.mapEnvOptions
     });
 
     var speciesLayers = new L.LayerGroup();
@@ -145,31 +142,74 @@ function loadMap() {
 
     L.control.layers(baseLayers, overlays).addTo(SHOW_CONF.map);
 
-    SHOW_CONF.map.on('click', onMapClick);
+    //SHOW_CONF.map.on('click', onMapClick);
     SHOW_CONF.map.invalidateSize(false);
+
+    updateOccurrenceCount();
+    fitMapToBounds();
 }
 
-function onMapClick(e) {
-    $.ajax({
-        url: SHOW_CONF.biocacheServiceUrl + "/occurrences/info",
-        jsonp: "callback",
-        dataType: "jsonp",
-        data: {
-            q: SHOW_CONF.scientificName,
-            zoom: "6",
-            lat: e.latlng.lat,
-            lon: e.latlng.lng,
-            radius: 20,
-            format: "json"
-        },
-        success: function (response) {
-            var popup = L.popup()
-                .setLatLng(e.latlng)
-                .setContent("Occurrences at this point: " + response.count)
-                .openOn(map);
+/**
+ * Update the total records count for the occurrence map in heading text
+ */
+function updateOccurrenceCount() {
+    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid + "&fq=" + SHOW_CONF.mapQueryContext, function( data ) {
+        if (data) {
+            $.each( data, function( key, value ) {
+                if (value && typeof value == "number") {
+                    $('.occurrenceRecordCount').html(value.toLocaleString());
+                    return false;
+                }
+            });
         }
     });
 }
+
+function fitMapToBounds() {
+    var jsonUrl = SHOW_CONF.biocacheServiceUrl + "/mapping/bounds.json?q=lsid:" + SHOW_CONF.guid + "&callback=?";
+    $.getJSON(jsonUrl, function(data) {
+        if (data.length == 4) {
+            //console.log("data", data);
+            var sw = L.latLng(data[1],data[0]);
+            var ne = L.latLng(data[3],data[2]);
+            //console.log("sw", sw.toString());
+            var dataBounds = L.latLngBounds(sw, ne);
+            //var centre = dataBounds.getCenter();
+            var mapBounds = SHOW_CONF.map.getBounds();
+
+            if (!mapBounds.contains(dataBounds) && !mapBounds.intersects(dataBounds)) {
+                SHOW_CONF.map.fitBounds(dataBounds);
+                if (SHOW_CONF.map.getZoom() > 3) {
+                    SHOW_CONF.map.setZoom(3);
+                }
+            }
+            
+            SHOW_CONF.map.invalidateSize(true);
+        }
+    });
+}
+
+//function onMapClick(e) {
+//    $.ajax({
+//        url: SHOW_CONF.biocacheServiceUrl + "/occurrences/info",
+//        jsonp: "callback",
+//        dataType: "jsonp",
+//        data: {
+//            q: SHOW_CONF.scientificName,
+//            zoom: "6",
+//            lat: e.latlng.lat,
+//            lon: e.latlng.lng,
+//            radius: 20,
+//            format: "json"
+//        },
+//        success: function (response) {
+//            var popup = L.popup()
+//                .setLatLng(e.latlng)
+//                .setContent("Occurrences at this point: " + response.count)
+//                .openOn(SHOW_CONF.map);
+//        }
+//    });
+//}
 
 function loadDataProviders(){
 
@@ -191,12 +231,42 @@ function loadDataProviders(){
     $.getJSON(url, function(data){
 
         if(data.totalRecords > 0) {
-            $('.datasetCount').html(data.facetResults[0].fieldResult.length);
-            $.each(data.facetResults[0].fieldResult, function (idx, facetValue) {
-                if(facetValue.count > 0){
-                    var queryUrl = uiUrl + "&fq=" + facetValue.fq;
-                    $('#data-providers-list tbody').append("<tr><td><a href='" + queryUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a></td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td></tr>");
 
+            var datasetCount = data.facetResults[0].fieldResult.length;
+
+            //exclude the "Unknown facet value"
+            if(data.facetResults[0].fieldResult[datasetCount - 1].label == "Unknown"){
+                datasetCount = datasetCount - 1;
+            }
+
+            if(datasetCount == 1){
+                $('.datasetLabel').html("dataset has");
+            }
+
+            $('.datasetCount').html(datasetCount);
+            $.each(data.facetResults[0].fieldResult, function (idx, facetValue) {
+                //console.log(data.facetResults[0].fieldResult);
+                if(facetValue.count > 0){
+
+                    var uid = facetValue.fq.replace(/data_resource_uid:/, '').replace(/[\\"]*/, '').replace(/[\\"]/, '');
+                    var dataResourceUrl =  SHOW_CONF.collectoryUrl + "/public/show/" + uid;
+                    var tableRow = "<tr><td><a href='" + dataResourceUrl + "'><span class='data-provider-name'>" + facetValue.label + "</span></a>";
+
+                    //console.log(uid);
+                    $.getJSON(SHOW_CONF.collectoryUrl + "/ws/dataResource/" + uid, function(collectoryData) {
+
+
+                        if(collectoryData.provider){
+                            tableRow += "<br/><small><a href='" + SHOW_CONF.collectoryUrl + '/public/show/' + uid + "'>" + collectoryData.provider.name + "</a></small>";
+                        }
+                        tableRow += "</td>";
+                        tableRow += "<td>" + collectoryData.licenseType + "</td>";
+
+                        var queryUrl = uiUrl + "&fq=" + facetValue.fq;
+                        tableRow += "</td><td><a href='" + queryUrl + "'><span class='record-count'>" + facetValue.count + "</span></a></td>"
+                        tableRow += "</tr>";
+                        $('#data-providers-list tbody').append(tableRow);
+                    });
                 }
             });
         }
@@ -204,6 +274,11 @@ function loadDataProviders(){
 }
 
 function loadIndigenousData() {
+
+    if(!SHOW_CONF.profileServiceUrl || SHOW_CONF.profileServiceUrl == ""){
+        return;
+    }
+
     var url = SHOW_CONF.profileServiceUrl + "/api/v1/profiles?summary=true&tags=IEK&guids=" + SHOW_CONF.guid;
     $.getJSON(url, function (data) {
         if (data.total > 0) {
@@ -421,7 +496,7 @@ function loadOverviewImages(){
         hasPreferredImage = true;
         var prefUrl = SHOW_CONF.biocacheServiceUrl  +
             '/occurrences/search.json?q=image_url:' + SHOW_CONF.preferredImageId +
-            '&im=true&facet=off&pageSize=1&start=0&callback=?';
+            '&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
         $.getJSON(prefUrl, function(data){
             //console.log("prefUrl", prefUrl, data);
             if (data && data.totalRecords > 0) {
@@ -440,7 +515,7 @@ function loadOverviewImages(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&im=true&facet=off&pageSize=5&start=0&callback=?';
+        '&fq=multimedia:"Image"&fq=-assertion_user_id:*&im=true&facet=off&pageSize=5&start=0&callback=?';
     //console.log('Loading images from: ' + url);
 
     $.getJSON(url, function(data){
@@ -463,7 +538,9 @@ function addOverviewImages(imagesArray, hasPreferredImage) {
 
     for (j = 1; j < 5; j++) {
         // load smaller thumb images
-        addOverviewThumb(imagesArray[j], j)
+        if(imagesArray.length > j) {
+            addOverviewThumb(imagesArray[j], j)
+        }
     }
 }
 
@@ -522,7 +599,7 @@ function loadGalleryType(category, start) {
     var imageCategoryParams = {
         type: '&fq=type_status:*',
         specimen: '&fq=basis_of_record:PreservedSpecimen&fq=-type_status:*',
-        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:"Uncertain"&sort=identification_qualifier_s&dir=asc',
+        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:"Uncertain"&fq=-assertion_user_id:*&sort=identification_qualifier_s&dir=asc',
         uncertain: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=identification_qualifier_s:"Uncertain"'
     };
 
@@ -558,7 +635,9 @@ function loadGalleryType(category, start) {
                 $taxonThumb.removeClass('hide');
                 $taxonThumb.attr('id','thumb_' + category + i);
                 $taxonThumb.attr('href', el.largeImageUrl);
-                $taxonThumb.find('img').attr('src', el.smallImageUrl).attr('onerror',"$(this).parent().hide();"); // hide broken images
+                $taxonThumb.find('img').attr('src', el.smallImageUrl);
+                // turned off 'onerror' below as IE11 hides all images
+                //$taxonThumb.find('img').attr('onerror',"$(this).parent().hide();"); // hide broken images
 
                 // brief metadata
                 var briefHtml = getImageTitleFromOccurrence(el);
@@ -784,7 +863,7 @@ function cancelSearch(msg) {
 }
 
 function loadExpertDistroMap() {
-    var url = "http://spatial.ala.org.au/layers-service/distribution/map/" + SHOW_CONF.guid + "?callback=?";
+    var url = SHOW_CONF.layersServiceUrl + "/distribution/map/" + SHOW_CONF.guid + "?callback=?";
     $.getJSON(url, function(data){
         if (data.available) {
             $("#expertDistroDiv img").attr("src", data.url);

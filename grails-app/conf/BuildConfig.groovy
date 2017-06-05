@@ -45,6 +45,6 @@ grails.project.dependency.resolution = {
         compile ':cache:1.1.8'
         runtime ":rest:0.8"
         build ":tomcat:7.0.53"
-        compile ":images-client-plugin:0.7.7-SNAPSHOT"
+        compile ":images-client-plugin:0.7.9-SNAPSHOT"
     }
 }

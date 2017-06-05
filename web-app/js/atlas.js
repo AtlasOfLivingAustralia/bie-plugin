@@ -60,7 +60,8 @@ $(function(){
 			imageUrl: imageUrl,
 			showOnlyImage: SHOW_CONF.showOnlyImage,
 			savePreferredSpeciesListUrl: SHOW_CONF.savePreferredSpeciesListUrl + '?id=' + imageId + '&scientificName=' + SHOW_CONF.scientificName,
-			getPreferredSpeciesListUrl: SHOW_CONF.getPreferredSpeciesListUrl
+			getPreferredSpeciesListUrl: SHOW_CONF.getPreferredSpeciesListUrl,
+			druid: SHOW_CONF.druid
 		});
 	});
 

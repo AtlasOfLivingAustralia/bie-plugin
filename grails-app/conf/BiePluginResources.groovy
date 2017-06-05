@@ -22,7 +22,7 @@ modules = {
 
     show {
         dependsOn 'cleanHtml, ekko'
-//        resource url: 'https://ajax.googleapis.com/jsapi', attrs: [type: 'js'], disposition: 'head'
+
         resource url:[dir:'js/leaflet', file:'leaflet.css', plugin:'bie-plugin'], attrs: [ media: 'all' ]
         resource url:[dir:'js/leaflet', file:'leaflet.js', plugin:'bie-plugin']
 
