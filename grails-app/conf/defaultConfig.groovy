@@ -40,6 +40,7 @@ googleMapsApiKey = "AIzaSyB0HIkSCV2EdkG50uM7s96IEbO6wUHTqy0"
 languageCodesUrl = defaultConfig.class.getResource("/languages.json").toString()
 geocode.querySuffix = ""
 occurrenceCounts.enabled = true
+showImageFromUrl = false
 additionalResultsFields = "kingdom"
 admin_role = "ROLE_ADMIN"
 /** an additional map filter that can be applied to restrict records displayed on the map */

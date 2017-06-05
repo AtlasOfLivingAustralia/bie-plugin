@@ -717,9 +717,9 @@ function getImageFooterFromOccurrence(el){
     }
 
     // write to DOM
-    detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a>' +
-                  '<br><br>If this image is incorrectly<br>identified please flag an<br>issue on the <a href=' + SHOW_CONF.biocacheUrl +
-                  '/occurrences/' + el.uuid + '>record.<br></div>';
+    detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a></div>' +
+                  '<br>If this image is incorrectly identified <br>please flag an issue on the <a href=' + SHOW_CONF.biocacheUrl +
+                  '/occurrences/' + el.uuid + '>record.<br>';
     return detailHtml;
 }
 
