@@ -38,6 +38,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="breadcrumb" content="${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''}"/>
     <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <r:require modules="show, charts, image-viewer"/>
@@ -661,14 +662,14 @@
                             <div id="bhl-integration">
                                 <h3>Name references found in the <a href="http://biodiversityheritagelibrary.com/" target="_blank">Biodiversity Heritage Library</a></h3>
                                 <div id="bhl-results-list" class="results-listZ">
-                                    <a href='http://www.biodiversitylibrary.org/search?SearchTerm=${tc?.taxonConcept?.nameString}&SearchCat=M#/names' target='bhl'>Search BHL for references to ${tc?.taxonConcept?.nameString}</a>
+                                    <a href='http://www.biodiversitylibrary.org/search?SearchTerm=${synonyms?.join('%22+OR+%22')}&SearchCat=M#/names' target='bhl'>Search BHL for references to ${tc?.taxonConcept?.nameString}</a>
                                 </div>
                             </div>
 
                             <div id="trove-integration" class="column-wrap" style="padding-top:50px;">
                                 %{--<h2>&nbsp;</h2>--}%
                                 <hr />
-                                <h3>Name references found in <a href="http://trove.nla.gov.au" target="_blank">Trove - NLA</a></h3>
+                                <h3>Name references found in <a href="http://trove.nla.gov.au/result?q=%22${synonyms?.join('%22+OR+%22')}%22" target="_blank">Trove - NLA</a></h3>
 
                                 <div id="trove-result-list" class="result-list">
                                 </div>
