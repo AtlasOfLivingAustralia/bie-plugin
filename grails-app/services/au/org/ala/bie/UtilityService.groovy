@@ -2,6 +2,7 @@ package au.org.ala.bie
 
 import org.apache.commons.lang.StringUtils
 import grails.converters.JSON
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 class UtilityService {
 
@@ -165,4 +166,31 @@ class UtilityService {
 
         imageCategories
     }
-}
+
+    /**
+     * Extract a list of (real) synonyms for the input taxon concept object,
+     * checking against a known list of accepted synonym "types"
+     *
+     * @param tc
+     * @return
+     */
+    List getSynonymsForTaxon(JSONObject tc) {
+        List synonyms = []
+        String synonymTypesStr = grailsApplication.config.synonymsTypes?:""
+        List synonymTypes = synonymTypesStr.tokenize(",")
+
+        // include accepted name
+        if (tc.containsKey("taxonConcept")) {
+            synonyms.add(tc.taxonConcept.nameString?:"")
+        }
+
+        if (tc.containsKey("synonyms") && tc.synonyms.size() > 0) {
+            tc.synonyms.each { s ->
+                if (synonymTypes.contains(s.taxonomicStatus?.toLowerCase())) {
+                    synonyms.add(s.nameString)
+                }
+            }
+        }
+        log.debug "synonyms = ${synonyms}"
+        synonyms
+    }}

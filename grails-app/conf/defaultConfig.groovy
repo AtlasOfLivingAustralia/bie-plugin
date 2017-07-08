@@ -44,3 +44,4 @@ additionalResultsFields = "kingdom"
 admin_role = "ROLE_ADMIN"
 /** an additional map filter that can be applied to restrict records displayed on the map */
 additionalMapFilter=""
+synonymsTypes="synonym" // comma separated list

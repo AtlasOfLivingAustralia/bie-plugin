@@ -5,9 +5,9 @@ $(function(){
 	$(".wrap").css("margin-bottom", -footerHeight);
 	$(".push").height(footerHeight);
 	
-	// Tabs
+	// Tabs init
 	var hash = window.location.hash;
-	hash && $(".taxon-tabs a[href=" + hash + "]").tab("show");
+	hash && $(".taxon-tabs a[href='" + hash + "']").tab("show");
 	$(".taxon-tabs a").click(function (e) {
 		window.location.hash = this.hash;
 	});
@@ -17,7 +17,7 @@ $(function(){
 		e.preventDefault();
 		window.location.hash = this.hash;
 		var tabID = $(this).attr("href");
-		$(".taxon-tabs a[href=" + tabID + "]").tab("show");
+		$(".taxon-tabs a[href='" + tabID + "']").tab("show");
 	})
 
 	// Lightbox

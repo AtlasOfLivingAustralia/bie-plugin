@@ -145,6 +145,7 @@ class SpeciesController {
                     statusRegionMap: utilityService.getStatusRegionCodes(),
                     infoSourceMap:[],
                     textProperties: [],
+                    synonyms: utilityService.getSynonymsForTaxon(taxonDetails),
                     isAustralian: false,
                     isRoleAdmin: false, //authService.userInRole(grailsApplication.config.auth.admin_role),
                     userName: "",
