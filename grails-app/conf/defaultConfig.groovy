@@ -20,6 +20,8 @@ alerts.baseUrl = "http://alerts.ala.org.au/ws/"
 sightings.guidUrl = "http://sightings.ala.org.au/"
 collectory.threatenedSpeciesCodesUrl = collectory.baseURL + "/public/showDataResource"
 skin.layout = "generic"
+skin.orgNameLong = "Generic BIE"
+skin.orgNameShort = "BIE"
 eol.lang = "en"
 bie.index.url = "http://bie.ala.org.au/ws"
 //bie.index.url = "http://localhost:8110/bie-index"
@@ -45,3 +47,4 @@ admin_role = "ROLE_ADMIN"
 /** an additional map filter that can be applied to restrict records displayed on the map */
 additionalMapFilter=""
 synonymsTypes="synonym" // comma separated list
+speciesParent="${bie.baseURL}"
