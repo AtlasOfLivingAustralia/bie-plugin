@@ -556,7 +556,7 @@
                     <g:each in="${taxonHierarchy}" var="taxon">
                         <!-- taxon = ${taxon} -->
                         <g:if test="${taxon.guid != tc.taxonConcept.guid}">
-                            <dl><dt><g:if test="${taxon.rankID ?: 0 != 0}">${taxon.rank}</g:if></dt>
+                            <dl><dt>${taxon.rank}</dt>
                             <dd><a href="${request?.contextPath}/species/${taxon.guid}#classification"
                                    title="${taxon.rank}">
                                 <bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}"
