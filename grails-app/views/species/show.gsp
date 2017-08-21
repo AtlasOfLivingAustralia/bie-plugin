@@ -556,7 +556,7 @@
                     <g:each in="${taxonHierarchy}" var="taxon">
                         <!-- taxon = ${taxon} -->
                         <g:if test="${taxon.guid != tc.taxonConcept.guid}">
-                            <dl><dt><g:if test="${taxon.rankID ?: 0 != 0}">${taxon.rank?:"[unknown rank]"}</g:if></dt>
+                            <dl><dt>${taxon.rank}</dt>
                             <dd><a href="${request?.contextPath}/species/${taxon.guid}#classification"
                                    title="${taxon.rank}">
                                 <bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}"
@@ -565,7 +565,7 @@
                             </dd>
                         </g:if>
                         <g:elseif test="${taxon.guid == tc.taxonConcept.guid}">
-                            <dl><dt id="currentTaxonConcept">${taxon.rank?:"[unknown rank]"}</dt>
+                            <dl><dt id="currentTaxonConcept">${taxon.rank}</dt>
                             <dd><span><bie:formatSciName rankId="${taxon.rankID}" nameFormatted="${taxon.nameFormatted}"
                                                          nameComplete="${taxon.nameComplete}"
                                                          taxonomicStatus="name"
@@ -585,7 +585,7 @@
                         <g:set var="currentRank" value=""/>
                         <g:each in="${childConcepts}" var="child" status="i">
                             <g:set var="currentRank" value="${child.rank}"/>
-                            <dt>${child.rank?:"[unknown rank]"}</dt>
+                            <dt>${child.rank}</dt>
                             <g:set var="taxonLabel"><bie:formatSciName rankId="${child.rankID}"
                                                                        nameFormatted="${child.nameFormatted}"
                                                                        nameComplete="${child.nameComplete}"
