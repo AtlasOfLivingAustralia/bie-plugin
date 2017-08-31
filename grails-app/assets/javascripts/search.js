@@ -1,3 +1,4 @@
+//= require jquery.sortElemets
 /*
  * Copyright (C) 2012 Atlas of Living Australia
  * All Rights Reserved.

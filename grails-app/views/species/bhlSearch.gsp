@@ -26,8 +26,8 @@
 <head>
     <title>${params.q} | Literature search | ${grailsApplication.config.skin.orgNameLong}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <r:require modules=" cleanHtml"/>
-    <r:script disposition='head'>
+    <asset:javascript src="jquery.htmlClean.js"/>
+    <script type="text/javascript">
         /**
          * OnLoad equavilent in JQuery
          */
@@ -160,7 +160,7 @@
             return true;
         }
 
-    </r:script>
+    </script>
 </head>
 <body class="nav-species bhl-search">
     <header id="page-header" class="heading-bar">

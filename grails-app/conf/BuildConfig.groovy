@@ -1,6 +1,9 @@
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
+grails.project.target.level = 1.8
+grails.project.source.level = 1.8
+
 
 //grails.plugin.location."ala-charts-plugin" = "../ala-charts-plugin"
 
@@ -27,10 +30,12 @@ grails.project.dependency.resolution = {
         compile("au.org.ala:ala-name-matching:2.4.0") {
             excludes "lucene-core", "lucene-analyzers-common", "lucene-queryparser", "simmetrics"
         }
+        compile ('org.jasig.cas.client:cas-client-core:3.4.1') {
+            excludes([group: 'javax.servlet', name: 'servlet-api'])
+        }
         compile "commons-httpclient:commons-httpclient:3.1",
                 "org.codehaus.jackson:jackson-core-asl:1.8.6",
                 "org.codehaus.jackson:jackson-mapper-asl:1.8.6"
-        compile 'org.jasig.cas.client:cas-client-core:3.1.12'
         runtime 'org.jsoup:jsoup:1.7.2'
     }
 
@@ -39,12 +44,16 @@ grails.project.dependency.resolution = {
                 ":rest-client-builder:2.0.3") {
             export = false
         }
-        runtime ":ala-charts-plugin:1.0"
+        runtime ":ala-bootstrap3:2.0.0-SNAPSHOT"
+        runtime(":ala-auth:2.2-SNAPSHOT") {
+            excludes "servlet-api"
+        }
+        compile ":asset-pipeline:2.14.1"
+        runtime ":ala-charts-plugin:1.3"
         runtime ":jquery:1.11.1"
-        runtime ":resources:1.2.8"
-        compile ':cache:1.1.8'
+        //compile ':cache:1.1.8'
         runtime ":rest:0.8"
-        build ":tomcat:7.0.53"
-        compile ":images-client-plugin:0.7.9-SNAPSHOT"
+        build ":tomcat:7.0.55"
+        compile ":images-client-plugin:0.8"
     }
 }

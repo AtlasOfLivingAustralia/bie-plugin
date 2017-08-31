@@ -26,7 +26,7 @@
 <head>
     <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if> Image browser | ${grailsApplication.config.skin.orgNameLong}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <script type="text/javascript">
+    <asset:script type="text/javascript">
         var prevPage = 0;
         var currentPage = 0;
         var lastPage, noOfColumns;
@@ -120,7 +120,7 @@
             return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
         }
 
-    </script>
+    </asset:script>
     <style type="text/css">
 
     body { padding-left: 15px; padding-right: 15px; }
