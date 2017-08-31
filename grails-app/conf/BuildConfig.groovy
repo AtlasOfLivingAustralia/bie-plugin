@@ -51,7 +51,7 @@ grails.project.dependency.resolution = {
         compile ":asset-pipeline:2.14.1"
         runtime ":ala-charts-plugin:1.3"
         runtime ":jquery:1.11.1"
-        //compile ':cache:1.1.8'
+        compile ':cache:1.1.8'
         runtime ":rest:0.8"
         build ":tomcat:7.0.55"
         compile ":images-client-plugin:0.8"
