@@ -1,24 +1,24 @@
 language: groovy
 jdk:
-- openjdk7
+- oraclejdk8
 sudo: false
 branches:
   only:
   - master
-before_install:
-- wget -q https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/ala_common.sh
-- chmod +x ala_common.sh
-- source ./ala_common.sh
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
-- ala_travis_grails_setup_env
-
-script:
-- ala_travis_grails_test
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
 
 after_success:
-- ala_travis_grails_deploy
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./gradlew publish'
 
 env:
   global:
-  - secure: WOvjK19te6dB1WoaF2vWsssjn8Eq/Mepy01Z8gyU3p1XXepxmbGoraSVWF/dTwhR2GU6QY5EMn4eRqzuIMt4YPhNWCcJ7AXMyX1UcIn3e6mXuwBs6BQTnxWCGirKMbg3vB51hPF4aIIKfmqGgRgOIPqtnLMjf8fWnoqg0bp+kZxLTWSBoLDWoyDbALrDivrVxKW2I2wpl/uluCwfGQv6GSvqTo+wHYnhxgQX5IHtPHz1HQXaMZqkziK+9WImj156mr7XUkSXCXYDbh8jGvxVwUY3Ar2GhZz2kELt3Uatp1z0F0ElgCf7nNeD6nDs3aCfFlMtPUx60CQtKJvG0P0BX19bQ0PUe92y0vTPj62eO0br5gniVvExxjhCf4XsEplBKHlNYRHGbukjlZGWWVWNpfwPvOl7tbt4FQPnDLRjrHKY4GruQcQ9LN8FewMcBxRm9Us8eN2GJiVVGzzWhHSOi2srWeeQEGtsW2erYk3GSvyAcV6bELMp7vO/RDvTzPNMZ+M/MbU2xu3HkFH987Bih4dj6AobiiM2bFMGdvhN1HSzh4gBnvM64W1YWJeq3kRPzWZe+LCHKvEUk7Ns9MV6YZvFihIiMVc0jg/vBCtjwlvA22oObra/lLYUiKh6gyy3tpgmxbCaeJR1t9SlWEWyJVCpBYVJV/ky2vZk4mDGoxc=
-  - secure: dLXiLVIxloRxAcxMP4LWjSmwBOHE5ukk5Yin/ATQNTOUEqDgtYBKFF+SxqSH6HrFX/UjqzxXjOLPtaxNqrbrSxdXYq1dsPwNzQPdER7E7byNomnFVVjMwxMwhsSQJwyMHabK6BcdlkKuO2xF/92r/bc2Cd8R5fGbQMsoybxPenhnGUfs+i03IUZsLK7hB6cxF1tLS/Kzzhn5fIguht2KrzIalKBp2jpaXJmOpuYutK/hTTjrfqRBgHC9DS8LDWcGkzFrWtJMeT90/fhacgMuNxZCUZ8iVKhG5k5f7OZRdKtwjaykTEltNV/sYVIMkWKZJiPtnpwdwU0weV7ZztUbSbma4lPH9TTmySSpMfdvSLfIjd1HrOIzyVl5RxkhGmvcu2AYa4XZQj+LmBQPxq7Irj48q2eMPeUnTsw8gbqP+N4b8Ysj+zvuqkU2ufmmgi+qv0HRqYuBAi6oog7JmKbrAFcgTxRjV+oz787CC6c/SQtYqPG6v5d/YQix006fg+X85Jy8FFHiJoy898DdHJyRGml0uMF2+aA0J9O/TzSirC3Y0ZffpugMpHW6sxjrCg/zzDVXL/6xZ+/IxLFTl7li77QtLfQS6iNy27oEZmJxj7pVU9++jyr7aWM9AvfuN6SoTkxvpPwgXVdHbs6xs7XWPUAvJARqdZslly0QiZJ5AaE=
+  - secure: M5RdnCEQHqRvytpOCDWhxSw6oOZLGYODdhHkmCy+5z8zKLWYchwcCSOdGgmEGU9oeEndg1erPKXuvRlpjWHq2VnaFh2EVg8rA82LoB4PkOzqwmCevLdTL6R+ePO/ZHoZo2PoLSbGHV38RkhFI+GTa9s+4/JZjNrm45a2eJx+GaU=
+  - secure: G9qlN6dGDN4RF+137R3lOAXQnTY0uhbt69TyPnaFUFlhUo/ngonaHkULCtDWujcmqkwoWh8QqybmO2XpG78cicFmzcrruQmDVqj2mi7VikDp722rLbSkop44E3xPVNAS1NAb9nyKyZlPMxmxncAA5O6TA//UPtsjIn1HrENJJ/o=

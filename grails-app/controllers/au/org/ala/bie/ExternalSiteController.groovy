@@ -11,9 +11,6 @@ import org.jsoup.select.Elements
  * and to make consumption of services easier from javascript.
  */
 class ExternalSiteController {
-
-    def grailsApplication
-
     def index() {}
 
     def genbankBase = "http://www.ncbi.nlm.nih.gov"

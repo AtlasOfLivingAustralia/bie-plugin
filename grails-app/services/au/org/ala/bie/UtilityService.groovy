@@ -2,7 +2,7 @@ package au.org.ala.bie
 
 import org.apache.commons.lang.StringUtils
 import grails.converters.JSON
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 class UtilityService {
 

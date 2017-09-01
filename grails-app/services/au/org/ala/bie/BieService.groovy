@@ -1,6 +1,8 @@
 package au.org.ala.bie
+
+import au.org.ala.bie.webapp2.SearchRequestParamsDTO
 import grails.converters.JSON
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 class BieService {
 

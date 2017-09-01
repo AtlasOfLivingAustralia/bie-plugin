@@ -1,10 +1,11 @@
 package au.org.ala.bie
 
 import grails.converters.JSON
-import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
-import groovyx.net.http.HTTPBuilder
+iimport groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ContentType
-import org.codehaus.groovy.grails.web.json.JSONObject
+import groovyx.net.http.HTTPBuilder
+import org.grails.web.converters.exceptions.ConverterException
+import org.grails.web.json.JSONObject
 import org.springframework.beans.factory.InitializingBean
 
 class WebService implements InitializingBean {

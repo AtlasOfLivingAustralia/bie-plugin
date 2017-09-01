@@ -1,25 +1,29 @@
-import grails.util.Environment
-import au.org.ala.bie.ExtendedPluginAwareResourceBundleMessageSource
+package au.org.ala.bie
 
-class BiePluginGrailsPlugin {
+import grails.plugins.*
 
-    // the plugin version
-    def version = "1.3.4-SNAPSHOT"
+class BiePluginGrailsPlugin extends Plugin {
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "2.5 > *"
+    def grailsVersion = "3.2.11 > *"
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp"
     ]
 
+    // TODO Fill in these fields
     def title = "Bie Plugin Plugin" // Headline display name of the plugin
     def author = "Dave Martin"
     def authorEmail = "david.martin@csiro.au"
     def description = '''\
 A plugin providing basic species page functionality and site search.
 '''
+
+    def profiles = ['web']
+
     // URL to the plugin's documentation
     def documentation = "https://github.com/atlasoflivingaustralia/bie-plugin"
+
+    // Extra (optional) plugin metadata
 
     // License: one of 'APACHE', 'GPL2', 'GPL3'
     def license = "MPL1.1"
@@ -36,16 +40,31 @@ A plugin providing basic species page functionality and site search.
     // Online location of the plugin's browse-able source code.
     def scm = [ url: "git://github.com/AtlasOfLivingAustralia/bie-plugin" ]
 
-    def doWithSpring = {
-        def config = application.config
-        def loadConfig = new ConfigSlurper(Environment.current.name).parse(application.classLoader.loadClass("defaultConfig"))
-        application.config = loadConfig.merge(config) // client app will now override the defaultConfig version
-
-        // Custom message source
-        messageSource(ExtendedPluginAwareResourceBundleMessageSource) {
-            basenames = ["WEB-INF/grails-app/i18n/messages"] as String[]
-            cacheSeconds = (60 * 60 * 6) // 6 hours
-            useCodeAsDefaultMessage = false
+    Closure doWithSpring() { {->
+            // TODO Implement runtime spring config (optional)
         }
+    }
+
+    void doWithDynamicMethods() {
+        // TODO Implement registering dynamic methods to classes (optional)
+    }
+
+    void doWithApplicationContext() {
+        // TODO Implement post initialization spring config (optional)
+    }
+
+    void onChange(Map<String, Object> event) {
+        // TODO Implement code that is executed when any artefact that this plugin is
+        // watching is modified and reloaded. The event contains: event.source,
+        // event.application, event.manager, event.ctx, and event.plugin.
+    }
+
+    void onConfigChange(Map<String, Object> event) {
+        // TODO Implement code that is executed when the project configuration changes.
+        // The event is the same as for 'onChange'.
+    }
+
+    void onShutdown(Map<String, Object> event) {
+        // TODO Implement code that is executed when the application shuts down (optional)
     }
 }

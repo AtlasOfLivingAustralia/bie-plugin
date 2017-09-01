@@ -14,9 +14,10 @@
  */
 package au.org.ala.bie
 
-import grails.converters.deep.JSON
+import au.org.ala.bie.webapp2.SearchRequestParamsDTO
+import grails.converters.JSON
 import groovy.json.JsonSlurper
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 /**
  * Species Controller
@@ -28,7 +29,6 @@ class SpeciesController {
     def bieService
     def utilityService
     def biocacheService
-    def grailsApplication
     def authService
 
     def geoSearch = {
@@ -55,7 +55,9 @@ class SpeciesController {
             log.error(e.getMessage(), e)
         }
 
-        render searchResults as JSON
+        JSON.use('deep') {
+            render searchResults as JSON
+        }
     }
 
     /**

@@ -36,7 +36,15 @@ grails.project.dependency.resolution = {
         compile "commons-httpclient:commons-httpclient:3.1",
                 "org.codehaus.jackson:jackson-core-asl:1.8.6",
                 "org.codehaus.jackson:jackson-mapper-asl:1.8.6"
-        runtime 'org.jsoup:jsoup:1.7.2'
+        runtime "org.jsoup:jsoup:1.8.3"
+
+        compile group: 'org.grails.plugins', name: 'ala-bootstrap3', version: '3.0.0-SNAPSHOT', changing: true
+        compile(group: 'org.grails.plugins', name: 'ala-auth', version:'3.1.0-SNAPSHOT', changing: true) {
+            exclude group: 'javax.servlet', module: 'servlet-api'
+        }
+        compile group: 'org.grails.plugins', name: 'ala-admin-plugin', version: '2.0-SNAPSHOT', changing: true
+        compile "org.grails.plugins:grails-spring-websocket:2.3.0"
+
     }
 
     plugins {
