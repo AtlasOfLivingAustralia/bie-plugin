@@ -21,8 +21,10 @@
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <title>${query} | Search | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="breadcrumb" content="Search results"/>
-    <r:require modules="search"/>
-    <r:script disposition='head'>
+    <asset:javascript src="search"/>
+    <asset:javascript src="atlas"/>
+    <asset:stylesheet src="atlas"/>
+    <asset:script type="text/javascript">
         // global var to pass GSP vars into JS file
         SEARCH_CONF = {
             searchResultTotal: ${searchResults.totalRecords},
@@ -35,7 +37,7 @@
             biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
             geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
         }
-    </r:script>
+    </asset:script>
 </head>
 <body class="general-search page-search">
 
@@ -332,7 +334,7 @@
 </div>
 
 <g:if test="${searchResults.totalRecords == 0}">
-    <r:script>
+    <asset:script type="text/javascript" >
         $(function(){
             console.log(SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix);
             $.get( SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query  + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix, function( searchResults ) {
@@ -353,7 +355,7 @@
                 }
             });
         });
-    </r:script>
+    </asset:script>
 </g:if>
 
 </body>

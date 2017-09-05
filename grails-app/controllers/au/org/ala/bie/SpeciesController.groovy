@@ -14,9 +14,10 @@
  */
 package au.org.ala.bie
 
-import grails.converters.deep.JSON
+import au.org.ala.bie.webapp2.SearchRequestParamsDTO
+import grails.converters.JSON
 import groovy.json.JsonSlurper
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 /**
  * Species Controller
@@ -24,11 +25,12 @@ import org.codehaus.groovy.grails.web.json.JSONObject
  * @author "Nick dos Remedios <Nick.dosRemedios@csiro.au>"
  */
 class SpeciesController {
+    // Caused by the grails structure eliminating the // from http://x.y.z type URLs
+    static BROKEN_URLPATTERN = /^[a-z]+:\/[^\/].*/
 
     def bieService
     def utilityService
     def biocacheService
-    def grailsApplication
     def authService
 
     def geoSearch = {
@@ -55,7 +57,9 @@ class SpeciesController {
             log.error(e.getMessage(), e)
         }
 
-        render searchResults as JSON
+        JSON.use('deep') {
+            render searchResults as JSON
+        }
     }
 
     /**
@@ -118,7 +122,7 @@ class SpeciesController {
      *
      */
     def show = {
-        def guid = params.guid
+        def guid = regularise(params.guid)
 
         def taxonDetails = bieService.getTaxonConcept(guid)
         log.debug "show - guid = ${guid} "
@@ -165,7 +169,7 @@ class SpeciesController {
     def imageSearch = {
         def model = [:]
         if(params.id){
-            def taxon = bieService.getTaxonConcept(params.id)
+            def taxon = bieService.getTaxonConcept(regularise(params.id))
             model["taxonConcept"] = taxon
         }
         model
@@ -192,4 +196,14 @@ class SpeciesController {
         session.invalidate()
         redirect(url:"${params.casUrl}?url=${params.appUrl}")
     }
+
+    private regularise(String guid) {
+        if (!guid)
+            return guid
+        if (guid ==~ BROKEN_URLPATTERN) {
+            guid = guid.replaceFirst(":/", "://")
+        }
+        return guid
+    }
+
 }

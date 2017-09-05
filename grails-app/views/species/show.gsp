@@ -38,11 +38,14 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="breadcrumbParent" content="${grailsApplication.config.speciesParent},${message(code:"show.australian.species")}">
-    <meta name="breadcrumb" content="${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''}">
     <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <r:require modules="show, charts, image-viewer"/>
+    <asset:javascript src="show"/>
+    <asset:stylesheet src="show"/>
+    <asset:javascript src="charts"/>
+    <asset:stylesheet src="charts"/>
+    <asset:javascript src="image-viewer"/>
+    <asset:stylesheet src="image-viewer"/>
 </head>
 
 <body class="page-taxon">
@@ -73,6 +76,9 @@
             <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.opt(0)?.nameString : ''}"/>
             <g:if test="${commonNameDisplay}">
                 <h2>${raw(commonNameDisplay)}</h2>
+            </g:if>
+            <g:if test="${tc?.taxonConcept?.acceptedConceptName}">
+                <h2><g:link uri="/species/${tc.taxonConcept.acceptedConceptID}">${tc.taxonConcept.acceptedConceptName}</g:link></h2>
             </g:if>
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
             <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
@@ -313,6 +319,15 @@
                                 </li></ul>
                             </td>
                         </tr>
+                        <g:if test="${(tc.taxonName && tc.taxonName.nameAccordingTo) || tc.taxonConcept.nameAccordingTo}">
+                            <tr class="cite">
+                                <td colspan="2">
+                                    <cite>Name according to: <span
+                                            class="publishedIn">${tc.taxonName?.nameAccordingTo ?: tc.taxonConcept.nameAccordingTo}</span>
+                                    </cite>
+                                </td>
+                            </tr>
+                        </g:if>
                         <g:if test="${(tc.taxonName && tc.taxonName.namePublishedIn) || tc.taxonConcept.namePublishedIn}">
                             <tr class="cite">
                                 <td colspan="2">
@@ -939,7 +954,7 @@
     </div><!-- /.modal-dialog -->
 </div>
 
-<r:script>
+<asset:script type="text/javascript">
     // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
     var SHOW_CONF = {
         biocacheUrl:        "${grailsApplication.config.biocache.baseURL}",
@@ -1015,6 +1030,6 @@
         loadMap();
     }
 });
-</r:script>
+</asset:script>
 </body>
 </html>

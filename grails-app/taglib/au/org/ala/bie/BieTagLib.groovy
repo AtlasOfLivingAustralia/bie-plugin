@@ -8,8 +8,6 @@ import org.springframework.web.servlet.support.RequestContextUtils
 import java.text.MessageFormat
 
 class BieTagLib {
-    def grailsApplication
-
     static namespace = 'bie'     // namespace for headers and footers
 
     static languages = null      // Lazy iniitalisation
