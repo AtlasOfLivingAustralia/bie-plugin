@@ -1,7 +1,9 @@
-class BiePluginBootStrap {
+package bie.plugin
+
+class BootStrap {
 
     def init = { servletContext ->
-        Object.metaClass.trimLength = {Integer stringLength ->
+        Object.metaClass.trimLength = { Integer stringLength ->
 
             String trimString = delegate?.toString()
             String concatenateString = "..."
@@ -9,8 +11,8 @@ class BiePluginBootStrap {
 
             if (stringLength && (trimString?.length() > stringLength)) {
                 trimString = trimString.substring(0, stringLength - concatenateString.length())
-                String separator = separators.findAll{trimString.contains(it)}?.min{trimString.lastIndexOf(it)}
-                if(separator){
+                String separator = separators.findAll { trimString.contains(it) }?.min { trimString.lastIndexOf(it) }
+                if (separator) {
                     trimString = trimString.substring(0, trimString.lastIndexOf(separator))
                 }
                 trimString += concatenateString
@@ -18,6 +20,7 @@ class BiePluginBootStrap {
             return trimString
         }
     }
+
     def destroy = {
     }
 }

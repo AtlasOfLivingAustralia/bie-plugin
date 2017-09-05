@@ -1,7 +1,6 @@
 package au.org.ala.bie
 
 import grails.converters.JSON
-iimport groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import org.grails.web.converters.exceptions.ConverterException
@@ -11,7 +10,7 @@ import org.springframework.beans.factory.InitializingBean
 class WebService implements InitializingBean {
 
     public void afterPropertiesSet() {
-        JSONObject.NULL.metaClass.asBoolean = {-> false}
+        // JSONObject.NULL.metaClass.asBoolean = {-> false}
     }
 
     def get(String url){

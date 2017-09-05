@@ -25,6 +25,8 @@ import org.grails.web.json.JSONObject
  * @author "Nick dos Remedios <Nick.dosRemedios@csiro.au>"
  */
 class SpeciesController {
+    // Caused by the grails structure eliminating the // from http://x.y.z type URLs
+    static BROKEN_URLPATTERN = /^[a-z]+:\/[^\/].*/
 
     def bieService
     def utilityService
@@ -120,7 +122,7 @@ class SpeciesController {
      *
      */
     def show = {
-        def guid = params.guid
+        def guid = regularise(params.guid)
 
         def taxonDetails = bieService.getTaxonConcept(guid)
         log.debug "show - guid = ${guid} "
@@ -167,7 +169,7 @@ class SpeciesController {
     def imageSearch = {
         def model = [:]
         if(params.id){
-            def taxon = bieService.getTaxonConcept(params.id)
+            def taxon = bieService.getTaxonConcept(regularise(params.id))
             model["taxonConcept"] = taxon
         }
         model
@@ -194,4 +196,14 @@ class SpeciesController {
         session.invalidate()
         redirect(url:"${params.casUrl}?url=${params.appUrl}")
     }
+
+    private regularise(String guid) {
+        if (!guid)
+            return guid
+        if (guid ==~ BROKEN_URLPATTERN) {
+            guid = guid.replaceFirst(":/", "://")
+        }
+        return guid
+    }
+
 }
