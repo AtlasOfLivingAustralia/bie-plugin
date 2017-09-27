@@ -6,6 +6,7 @@ branches:
   only:
   - master
   - jdk8
+  - name-match-redesign
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
