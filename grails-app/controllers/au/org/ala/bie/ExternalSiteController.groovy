@@ -13,9 +13,6 @@ import org.jsoup.select.Elements
 class ExternalSiteController {
     def index() {}
 
-    def genbankBase = "http://www.ncbi.nlm.nih.gov"
-    def scholarBase = "http://scholar.google.com"
-
     def eol = {
         def searchString = params.s
         def filterString  = java.net.URLEncoder.encode(params.f?:"", "UTF-8")
@@ -45,6 +42,7 @@ class ExternalSiteController {
 
         def searchStrings = params.list("s")
         def searchParams = URLEncoder.encode("\"" + searchStrings.join("\" OR \"") + "\"", "UTF-8")
+        def genbankBase = grailsApplication.config.literature?.genbank?.url ?: "https://www.ncbi.nlm.nih.gov"
         def url = (genbankBase + "/nuccore/?term=" + searchParams)
 
         Document doc = Jsoup.connect(url).get()
@@ -66,16 +64,15 @@ class ExternalSiteController {
                 formattedResults << [link:link,title:title,description:description, furtherDescription:furtherDescription]
             }
         }
-
-        render(contentType: "text/json") {
-            [total:totalResults, resultsUrl:url, results:formattedResults]
-        }
+        response.setContentType("application/json")
+        render ([total:totalResults, resultsUrl:url, results:formattedResults] as JSON)
     }
 
     def scholar = {
 
         def searchStrings = params.list("s")
         def searchParams = "\"" + searchStrings.join("\" OR \"") + "\""
+        def scholarBase = grailsApplication.config.literature?.scholar?.url ?: "https://scholar.google.com"
         def url = scholarBase + "/scholar?q=" + URLEncoder.encode(searchParams, "UTF-8")
         def doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").referrer("http://www.google.com").get()
         def totalResultsRaw = doc.select("div[id=gs_ab_md]").get(0).text()
@@ -93,19 +90,14 @@ class ExternalSiteController {
                     link =  scholarBase + link
                 }
                 def title = result.select("a").text()
-                def description = result.select("div[class=gs_a]")?.get(0).text()
-
+                def descEl = result.select("div[class=gs_a]")
+                def description = !descEl.empty ? descEl.get(0)?.text() : ""
                 def furthEl = result.select("div[class=gs_rs]")
-                def furtherDescription = ""
-                if(!furthEl.empty){
-                    furtherDescription = furthEl.get(0).text()
-                }
+                def furtherDescription = !furthEl.empty ? furthEl.get(0)?.text() : ""
                 formattedResults << [link:link,title:title,description:description, furtherDescription:furtherDescription]
             }
         }
-
-        render(contentType: "text/json") {
-            [total:totalResults, resultsUrl:url, results:formattedResults]
-        }
+        response.setContentType("application/json")
+        render ([total:totalResults, resultsUrl:url, results:formattedResults] as JSON)
     }
 }

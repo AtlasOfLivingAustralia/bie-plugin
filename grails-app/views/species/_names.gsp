@@ -119,36 +119,40 @@
             </tr>
             </thead>
             <tbody>
-            <g:each in="${sortCommonNameSources}" var="cn">
-                <g:set var="cNames" value="${cn.value}"/>
-                <g:set var="nkey" value="${cn.key}"/>
-                <g:set var="fName" value="${nkey?.trim()?.hashCode()}"/>
-                <g:set var="enKey" value="${nkey?.encodeAsJavaScript()}"/>
-                <g:set var="language" value="${sortCommonNameSources?.get(nkey)?.get(0)?.language}"/>
-                <g:set var="infoSourceURL"
-                       value="${sortCommonNameSources?.get(nkey)?.get(0)?.infoSourceURL}"/>
-                <g:set var="datasetURL" value="${sortCommonNameSources?.get(nkey)?.get(0)?.datasetURL}"/>
+            <g:each in="${tc.commonNames}" var="cn">
+                <g:set var="name" value="${cn.nameString}"/>
+                <g:set var="language" value="${cn.language}"/>
+                <g:set var="infoSource" value="${cn.infoSourceURL}"/>
+                <g:set var="isInfoSourceURL" value="${infoSource && infoSource.matches('[a-z]+://.*')}"/>
+                <g:set var="datasetURL" value="${cn.datasetURL}"/>
                 <tr>
                     <td>
-                        <g:if test="${infoSourceURL && infoSourceURL != datasetURL}"><a
-                                href="${infoSourceURL}" target="_blank" class="external"><bie:markLanguage text="${nkey}" lang="${language}"/></a></g:if>
-                        <g:else><bie:markLanguage text="${nkey}" lang="${language}"/></g:else>
+                        <g:if test="${isInfoSourceURL && infoSource != datasetURL}"><a
+                                href="${infoSource}" target="_blank" class="external"><bie:markLanguage text="${name}" lang="${language}"/></a></g:if>
+                        <g:else><bie:markLanguage text="${name}" lang="${language}"/></g:else>
+                        <g:if test="${cn.status && cn.status != 'common'}"><span title="${message(code: 'identifierStatus.' + cn.status + '.detail', default: '')}"
+                                                                                                 class="annotation annotation-status">${cn.status}</span></g:if>
                     </td>
                     <td class="source">
                         <ul>
-                            <g:each in="${sortCommonNameSources?.get(nkey)}" var="commonName">
                                 <li>
-                                    <g:if test="${commonName.datasetURL}"><a href="${commonName.datasetURL}"
+                                    <g:if test="${cn.datasetURL}"><a href="${cn.datasetURL}"
                                                                              onclick="window.open(this.href);
-                                                                             return false;">${commonName.infoSourceName}</a></g:if>
-                                    <g:else>${commonName.infoSourceName}</g:else>
-                                    <g:if test="${commonName.status && commonName.status != 'common'}"><span title="${message(code: 'identifierStatus.' + commonName.status + '.detail', default: '')}"
-                                                                                                             class="annotation annotation-status">${commonName.status}</span></g:if>
+                                                                             return false;">${cn.infoSourceName}</a></g:if>
+                                    <g:else>${cn.infoSourceName}</g:else>
                                 </li>
-                            </g:each>
                         </ul>
                     </td>
                 </tr>
+                <g:if test="${!isInfoSourceURL && infoSource}">
+                    <tr class="cite">
+                        <td colspan="2">
+                            <cite><g:message code="label.namePublishedIn"/><span
+                                    class="publishedIn">${infoSource}</span>
+                            </cite>
+                        </td>
+                    </tr>
+                </g:if>
             </g:each>
             </tbody></table>
     </g:if>
