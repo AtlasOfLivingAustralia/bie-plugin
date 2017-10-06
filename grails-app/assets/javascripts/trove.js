@@ -29,7 +29,8 @@ function getTroveUrl(){
   return TROVE.url + '&q=' + TROVE.q + '&s=' + TROVE.s + '&n=' + TROVE.n;
 }
 
-function loadTrove(query, containerDivId, resultsDivId, previousButtonId, nextButtonId){
+function loadTrove(url, query, containerDivId, resultsDivId, previousButtonId, nextButtonId){
+    TROVE.url = url;
     TROVE.q = query;
     TROVE.containerDivId = containerDivId
     TROVE.divId = resultsDivId

@@ -45,8 +45,10 @@
     <asset:stylesheet src="show"/>
     <asset:javascript src="charts"/>
     <asset:stylesheet src="charts"/>
-    <asset:javascript src="image-viewer"/>
-    <asset:stylesheet src="image-viewer"/>
+    <asset:javascript src="ala/images-client.js"/>
+    <asset:stylesheet src="ala/images-client.css"/>
+    <asset:javascript src="ala/images-client-gallery.js"/>
+    <asset:stylesheet src="ala/images-client-gallery.css"/>
 </head>
 
 <body class="page-taxon">
@@ -391,7 +393,9 @@
         druid: "${grailsApplication.config.speciesList.preferredSpeciesListDruid}",
         addPreferenceButton: ${imageClient.checkAllowableEditRole()},
         mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
-        mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}"
+        mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}",
+        troveUrl: "${grailsApplication.config.literature?.trove?.url ?: '//api.trove.nla.gov.au/result?key=fvt2q0qinduian5d&zone=book&encoding=json'}",
+        bhlUrl: "${grailsApplication.config.literature?.bhl?.url ?: '//bhlidx.ala.org.au/select'}"
     };
 
     $(function(){

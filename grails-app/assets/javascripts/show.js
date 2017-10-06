@@ -1,6 +1,6 @@
 //= require leaflet.js
 //= require jquery.sortElemets.js
-//= require jquert.htmlClean.js
+//= require jquery.htmlClean.js
 //= require jquery.jsonp-2.3.1.min.js
 //= require trove.js
 //= require species.show.js

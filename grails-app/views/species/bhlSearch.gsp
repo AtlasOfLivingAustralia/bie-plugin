@@ -68,7 +68,8 @@
                 return cancelSearch("No names were found to search BHL");
             }
 
-            var url = "//bhlidx.ala.org.au/select?q=" + query + '&start=' + start + "&rows=" + rows +
+            var source = "${grailsApplication.config.literature?.bhl?.url ?: '//bhlidx.ala.org.au/select'}";
+            var url = source + "?q=" + query + '&start=' + start + "&rows=" + rows +
                     "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
                     "group=true&group.field=itemId&group.limit=11&group.ngroups=true&taxa=false";
             var buf = "";
