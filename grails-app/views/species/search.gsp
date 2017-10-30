@@ -200,21 +200,23 @@
                         <g:set var="sectionText"><g:if test="${!facetMap.idxtype}"><span><b>Section:</b> <g:message code="idxType.${result.idxType}"/></span></g:if></g:set>
                             <g:if test="${result.has("idxtype") && result.idxtype == 'TAXON'}">
 
-                                <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.guid}</g:set>
+                                <g:set var="taxonPageLink">${request.contextPath}/species/${result.linkIdentifier ?: result.guid}</g:set>
+                                <g:set var="acceptedPageLink">${request.contextPath}/species/${result.acceptedConceptID ?: result.linkIdentifier ?: result.guid}</g:set>
                                 <g:if test="${result.image}">
                                     <div class="result-thumbnail">
-                                        <a href="${speciesPageLink}">
+                                        <a href="${acceptedPageLink}">
                                             <img src="${grailsApplication.config.image.thumbnailUrl}${result.image}" alt="">
                                         </a>
                                     </div>
                                 </g:if>
 
                                 <h3>${result.rank}:
-                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}" taxonomicStatus="${result.taxonomicStatus}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a>
-                                    <g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
+                                    <a href="${acceptedPageLink}"><bie:formatSciName rankId="${result.rankID}" taxonomicStatus="${result.taxonomicStatus}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a><%--
+                                    --%><g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
                                 </h3>
 
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
+                                <g:if test="${taxonPageLink != acceptedPageLink}"><p class="alt-names"</g:if>
                                 <g:each var="fieldToDisplay" in="${grailsApplication.config.additionalResultsFields.split(",")}">
                                     <g:if test='${result."${fieldToDisplay}"}'>
                                         <p class="summary-info"><strong><g:message code="${fieldToDisplay}" default="${fieldToDisplay}"/>:</strong> ${result."${fieldToDisplay}"}</p>
@@ -303,6 +305,9 @@
                                         <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">Occurrences:
                                         <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
                                         </li>
+                                    </g:if>
+                                    <g:if test="${result.acceptedConceptID && result.acceptedConceptID != result.guid}">
+                                        <li><g:link controller="species" action="show" params="[guid:result.guid]"><g:message code="taxonomicStatus.${result.taxonomicStatus}" default="${result.taxonomicStatus}"/></g:link></li
                                     </g:if>
                                 </ul>
                             </g:if>

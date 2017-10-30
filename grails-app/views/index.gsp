@@ -19,7 +19,7 @@
                 <input id="search" class="form-control ac_input general-search" name="q" type="text" placeholder="Search the Atlas" autocomplete="off">
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" alt="Search" value="Search">
+                <input type="submit" class="form-control btn btn-primary" alt="Search" value="Search">
             </div>
         </form>
     </div>
