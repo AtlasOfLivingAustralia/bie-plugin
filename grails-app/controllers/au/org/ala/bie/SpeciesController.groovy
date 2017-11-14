@@ -142,7 +142,7 @@ class SpeciesController {
             }
         } else if (taxonDetails.taxonConcept?.guid && taxonDetails.taxonConcept.guid != guid) {
             // old identifier so redirect to current taxon page
-            redirect(uri: "/species/${taxonDetails.taxonConcept.guid}", permanent: true)
+            redirect(uri: "/species/${taxonDetails.taxonConcept.guid}")
         } else {
             render(view: 'show', model: [
                     tc: taxonDetails,
