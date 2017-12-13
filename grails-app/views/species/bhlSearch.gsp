@@ -26,8 +26,8 @@
 <head>
     <title>${params.q} | Literature search | ${grailsApplication.config.skin.orgNameLong}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <r:require modules=" cleanHtml"/>
-    <r:script disposition='head'>
+    <asset:javascript src="jquery.htmlClean.js"/>
+    <script type="text/javascript">
         /**
          * OnLoad equavilent in JQuery
          */
@@ -68,7 +68,8 @@
                 return cancelSearch("No names were found to search BHL");
             }
 
-            var url = "//bhlidx.ala.org.au/select?q=" + query + '&start=' + start + "&rows=" + rows +
+            var source = "${grailsApplication.config.literature?.bhl?.url ?: '//bhlidx.ala.org.au/select'}";
+            var url = source + "?q=" + query + '&start=' + start + "&rows=" + rows +
                     "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
                     "group=true&group.field=itemId&group.limit=11&group.ngroups=true&taxa=false";
             var buf = "";
@@ -160,7 +161,7 @@
             return true;
         }
 
-    </r:script>
+    </script>
 </head>
 <body class="nav-species bhl-search">
     <header id="page-header" class="heading-bar">
