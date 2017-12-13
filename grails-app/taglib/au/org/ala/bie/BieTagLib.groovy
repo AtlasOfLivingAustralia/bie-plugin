@@ -2,7 +2,7 @@ package au.org.ala.bie
 
 import groovy.json.JsonSlurper
 import org.apache.commons.lang.StringEscapeUtils
-import au.org.ala.names.parser.PhraseNameParser
+import org.gbif.nameparser.PhraseNameParser
 import org.springframework.web.servlet.support.RequestContextUtils
 
 import java.text.MessageFormat
