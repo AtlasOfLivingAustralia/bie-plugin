@@ -35,7 +35,7 @@ a.expand-options {border-top: 1px solid #e3e3e3; display: block; padding-top: 2p
 
 /* Search results list */
 .search-results-list {border-bottom: 1px solid #ddd;}
-.search-result {border-top: 1px solid #ddd; padding-top: 16px; padding-bottom: 15px;}
+.search-result { width: 1000%; border-top: 1px solid #ddd; padding-top: 16px; padding-bottom: 15px;}
 .search-result h3 {font-size: 17px; line-height: 21px; margin-bottom: 5px; margin-top: 0;}
 .search-result h4 {font-size: 15px; line-height: 20px; margin-bottom: 5px; margin-top: 0;}
 .search-result p {margin-bottom: 5px;}
