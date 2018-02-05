@@ -34,6 +34,7 @@
 <g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}"/>
 <g:set bean="authService" var="authService"></g:set>
 <g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType?:'LEAFLET'}"></g:set>
+<g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout?:"false".toBoolean()}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +53,7 @@
 </head>
 
 <body class="page-taxon">
-<section class="container">
+<section class="${fluidLayout ? 'container-fluid' : 'container'}">
     <header class="pg-header">
         <g:if test="${taxonHierarchy && taxonHierarchy.size() > 1}">
             <div class="taxonomy-bcrumb">
