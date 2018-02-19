@@ -21,7 +21,7 @@ class BieService {
 
         //add a query context for biocache - this will influence record counts
         if(grailsApplication.config.biocacheService.queryContext){
-            queryUrl = queryUrl + "&bqc=" + grailsApplication.config.biocacheService.queryContext
+            queryUrl = queryUrl + "&bqc=" + URLEncoder.encode(grailsApplication.config.biocacheService.queryContext, "UTF-8")
         }
 
         def json = webService.get(queryUrl)

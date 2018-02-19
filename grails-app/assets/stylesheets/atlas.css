@@ -1,6 +1,8 @@
 /* Page */
 .main-content {margin-bottom: 80px;}
 
+#main-content.panel-body {padding-left:0px; padding-right:0px; }
+
 /* Typography */
 h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {margin-top: 0;}
 
@@ -193,3 +195,6 @@ html, body {height:100%;}
 
 /* Hide wikipedia links */
 .mw-editsection { display:none; }
+
+#recordBreakdowns {
+	min-height: 900px;}

@@ -34,6 +34,7 @@
 <g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}"/>
 <g:set bean="authService" var="authService"></g:set>
 <g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType?:'LEAFLET'}"></g:set>
+<g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout?:"false".toBoolean()}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +53,7 @@
 </head>
 
 <body class="page-taxon">
-<section class="container">
+<section class="${fluidLayout ? 'container-fluid' : 'container'}">
     <header class="pg-header">
         <g:if test="${taxonHierarchy && taxonHierarchy.size() > 1}">
             <div class="taxonomy-bcrumb">
@@ -375,7 +376,7 @@
         defaultMapId: "${grailsApplication.config.map.default.id}",
         defaultMapToken: "${grailsApplication.config.map.default.token}",
         recordsMapColour: "${grailsApplication.config.map.records.colour}",
-        mapQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+        mapQueryContext: '${raw(grailsApplication.config.biocacheService.queryContext)}',
         additionalMapFilter: "${raw(grailsApplication.config.additionalMapFilter)}",
         noImage100Url: "${resource(dir: 'images', file: 'noImage100.jpg')}",
         map: null,

@@ -15,6 +15,7 @@
 <%@ page import="au.org.ala.bie.BieTagLib" contentType="text/html;charset=UTF-8" %>
 <g:set var="alaUrl" value="${grailsApplication.config.ala.baseURL}"/>
 <g:set var="biocacheUrl" value="${grailsApplication.config.biocache.baseURL}"/>
+<g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout?:"false".toBoolean()}"/>
 <!doctype html>
 <html>
 <head>
@@ -34,14 +35,15 @@
             biocacheUrl: "${grailsApplication.config.biocache.baseURL}",
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
             bhlUrl: "${grailsApplication.config.bhl.baseURL}",
-            biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+            biocacheQueryContext: '${raw(grailsApplication.config.biocacheService.queryContext)}',
             geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
         }
     </asset:script>
+
 </head>
 <body class="general-search page-search">
 
-<section class="container">
+<section class="${fluidLayout ? 'container-fluid' : 'container'}">
 
     <header class="pg-header">
         <div class="row">
