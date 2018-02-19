@@ -105,6 +105,7 @@ a.expand-options {border-top: 1px solid #e3e3e3; display: block; padding-top: 2p
 .name-table ul {margin: 0; padding-left: 25px;}
 .name-table .source {width: 50%;}
 .name-table tr.cite td { border: none; }
+.name-table tr.remarks td { border: none; }
 
 /* Taxon Classification tab */
 .classification-list dl {margin-left: 24px;}
@@ -142,6 +143,36 @@ html, body {height:100%;}
 
 /* Name annotations */
 .annotation { display: inline; background: #C8D0E0; font-size: smaller; padding: 2px 1ex; border: none; border-radius: 2px; }
+.annotation-country-code { }
+.annotation-format { }
+.annotation-is-plural { }
+.annotation-language { }
+.annotation-life-stage { }
+.annotation-locality { }
+.annotation-nomenclatural-status { }
+.annotation-sex { }
+.annotation-status { }
+.annotation-taxonomic-status { }
+.annotation-temporal { }
+
+/* Tags (intended for labels) */
+.tag { display: inline; color: #202020; background: #F0F0F0; font-size: smaller; padding: 2px 1ex; border: thin solid #202020; border-radius: 5px; }
+.tag-tk-f { }
+.tag-tk-s { }
+.tag-tk-o { }
+.tag-tk-v { }
+.tag-tk-a { }
+.tag-tk-co { }
+.tag-tk-ss { }
+.tag-tk-wg { }
+.tag-tk-wr { }
+.tag-tk-mg { }
+.tag-tk-mr { }
+.tag-tk-nc { }
+.tag-tk-c { }
+.tag-tk-cv { }
+.tag-tk-cs { }
+
 
 /* Media Queries
 ================================================== */
