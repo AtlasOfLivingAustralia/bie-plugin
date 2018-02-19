@@ -51,6 +51,13 @@
                 </td>
             </tr>
         </g:if>
+        <g:if test="${(tc.taxonName && tc.taxonName.taxonRemarks) || tc.taxonConcept.taxonRemarks}">
+            <tr class="remarks">
+                <td colspan="2">
+                    <span class="taxonRemarks">${tc.taxonName?.taxonRemarks ?: tc.taxonConcept.taxonRemarks}</span>
+                </td>
+            </tr>
+        </g:if>
         </tbody>
     </table>
 
@@ -127,11 +134,14 @@
                 <g:set var="datasetURL" value="${cn.datasetURL}"/>
                 <tr>
                     <td>
-                        <g:if test="${isInfoSourceURL && infoSource != datasetURL}"><a
-                                href="${infoSource}" target="_blank" class="external"><bie:markLanguage text="${name}" lang="${language}"/></a></g:if>
-                        <g:else><bie:markLanguage text="${name}" lang="${language}"/></g:else>
-                        <g:if test="${cn.status && cn.status != 'common'}"><span title="${message(code: 'identifierStatus.' + cn.status + '.detail', default: '')}"
-                                                                                                 class="annotation annotation-status">${cn.status}</span></g:if>
+                        <bie:markLanguage text="${name}" lang="${language}" href="${isInfoSourceURL && infoSource != datasetURL ? infoSource : null}"/></a>
+                        <bie:markCommonStatus status="${cn.status}" tags="${cn.labels}"/>
+                        <g:if test="${cn.temporal}"><span title="${message(code: 'label.temporal.vernacular.detail', default: 'Used with a specific time period')}" class="annotation annotation-temporal">${cn.temporal}</span></g:if>
+                        <g:if test="${cn.locality || cn.countryCode}"><span title="${message(code: 'label.locality.vernacular.detail', default: 'Used in a specific locality or country')}" class="annotation annotation-locality">${cn.locality} <bie:country code="${cn.countryCode}"/></span></g:if>
+                        <g:if test="${cn.sex}"><span title="${message(code: 'label.sex.vernacular.detail', default: 'Used with a specific sex')}" class="annotation annotation-sex">${cn.sex}</span></g:if>
+                        <g:if test="${cn.lifeStage}"><span title="${message(code: 'label.lifeStage.vernacular.detail', default: 'Used with a specific life-stage')}" class="annotation annotation-life-stage">${cn.lifeStage}</span></g:if>
+                        <g:if test="${cn.isPlural}"><span title="${message(code: 'label.isPlural.vernacular.detail', default: 'Plural form of name')}" class="annotation annotation-is-plural"><g:message code="label.isPlural.vernacular" default="plural"/></span></g:if>
+                        <g:if test="${cn.organismPart}"><span title="${message(code: 'label.organismPart.vernacular.detail', default: 'Used for a specific part')}" class="annotation annotation-organism-part">${cn.organismPart}</span></g:if>
                     </td>
                     <td class="source">
                         <ul>
@@ -150,6 +160,13 @@
                             <cite><g:message code="label.namePublishedIn"/><span
                                     class="publishedIn">${infoSource}</span>
                             </cite>
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${cn.taxonRemarks}">
+                    <tr class="remarks">
+                        <td colspan="2">
+                            <span class="taxonRermarks">${cn.taxonRemarks}</span
                         </td>
                     </tr>
                 </g:if>
