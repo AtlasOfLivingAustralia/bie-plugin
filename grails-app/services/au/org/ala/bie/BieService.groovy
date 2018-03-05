@@ -29,7 +29,7 @@ class BieService {
     }
 
     def getSpeciesList(guid){
-        if(!guid){
+        if(!guid || !grailsApplication.config.speciesList.baseURL){
             return null
         }
         try {
