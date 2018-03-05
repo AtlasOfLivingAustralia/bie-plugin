@@ -114,7 +114,7 @@ class UtilityService {
                                       (uid.startsWith("dp")) ? "dataProvider" :
                                       (uid.startsWith("co")) ? "collection" :
                                       (uid.startsWith("in")) ? "institution" : null
-                        if(type != null){
+                        if(type != null && grailsApplication.config.collectory.baseURL){
                             String url = grailsApplication.config.collectory.baseURL+"/ws/"+type+"/"+uid
                             def json = webService.get(url)
                             Map wsmap =JSON.parse(json)

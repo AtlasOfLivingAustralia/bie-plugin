@@ -13,6 +13,8 @@ class BiocacheService {
      * @return
      */
     def getSoundsForTaxon(taxonName){
+        if (!grailsApplication.config.biocacheService.baseURL)
+            return []
         def queryUrl = grailsApplication.config.biocacheService.baseURL + "/occurrences/search?q=" + java.net.URLEncoder.encode(taxonName, "UTF-8") + "&fq=multimedia:\"Sound\""
         def data = webService.getJson(queryUrl)
         //log.debug "sound data => " + data
