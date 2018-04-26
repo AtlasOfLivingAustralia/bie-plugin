@@ -674,7 +674,7 @@ function getImageTitleFromOccurrence(el){
     var briefHtml = "";
     //include sci name when genus or higher taxon
     if(SHOW_CONF.taxonRankID  < 7000) {
-        briefHtml += el.raw_scientificName;
+        briefHtml += (el.raw_scientificName === undefined? el.scientificName : el.raw_scientificName); //raw scientific name can be null, e.g. if taxon GUIDS were submitted
     }
 
     if (el.typeStatus) {
@@ -703,7 +703,7 @@ function getImageTitleFromOccurrence(el){
 
 function getImageFooterFromOccurrence(el){
     var br = "<br/>";
-    var detailHtml = el.raw_scientificName;
+    var detailHtml = (el.raw_scientificName === undefined? el.scientificName : el.raw_scientificName); //raw scientific name can be null, e.g. if taxon GUIDS were submitted
     if (el.typeStatus) detailHtml += br + 'Type: ' + el.typeStatus;
     if (el.collector) detailHtml += br + 'By: ' + el.collector;
     if (el.eventDate) detailHtml += br + 'Date: ' + moment(el.eventDate).format('YYYY-MM-DD');
