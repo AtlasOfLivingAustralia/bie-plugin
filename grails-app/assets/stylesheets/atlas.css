@@ -108,6 +108,7 @@ a.expand-options {border-top: 1px solid #e3e3e3; display: block; padding-top: 2p
 .name-table .source {width: 50%;}
 .name-table tr.cite td { border: none; }
 .name-table tr.remarks td { border: none; }
+.name-table tr.provenance td { border: none; }
 
 /* Taxon Classification tab */
 .classification-list dl {margin-left: 24px;}

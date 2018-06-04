@@ -51,10 +51,21 @@
                 </td>
             </tr>
         </g:if>
-        <g:if test="${(tc.taxonName && tc.taxonName.taxonRemarks) || tc.taxonConcept.taxonRemarks}">
+        <g:if test="${tc.taxonName?.taxonRemarks || tc.taxonConcept?.taxonRemarks}">
             <tr class="remarks">
                 <td colspan="2">
-                    <span class="taxonRemarks">${tc.taxonName?.taxonRemarks ?: tc.taxonConcept.taxonRemarks}</span>
+                    <g:each in="${tc.taxonName?.taxonRemarks ?: tc.taxonConcept?.taxonRemarks}" var="remark">
+                    <p class="taxonRemarks">${remark}</p>
+                    </g:each>
+                </td>
+            </tr>
+        </g:if>
+        <g:if test="${tc.taxonName?.provenance || tc.taxonConcept?.provenance}">
+            <tr class="provenance">
+                <td colspan="2">
+                    <g:each in="${tc.taxonName?.provenance ?: tc.taxonConcept?.provenance}" var="statement">
+                        <p class="provenanceStatement">${statement}</p>
+                    </g:each>
                 </td>
             </tr>
         </g:if>
@@ -112,6 +123,24 @@
                         </td>
                     </tr>
                 </g:if>
+                <g:if test="${synonym.taxonRemarks}">
+                    <tr class="remarks">
+                        <td colspan="2">
+                            <g:each in="${synonyn.taxonRemarks}" var="remark">
+                                <p class="taxonRemarks">${remark}</p>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${synonym.provenance}">
+                    <tr class="provenance">
+                        <td colspan="2">
+                            <g:each in="${synonym.provenance}" var="statement">
+                                <p class="provenanceStatement">${statement}</p>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:if>
             </g:each>
             </tbody>
         </table>
@@ -166,7 +195,18 @@
                 <g:if test="${cn.taxonRemarks}">
                     <tr class="remarks">
                         <td colspan="2">
-                            <span class="taxonRermarks">${cn.taxonRemarks}</span
+                            <g:each in="${cn.taxonRemarks}" var="remark">
+                                <p class="taxonRemarks">${remark}</p>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${cn.provenance}">
+                    <tr class="provenance">
+                        <td colspan="2">
+                            <g:each in="${cn.provenance}" var="statement">
+                                <p class="provenanceStatement">${statement}</p>
+                            </g:each>
                         </td>
                     </tr>
                 </g:if>
@@ -222,6 +262,24 @@
                             <cite><g:message code="label.namePublishedIn"/><span
                                     class="publishedIn">${variant.namePublishedIn}</span>
                             </cite>
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${variant.taxonRemarks}">
+                    <tr class="remarks">
+                        <td colspan="2">
+                            <g:each in="${variant.taxonRemarks}" var="remark">
+                                <p class="taxonRemarks">${remark}</p>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${variant.provenance}">
+                    <tr class="provenance">
+                        <td colspan="2">
+                            <g:each in="${variant.provenance}" var="statement">
+                                <p class="provenanceStatement">${statement}</p>
+                            </g:each>
                         </td>
                     </tr>
                 </g:if>
