@@ -322,6 +322,15 @@
                         </ul>
                     </td>
                 </tr>
+                <g:if test="${identifier.provenance}">
+                    <tr class="provenance">
+                        <td colspan="2">
+                            <g:each in="${identifier.provenance}" var="statement">
+                                <p class="provenanceStatement">${statement}</p>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:if>
             </g:each>
         </tbody></table>
     </g:if>
