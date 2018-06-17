@@ -50,6 +50,13 @@
     <asset:stylesheet src="ala/images-client.css"/>
     <asset:javascript src="ala/images-client-gallery.js"/>
     <asset:stylesheet src="ala/images-client-gallery.css"/>
+    <script type="text/javascript">
+        jQuery.i18n.properties({
+            name: 'Messages',
+            path: '${request.contextPath}/i18n/',
+            mode: 'map'
+        });
+    </script>
 </head>
 
 <body class="page-taxon">

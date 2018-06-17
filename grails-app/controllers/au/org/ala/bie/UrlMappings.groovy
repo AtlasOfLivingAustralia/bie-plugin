@@ -19,6 +19,7 @@ class UrlMappings {
         "/bhl-search"(controller: "species", action: "bhlSearch")
         "/sound-search"(controller: "species", action: "soundSearch")
         "/logout"(controller: "species", action: "logout")
+        "/i18n/$catalogue"(controller: "i18nMessages", action: "i18n")
         "/"(view:"/index")
         "500"(view:'/error')
     }
