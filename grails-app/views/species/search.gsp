@@ -318,9 +318,9 @@
                 </ol><!--close results-->
 
                 <div>
-                    <tb:paginate total="${searchResults?.totalRecords}"
+                    <tb:paginate total="${searchResults?.totalRecords}" max="${params.rows}"
                             action="search"
-                            params="${[q: params.q, fq: params.fq, dir: params.dir]}"
+                            params="${[q: params.q, fq: params.fq, dir: params.dir, sortField: params.sortField, rows: params.rows]}"
                     />
                 </div>
             </div><!--end .col-wide last-->
