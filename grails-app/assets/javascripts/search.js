@@ -97,6 +97,8 @@ function reloadWithParam(paramName, paramValue) {
     var fqList = $.getQueryParam('fq'); //$.query.get('fq');
     var sort = $.getQueryParam('sortField');
     var dir = $.getQueryParam('dir');
+    var rows = $.getQueryParam('rows');
+    
     // add query param
     if (q != null) {
         paramList.push("q=" + q);
@@ -112,6 +114,10 @@ function reloadWithParam(paramName, paramValue) {
     // add dir param if already set
     if (paramName != 'dir' && dir != null) {
         paramList.push('dir' + "=" + dir);
+    }
+    // add rows param if already set
+    if (paramName != 'rows' && rows != null) {
+        paramList.push('rows' + "=" + rows);
     }
     // add the changed value
     if (paramName != null && paramValue != null) {
