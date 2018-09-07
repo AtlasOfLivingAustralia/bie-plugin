@@ -1,4 +1,5 @@
-$(function(){
+
+$(document).ready(function() {
 	// Sticky footer
 	var footerHeight = $(".site-footer").outerHeight();
 	var imageId, attribution, recordUrl;
@@ -70,7 +71,7 @@ $(function(){
 	}
 
 	// Tooltips
-	$("[data-toggle='tooltip']").tooltip();
+	$("[data-toggle='tooltip']").tooltips();
 
 	// Search: Refine results accordions
 	$(".refine-box h2 a").click(function() {
