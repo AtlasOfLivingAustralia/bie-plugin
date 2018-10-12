@@ -71,7 +71,8 @@ $(document).ready(function() {
 	}
 
 	// Tooltips
-	$("[data-toggle='tooltip']").tooltips();
+    $("[data-toggle='tooltip']").tooltip();
+
 
 	// Search: Refine results accordions
 	$(".refine-box h2 a").click(function() {

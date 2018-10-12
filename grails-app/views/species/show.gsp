@@ -42,6 +42,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
+
+    <g:if test="${tc.imageIdentifier}">
+        <meta property="og:image" content="${grailsApplication.config.image.thumbnailUrl}${tc?.imageIdentifier}">
+    </g:if>
+
     <asset:javascript src="show"/>
     <asset:stylesheet src="show"/>
     <asset:javascript src="charts"/>
