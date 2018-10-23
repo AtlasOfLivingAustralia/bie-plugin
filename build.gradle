@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.4.4"
+version "1.4.5-SNAPSHOT"
 group "au.org.ala.plugins.grails"
 
 apply plugin:"eclipse"
@@ -54,7 +54,7 @@ dependencies {
     compile ('org.jasig.cas.client:cas-client-core:3.4.1') {
         exclude group: 'javax.servlet', module: 'servlet-api'
     }
-    compile("au.org.ala:ala-name-matching:2.4.7") {
+    compile('au.org.ala:ala-name-matching:2.4.7') {
         exclude group: 'org.apache.lucene', module: 'lucene-core'
         exclude group: 'org.apache.lucene', module: 'lucene-analyzers-common'
         exclude group: 'org.apache.lucene', module: 'lucene-queryparser'
