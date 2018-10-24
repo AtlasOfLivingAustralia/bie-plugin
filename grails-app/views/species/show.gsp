@@ -43,8 +43,17 @@
     <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
 
+    <!-- facebook tags -->
+    <meta property="og:url" content="${grailsApplication.config.bie.baseURL}/species/${tc?.taxonConcept?.guid}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''}">
+    <meta property="og:description" content="${raw(grailsApplication.config.skin.orgNameLong)}">
+    <meta property="fb:app_id" content="291639771683619">
     <g:if test="${tc.imageIdentifier}">
         <meta property="og:image" content="${grailsApplication.config.image.thumbnailUrl}${tc?.imageIdentifier}">
+        <meta property="og:image:type" content="image/jpeg">
+        <meta property="og:image:width" content="300">
+        <meta property="og:image:height" content="225">
     </g:if>
 
     <asset:javascript src="show"/>
