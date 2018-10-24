@@ -35,6 +35,7 @@
 <g:set bean="authService" var="authService"></g:set>
 <g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType?:'LEAFLET'}"></g:set>
 <g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout?:"false".toBoolean()}"/>
+<g:set var="logoFile" value="${grailsApplication.config.skin.logoFile}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,11 +51,23 @@
     <meta property="og:description" content="${raw(grailsApplication.config.skin.orgNameLong)}">
     <meta property="fb:app_id" content="291639771683619">
     <g:if test="${tc.imageIdentifier}">
-        <meta property="og:image" content="${grailsApplication.config.image.thumbnailUrl}${tc?.imageIdentifier}">
+        <meta property="og:image" content="${grailsApplication.config.image.thumbnailUrl}${tc.imageIdentifier}">
         <meta property="og:image:type" content="image/jpeg">
         <meta property="og:image:width" content="300">
         <meta property="og:image:height" content="225">
     </g:if>
+    <g:else>
+        <g:if test="${logoFile}">
+            <meta property="og:image" content="${resource(dir: 'images', file: logoFile)}">
+            <meta property="og:image:type" content="image/png">
+        </g:if>
+        <g:else>
+            <meta property="og:image" content="${resource(dir: 'images', file: 'noImage.jpg')}">
+            <meta property="og:image:type" content="image/jpeg">
+        </g:else>
+        <meta property="og:image:width" content="300">
+        <meta property="og:image:height" content="300">
+    </g:else>
 
     <asset:javascript src="show"/>
     <asset:stylesheet src="show"/>
