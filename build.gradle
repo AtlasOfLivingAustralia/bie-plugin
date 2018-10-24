@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.4.6"
+version "1.4.7-SNAPSHOT"
 group "au.org.ala.plugins.grails"
 
 apply plugin:"eclipse"
