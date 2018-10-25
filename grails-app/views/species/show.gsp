@@ -45,31 +45,7 @@
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
 
     <!-- facebook tags -->
-    <meta property="og:url" content="${grailsApplication.config.bie.baseURL}/species/${tc?.taxonConcept?.guid}">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''}">
-    <meta property="og:description" content="${raw(grailsApplication.config.skin.orgNameLong)}">
-    <meta property="fb:app_id" content="291639771683619">
-    <g:if test="${tc.imageIdentifier}">
-        <meta property="og:image" content="${grailsApplication.config.image.thumbnailUrl}${tc.imageIdentifier}">
-        <meta property="og:image:type" content="image/jpeg">
-        <meta property="og:image:width" content="300">
-        <meta property="og:image:height" content="225">
-    </g:if>
-    <g:else>
-        <g:if test="${logoFile}">
-            <meta property="og:image" content="${resource(dir: 'images', file: logoFile)}">
-            <meta property="og:image:type" content="image/png">
-            <meta property="og:image:width" content="300">
-            <meta property="og:image:height" content="271">
-        </g:if>
-        <g:else>
-            <meta property="og:image" content="${resource(dir: 'images', file: 'noImage.jpg')}">
-            <meta property="og:image:type" content="image/jpeg">
-            <meta property="og:image:width" content="300">
-            <meta property="og:image:height" content="300">
-        </g:else>
-    </g:else>
+    <g:render template="facebookTags"/>
 
     <asset:javascript src="show"/>
     <asset:stylesheet src="show"/>
