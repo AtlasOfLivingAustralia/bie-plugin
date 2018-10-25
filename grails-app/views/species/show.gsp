@@ -60,13 +60,15 @@
         <g:if test="${logoFile}">
             <meta property="og:image" content="${resource(dir: 'images', file: logoFile)}">
             <meta property="og:image:type" content="image/png">
+            <meta property="og:image:width" content="300">
+            <meta property="og:image:height" content="271">
         </g:if>
         <g:else>
             <meta property="og:image" content="${resource(dir: 'images', file: 'noImage.jpg')}">
             <meta property="og:image:type" content="image/jpeg">
+            <meta property="og:image:width" content="300">
+            <meta property="og:image:height" content="300">
         </g:else>
-        <meta property="og:image:width" content="300">
-        <meta property="og:image:height" content="300">
     </g:else>
 
     <asset:javascript src="show"/>
