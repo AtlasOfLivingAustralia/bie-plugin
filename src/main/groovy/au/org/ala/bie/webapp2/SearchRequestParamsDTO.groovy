@@ -44,10 +44,10 @@ class SearchRequestParamsDTO {
         queryStr.append("q=" + URIUtil.encodeWithinQuery(q)) //q.encodeAsURL())
         def fqIsList = fq.getClass().metaClass.getMetaMethod("join", String)
         if (fq && fqIsList) {
-            def newFq = fq.collect { it.replaceAll(/\s+/, "+") }
+            def newFq = fq.collect { URIUtil.encodeWithinQuery(it) }
             queryStr.append("&fq=" + newFq?.join("&fq="))
         } else if (fq) {
-            queryStr.append("&fq=" + fq.replaceAll(" ", "+"))
+            queryStr.append("&fq=" + URIUtil.encodeWithinQuery(fq))
         }
         queryStr.append("&start=" + start)
         queryStr.append("&rows=" + rows)
