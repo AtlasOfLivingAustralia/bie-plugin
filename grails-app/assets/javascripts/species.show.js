@@ -450,7 +450,7 @@ function loadExternalSources(){
             }
 
             soundsDiv += '</div><div class="panel-footer"><p>' + source + '<br>';
-            soundsDiv += '<a href="' + SHOW_CONF.biocacheUrl + '/occurrence/'+ data.raw.uuid +'">View more details of this audio</a></p>';
+            soundsDiv += '<a href="' + SHOW_CONF.biocacheUrl + '/occurrence/'+ data.raw.rowKey +'">View more details of this audio</a></p>';
             soundsDiv += '</div></div>';
             $('#sounds').append(soundsDiv);
         }

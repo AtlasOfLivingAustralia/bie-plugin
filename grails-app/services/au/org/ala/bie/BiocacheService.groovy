@@ -1,5 +1,8 @@
 package au.org.ala.bie
 
+import org.apache.commons.httpclient.util.URIUtil
+import org.grails.web.json.JSONObject
+
 
 class BiocacheService {
 
@@ -13,17 +16,20 @@ class BiocacheService {
      * @return
      */
     def getSoundsForTaxon(taxonName){
+        JSONObject jsonObj = new JSONObject()
         if (!grailsApplication.config.biocacheService.baseURL)
-            return []
-        def queryUrl = grailsApplication.config.biocacheService.baseURL + "/occurrences/search?q=" + java.net.URLEncoder.encode(taxonName, "UTF-8") + "&fq=multimedia:\"Sound\""
+            return jsonObj
+        def queryUrl = grailsApplication.config.biocacheService.baseURL + "/occurrences/search?q=" + URIUtil.encodeWithinQuery(taxonName, "UTF-8") + "&fq=multimedia:Sound"
+
+        log.debug "calling url = ${queryUrl}"
         def data = webService.getJson(queryUrl)
-        //log.debug "sound data => " + data
-        if(data.size() && data.has("occurrences") && data.get("occurrences").size()){
+
+        if (data.size() && data.has("occurrences") && data.get("occurrences").size()) {
             def recordUrl = grailsApplication.config.biocacheService.baseURL + "/occurrence/" + data.get("occurrences").get(0).uuid
-            webService.getJson(recordUrl)
-        } else {
-            []
+            jsonObj = webService.getJson(recordUrl)
         }
+
+        jsonObj
     }
 
     /**

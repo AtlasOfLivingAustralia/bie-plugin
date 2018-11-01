@@ -8,3 +8,4 @@
 //= require moment.min.js
 //= require ekko-lightbox.min.js
 //= require atlas.js
+//= require audio.min.js

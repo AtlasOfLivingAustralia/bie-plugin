@@ -180,10 +180,8 @@ class SpeciesController {
     }
 
     def soundSearch = {
-        def result = biocacheService.getSoundsForTaxon(params.s)
-        render(contentType: "text/json") {
-            result
-        }
+        JSONObject result = biocacheService.getSoundsForTaxon(params.s)
+        render(text: result.toString(), contentType: "application/json", encoding: "UTF-8")
     }
 
     /**
