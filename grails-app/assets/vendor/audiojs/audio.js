@@ -29,7 +29,7 @@
       }
     }
     // when no script found, an empty string causes the least confusion.
-    return '/assets/audiojs/';
+    return '/assets/audiojs/'; // Grails work-around for asset pipeline when bundled
   })();
 
   // ##The audiojs interface
