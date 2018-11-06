@@ -20,11 +20,9 @@
         scripts = document.getElementsByTagName('script');
     for (var i = 0, ii = scripts.length; i < ii; i++) {
       var path = scripts[i].getAttribute('src');
-      //console.log("audiojs path", path);
       if(re.test(path)) {
         var f = path.split ( '/' );
         f.pop ();
-        console.log("audiojs f", f, f.join ( '/' ) + '/');
         return f.join ( '/' ) + '/';
       }
     }
