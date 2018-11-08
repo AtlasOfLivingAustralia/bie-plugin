@@ -27,7 +27,7 @@
       }
     }
     // when no script found, an empty string causes the least confusion.
-    return '/assets/audiojs/'; // Grails work-around for asset pipeline when bundled
+    return '/assets/audiojs/'; // Grails work-around for asset pipeline when scripts are bundled
   })();
 
   // ##The audiojs interface
@@ -54,7 +54,8 @@
       loop: false,
       preload: true,
       imageLocation: path + 'player-graphics.gif',
-      retinaImageLocation: path + 'player-graphics@2x.gif',
+      //retinaImageLocation: path + 'player-graphics@2x.gif', // bug meant this file was never committed into original project
+      retinaImageLocation: path + 'player-graphics.gif',
       swfLocation: path + 'audiojs.swf',
       useFlash: (function() {
         var a = document.createElement('audio');
