@@ -82,13 +82,13 @@ function addAlerts(){
     $("#alertsButton").click(function(e) {
         e.preventDefault();
         var query = "Species: " + SHOW_CONF.scientificName;
-        var searchString = "?q=" + SHOW_CONF.guid;
+        var searchString = "?q=lsid:" + SHOW_CONF.guid;
         var url = SHOW_CONF.alertsUrl + "/webservice/createBiocacheNewRecordsAlert?";
         url += "queryDisplayName=" + encodeURIComponent(query);
         url += "&baseUrlForWS=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
         url += "&baseUrlForUI=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
         url += "&webserviceQuery=%2Fws%2Foccurrences%2Fsearch" + encodeURIComponent(searchString);
-        url += "&uiQuery=%2Foccurrences%2Fsearch%3Fq%3D*%3A*";
+        url += "&uiQuery=%2Foccurrences%2Fsearch" + encodeURIComponent(searchString);
         url += "&resourceName=" + encodeURIComponent("Atlas");
         window.location.href = url;
     });
