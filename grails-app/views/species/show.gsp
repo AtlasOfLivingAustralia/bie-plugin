@@ -72,7 +72,7 @@
                 <ol class="list-inline breadcrumb">
                     <g:each in="${taxonHierarchy}" var="taxon">
                         <g:if test="${taxon.guid != tc.taxonConcept.guid}">
-                            <li><g:link controller="species" action="show"
+                            <li><g:link controller="species" action="show" title="${taxon.rank}" data-toggle="tooltip" data-placement="bottom"
                                         params="[guid: taxon.guid]">${taxon.scientificName}</g:link></li>
                         </g:if>
                         <g:else>
