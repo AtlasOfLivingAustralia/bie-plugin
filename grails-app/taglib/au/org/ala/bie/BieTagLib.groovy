@@ -27,7 +27,7 @@ class BieTagLib {
         def rankId = attrs.rankId ?: 0
         def name = attrs.nameComplete ?: attrs.name
         def rank = cssRank(rankId)
-        def accepted = attrs.acceptedName
+        String accepted = attrs.acceptedName
         def taxonomicStatus = attrs.taxonomicStatus
         def parsed = { n, r, incAuthor ->
             PhraseNameParser pnp = new PhraseNameParser()
@@ -50,7 +50,7 @@ class BieTagLib {
                 output = parsed(name, rank, true)
             nameFormatted = output
         }
-        if (accepted) {
+        if (accepted && accepted.tokenize(" ").size() < 7) {
             accepted = parsed(accepted, rank, false)
         }
         out << MessageFormat.format(format, nameFormatted, accepted)
