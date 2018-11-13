@@ -100,4 +100,29 @@ class ExternalSiteController {
         response.setContentType("application/json")
         render ([total:totalResults, resultsUrl:url, results:formattedResults] as JSON)
     }
+
+    /**
+     * Proxy autocomplete requests to bie-index
+     *
+     */
+    def proxyAutocomplete = {
+        def url = ( "${grailsApplication.config.bieService?.baseUrl}/search/auto.json" + params.toQueryString() ).toURL()
+        HttpURLConnection connection = (HttpURLConnection)  url.openConnection()
+        connection.setRequestMethod("GET")
+        connection.connect()
+        StringBuilder content = new StringBuilder()
+        // wrap the urlconnection in a bufferedreader
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))
+        String line
+        // read from the connection via the bufferedreader
+        while ((line = bufferedReader.readLine()) != null) {
+            content.append(line + "\n")
+        }
+        bufferedReader.close()
+
+        response.setContentType(connection.getContentType())
+        response.status = connection.getResponseCode()
+
+        render content.toString() //render url.getText()
+    }
 }

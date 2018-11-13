@@ -20,6 +20,7 @@ class UrlMappings {
         "/sound-search"(controller: "species", action: "soundSearch")
         "/logout"(controller: "species", action: "logout")
         "/i18n/$catalogue"(controller: "i18nMessages", action: "i18n")
+        "/search/auto.jso*"(controller:"externalSite", action: "proxyAutocomplete") // legacy URL
         "/"(view:"/index")
         "500"(view:'/error')
     }
