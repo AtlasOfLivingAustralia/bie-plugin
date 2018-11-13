@@ -40,8 +40,19 @@ A plugin providing basic species page functionality and site search.
     // Online location of the plugin's browse-able source code.
     def scm = [ url: "git://github.com/AtlasOfLivingAustralia/bie-plugin" ]
 
-    Closure doWithSpring() { {->
+    def loadAfter = ['dataBinding', 'i18n']
+
+    Closure doWithSpring() { { ->
             // TODO Implement runtime spring config (optional)
+
+            // Custom message source
+            messageSource(ExtendedPluginAwareResourceBundleMessageSource) {
+                //basenames = ["WEB-INF/grails-app/i18n/messages","classpath:messages","classpath:grails-app/i18n/messages"] as String[]
+                basename = "classpath:grails-app/i18n/messages"
+                cacheSeconds = 10 //(60 * 60 * 6)
+                useCodeAsDefaultMessage = true
+                defaultEncoding = "UTF-8"
+            }
         }
     }
 
