@@ -159,6 +159,9 @@ function updateOccurrenceCount() {
                 if (value && typeof value == "number") {
                     $('.occurrenceRecordCount').html(value.toLocaleString());
                     return false;
+                } else if (value == 0) {
+                    // hide charts if no records
+                    $("#recordBreakdowns").html("<h3>" + jQuery.i18n.prop("no.records.found") + "</h3>");
                 }
             });
         }
