@@ -106,7 +106,7 @@ class ExternalSiteController {
      *
      */
     def proxyAutocomplete = {
-        def url = ( "${grailsApplication.config.bieService?.baseUrl}/search/auto.json" + params.toQueryString() ).toURL()
+        def url = ( "${grailsApplication.config.getProperty("bie.index.url")}/search/auto.json" + params.toQueryString() ).toURL()
         HttpURLConnection connection = (HttpURLConnection)  url.openConnection()
         connection.setRequestMethod("GET")
         connection.connect()
