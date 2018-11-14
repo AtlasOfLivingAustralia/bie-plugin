@@ -59,7 +59,7 @@
         <g:set var="currentRank" value=""/>
         <g:each in="${childConcepts.toSorted { a, b -> a.rankID <=> b.rankID }}" var="child" status="i">
             <g:set var="currentRank" value="${child.rank}"/>
-            <g:if test="${child.rankID - tc.taxonConcept.rankID < 2000}"><%-- Fix for issue https://github.com/AtlasOfLivingAustralia/bie-plugin/issues/121 --%>
+            <g:if test="${child.rankID - tc.taxonConcept.rankID < 2001}"><%-- Fix for issue https://github.com/AtlasOfLivingAustralia/bie-plugin/issues/121 --%>
                 <dt>${child.rank}</dt>
                 <g:set var="taxonLabel"><bie:formatSciName rankId="${child.rankID}"
                                                            nameFormatted="${child.nameFormatted}"
