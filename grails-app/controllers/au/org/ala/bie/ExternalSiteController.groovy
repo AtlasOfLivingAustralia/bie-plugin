@@ -57,8 +57,8 @@ class ExternalSiteController {
         def searchParams = URLEncoder.encode("\"" + searchStrings.join("\" OR \"") + "\"", "UTF-8")
         def genbankBase = grailsApplication.config.literature?.genbank?.url ?: "https://www.ncbi.nlm.nih.gov"
         def url = (genbankBase + "/nuccore/?term=" + searchParams)
-
-        Document doc = Jsoup.connect(url).get()
+        log.debug "genbank URL = ${url}"
+        Document doc = Jsoup.connect(url).timeout(10*1000).get()
         Elements results = doc.select("div.rslt")
 
         def totalResultsRaw = doc.select("h2.result_count").text()
@@ -87,7 +87,7 @@ class ExternalSiteController {
         def searchParams = "\"" + searchStrings.join("\" OR \"") + "\""
         def scholarBase = grailsApplication.config.literature?.scholar?.url ?: "https://scholar.google.com"
         def url = scholarBase + "/scholar?q=" + URLEncoder.encode(searchParams, "UTF-8")
-        def doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").referrer("http://www.google.com").get()
+        def doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").referrer("http://www.google.com").timeout(10*1000).get()
         def totalResultsRaw = doc.select("div[id=gs_ab_md]").get(0).text()
         def matcher = totalResultsRaw =~ "About ([0-9\\,]{1,}) results \\([0-9\\.]{1,} sec\\)"
         def found = matcher.find()
@@ -119,7 +119,7 @@ class ExternalSiteController {
      *
      */
     def proxyAutocomplete = {
-        def url = ( "${grailsApplication.config.getProperty("bie.index.url")}/search/auto.json" + params.toQueryString() ).toURL()
+        URL url = ( "${grailsApplication.config.getProperty("bie.index.url")}/search/auto.json" + params.toQueryString() ).toURL()
         StringBuilder content = new StringBuilder()
         BufferedReader bufferedReader
 
@@ -140,7 +140,9 @@ class ExternalSiteController {
             // will bubble up to Grails and trigger an error page
             log.error "${e.message}", e
         } finally {
-            bufferedReader.close()
+            if (bufferedReader) {
+                bufferedReader.close() // can throw exception but passing on to Grails error handling
+            }
         }
     }
 }
