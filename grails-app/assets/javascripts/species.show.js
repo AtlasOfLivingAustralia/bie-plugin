@@ -35,7 +35,7 @@ function showSpeciesPage() {
 function loadSpeciesLists(){
 
     //console.log('### loadSpeciesLists #### ' + SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid);
-    $.getJSON(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid + '?callback=?', function( data ) {
+    $.getJSON(SHOW_CONF.speciesListUrl + '/ws/species/' + SHOW_CONF.guid + '?isBIE=true', function( data ) {
         for(var i = 0; i < data.length; i++) {
             var specieslist = data[i];
             var maxListFields = 10;
@@ -48,7 +48,7 @@ function loadSpeciesLists(){
                 $description.find(".title").html(specieslist.list.listName);
 
                 if (specieslist.kvpValues.length > 0) {
-                    var content = "<table class='table'>";
+                    var content = "<table class='table specieslist-table'>";
                     $.each(specieslist.kvpValues, function (idx, kvpValue) {
                         if (idx >= maxListFields) {
                             return false;

@@ -160,3 +160,20 @@ h5.json > a {
 #imageDialog .modal-body{overflow-y: hidden;position:static;top:50px;bottom:50px;right:0px;left:0px;}
 
 #imageDialog .modal-footer {position: absolute;bottom: 0;right: 0;left: 0;}
+
+
+.species-list-block .content, .content > .specieslist-table {
+    margin-bottom: 0;
+}
+.content > .specieslist-table > thead > tr > th, .content > .specieslist-table > tbody > tr > td {
+    padding: 4px;
+    line-height: 1.6em;
+    vertical-align: top;
+    border-top: 1px solid #bbb;
+}
+.content > .specieslist-table > tbody > tr:first-child > td {
+    border-top: none;
+}
+.specieslist-table td:first-child {
+    font-weight: bold;
+}
