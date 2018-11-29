@@ -41,13 +41,13 @@ class SearchRequestParamsDTO {
 
     def getQueryString() {
         def queryStr = new StringBuilder()
-        queryStr.append("q=" + URIUtil.encodeWithinQuery(q)) //q.encodeAsURL())
+        queryStr.append("q=" + URLEncoder.encode(q, "UTF-8")) //q.encodeAsURL())
         def fqIsList = fq.getClass().metaClass.getMetaMethod("join", String)
         if (fq && fqIsList) {
-            def newFq = fq.collect { it.replaceAll(/\s+/, "+") }
+            def newFq = fq.collect { URLEncoder.encode(it, "UTF-8") }
             queryStr.append("&fq=" + newFq?.join("&fq="))
         } else if (fq) {
-            queryStr.append("&fq=" + fq.replaceAll(" ", "+"))
+            queryStr.append("&fq=" + URLEncoder.encode(fq, "UTF-8"))
         }
         queryStr.append("&start=" + start)
         queryStr.append("&rows=" + rows)
