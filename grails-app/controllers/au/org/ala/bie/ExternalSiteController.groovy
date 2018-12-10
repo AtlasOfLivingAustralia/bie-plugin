@@ -27,9 +27,10 @@ class ExternalSiteController {
         //get first pageId
         if(json.results){
             def pageId = json.results[0].id
-            def pageUrl = "http://eol.org/api/pages/1.0/${pageId}.json?images=00&videos=0&sounds=0&maps=0&text=2&iucn=false&subjects=overview&licenses=all&details=true&references=true&vetted=0&cache_ttl="
-            log.debug(pageUrl)
-            def pageText = new java.net.URL(pageUrl).text
+            String page = grailsApplication.config.external.eol.page.service
+            page = MessageFormat.format(page, pageId)
+            log.debug("EOL page url = ${page}")
+            def pageText = new URL(page).text ?: '{}'
             response.setContentType("application/json")
             render pageText
         } else {
