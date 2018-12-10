@@ -87,3 +87,14 @@ grails:
 endpoints:
     jmx:
         unique-names: true
+---
+external:
+  eol:
+    search:
+      # {0}= name to search for, {1} = filter string
+      # service: https://eol.org/api/search/1.0.json?q={0}&page=1&exact=true&filter_by_string={1}&cache_ttl=
+      service: https://eol.org/api/search/1.0.json?q={0}&page=1&exact=true&cache_ttl=
+    page:
+      # {0} = page id
+      service: https://eol.org/api/pages/1.0/{0,number,#0}.json?images_per_page=0&videos_per_page=0&sounds_per_page=0&maps_per_page=0&texts_per_page=30&subjects=overview&licenses=all&details=true&references=true&vetted=0&cache_ttl=
+
