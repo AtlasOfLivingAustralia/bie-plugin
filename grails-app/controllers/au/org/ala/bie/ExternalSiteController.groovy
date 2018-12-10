@@ -19,6 +19,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
+import java.text.MessageFormat
+
 /**
  * Controller that proxies external webservice calls to get around cross domain issues
  * and to make consumption of services easier from javascript.
@@ -27,21 +29,22 @@ class ExternalSiteController {
     def index() {}
 
     def eol = {
-        def searchString = params.s
-        def filterString  = java.net.URLEncoder.encode(params.f?:"", "UTF-8")
-        def nameEncoded = java.net.URLEncoder.encode(searchString, "UTF-8")
-        def searchURL = "http://eol.org/api/search/1.0.json?q=${nameEncoded}&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=${filterString}&cache_ttl="
-        log.debug "Initial EOL url = ${searchURL}"
+        def nameEncoded = URLEncoder.encode(params.s, 'UTF-8')
+        def filterString  = URLEncoder.encode(params.f ?: '', 'UTF-8')
+        String search = grailsApplication.config.external.eol.search.service
+        search =  MessageFormat.format(search, nameEncoded, filterString)
+        log.debug "Initial EOL url = ${search}"
         def js = new JsonSlurper()
-        def jsonText = new java.net.URL(searchURL).text
+        def jsonText = new URL(search).text
         def json = js.parseText(jsonText ?: '{}')
 
         //get first pageId
         if(json.results){
             def pageId = json.results[0].id
-            def pageUrl = "http://eol.org/api/pages/1.0/${pageId}.json?images=00&videos=0&sounds=0&maps=0&text=2&iucn=false&subjects=overview&licenses=all&details=true&references=true&vetted=0&cache_ttl="
-            log.debug(pageUrl)
-            def pageText = new java.net.URL(pageUrl).text ?: '{}'
+            String page = grailsApplication.config.external.eol.page.service
+            page = MessageFormat.format(page, pageId)
+            log.debug("EOL page url = ${page}")
+            def pageText = new URL(page).text ?: '{}'
             response.setContentType("application/json")
             render pageText
         } else {
