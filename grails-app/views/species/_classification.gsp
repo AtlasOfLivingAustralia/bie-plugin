@@ -57,35 +57,33 @@
     </g:each>
     <dl class="child-taxa">
         <g:set var="currentRank" value=""/>
-        <g:each in="${childConcepts.toSorted { a, b -> a.rankID <=> b.rankID }}" var="child" status="i">
+        <g:each in="${childConcepts}" var="child" status="i"><!-- Rely on web service for correct order -->
             <g:set var="currentRank" value="${child.rank}"/>
-            <g:if test="${child.rankID - tc.taxonConcept.rankID < 2001}"><%-- Fix for issue https://github.com/AtlasOfLivingAustralia/bie-plugin/issues/121 --%>
-                <dt>${child.rank}</dt>
-                <g:set var="taxonLabel"><bie:formatSciName rankId="${child.rankID}"
-                                                           nameFormatted="${child.nameFormatted}"
-                                                           nameComplete="${child.nameComplete}"
-                                                           taxonomicStatus="name"
-                                                           name="${child.name}"/><g:if
-                        test="${child.commonNameSingle}">: ${child.commonNameSingle}</g:if></g:set>
-                <dd><a href="${request?.contextPath}/species/${child.guid}#classification">${raw(taxonLabel.trim())}</a>&nbsp;
-                    <span>
-                        <g:if test="${child.isAustralian}">
-                            <img src="${grailsApplication.config.ala.baseURL}/wp-content/themes/ala2011/images/status_native-sm.png"
-                                 alt="Recorded in Australia" title="Recorded in Australia" width="21"
-                                 height="21">
+            <dt>${child.rank}</dt>
+            <g:set var="taxonLabel"><bie:formatSciName rankId="${child.rankID}"
+                                                       nameFormatted="${child.nameFormatted}"
+                                                       nameComplete="${child.nameComplete}"
+                                                       taxonomicStatus="name"
+                                                       name="${child.name}"/><g:if
+                    test="${child.commonNameSingle}">: ${child.commonNameSingle}</g:if></g:set>
+            <dd><a href="${request?.contextPath}/species/${child.guid}#classification">${raw(taxonLabel.trim())}</a>&nbsp;
+                <span>
+                    <g:if test="${child.isAustralian}">
+                        <img src="${grailsApplication.config.ala.baseURL}/wp-content/themes/ala2011/images/status_native-sm.png"
+                             alt="Recorded in Australia" title="Recorded in Australia" width="21"
+                             height="21">
+                    </g:if>
+                    <g:else>
+                        <g:if test="${child.guid?.startsWith('urn:lsid:catalogueoflife.org:taxon')}">
+                            <span class="inferredPlacement"
+                                  title="Not recorded in Australia">[inferred placement]</span>
                         </g:if>
                         <g:else>
-                            <g:if test="${child.guid?.startsWith('urn:lsid:catalogueoflife.org:taxon')}">
-                                <span class="inferredPlacement"
-                                      title="Not recorded in Australia">[inferred placement]</span>
-                            </g:if>
-                            <g:else>
-                                <span class="inferredPlacement" title="Not recorded in Australia"></span>
-                            </g:else>
+                            <span class="inferredPlacement" title="Not recorded in Australia"></span>
                         </g:else>
-                    </span>
-                </dd>
-            </g:if>
+                    </g:else>
+                </span>
+            </dd>
         </g:each>
     </dl>
     <g:each in="${taxonHierarchy}" var="taxon">
