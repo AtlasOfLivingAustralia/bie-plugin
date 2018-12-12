@@ -163,22 +163,38 @@ function numberWithCommas(x) {
 }
 
 function injectBhlResults() {
+    var queryString = SEARCH_CONF.query;
 
-    var bhlHtml = "<li><a href='http://www.biodiversitylibrary.org/search?SearchTerm=" + SEARCH_CONF.query + "&SearchCat=M#/names' target='bhl'>BHL Literature </a></li>"
+    if (queryString.startsWith("rkid_")) {
+        // remove the SOLR field prefix so BHL searches work as expected
+        var prefix = queryString.split(":")[0].replace("rkid_",""); // e.g. "family" or "genus" from "rkid_family" and "rkid_genus"
+        queryString = SEARCH_CONF.queryTitle.replace(prefix, "").trim(); // "genus Forcipiger" becomes "Forcipiger" 
+    }
+
+    var bhlHtml = "<li><a href='http://www.biodiversitylibrary.org/search?SearchTerm=" + queryString + "&SearchCat=M#/names' target='bhl'>BHL Literature </a></li>"
     insertSearchLinks(bhlHtml);
 }
 
 function injectBiocacheResults() {
 
     var queryToUse = (SEARCH_CONF.query == "" || SEARCH_CONF.query == "*" ? "*:*" : SEARCH_CONF.query);
-    var url = SEARCH_CONF.biocacheServicesUrl + "/occurrences/search.json?q=" + queryToUse + "&start=0&pageSize=0&facet=off&qc=" + SEARCH_CONF.biocacheQueryContext;
+
+    if (queryToUse.startsWith("rkid_family")  ) {
+        queryToUse = queryToUse.replace("rkid_family","lsid");
+    } else if ( queryToUse.startsWith("urn:")) {
+        queryToUse = queryToUse.replace("urn:","lsid:urn:");
+    }
+
+    var url = SEARCH_CONF.biocacheServicesUrl + "/occurrences/search.json?q=" + queryToUse + "&start=0&pageSize=0&facet=off&qc="
+        + SEARCH_CONF.biocacheQueryContext;
     $.ajax({
         url: url,
         dataType: 'jsonp',
         success:  function(data) {
             var maxItems = parseInt(data.totalRecords, 10);
             var url = SEARCH_CONF.biocacheUrl + "/occurrences/search?q=" + queryToUse;
-            var html = "<li data-count=\"" + maxItems + "\"><a href=\"" + url + "\" id=\"biocacheSearchLink\">Occurrence records</a> (" + numberWithCommas(maxItems) + ")</li>";
+            var html = "<li data-count=\"" + maxItems + "\"><a href=\"" + url + "\" id=\"biocacheSearchLink\">Occurrence records</a> ("
+                + numberWithCommas(maxItems) + ")</li>";
             insertSearchLinks(html);
         }
     });

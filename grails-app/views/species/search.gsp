@@ -30,6 +30,7 @@
         SEARCH_CONF = {
             searchResultTotal: ${searchResults.totalRecords},
             query: "${BieTagLib.escapeJS(query)}",
+            queryTitle: "${searchResults.queryTitle}",
             serverName: "${grailsApplication.config.grails.serverURL}",
             bieUrl: "${grailsApplication.config.bie.baseURL}",
             biocacheUrl: "${grailsApplication.config.biocache.baseURL}",
