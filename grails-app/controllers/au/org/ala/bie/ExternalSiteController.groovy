@@ -13,6 +13,7 @@
 
 package au.org.ala.bie
 
+import com.google.common.util.concurrent.RateLimiter
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.jsoup.Jsoup
@@ -26,9 +27,14 @@ import java.text.MessageFormat
  * and to make consumption of services easier from javascript.
  */
 class ExternalSiteController {
+    RateLimiter eolRateLimiter = RateLimiter.create(1.0) // rate max requests per second (Double)
+    RateLimiter genbankRateLimiter = RateLimiter.create(3.0) // rate max requests per second (Double)
+
     def index() {}
 
     def eol = {
+        eolRateLimiter.acquire()
+        String jsonOutput = "{}" // default is empty JSON object
         def nameEncoded = URLEncoder.encode(params.s, 'UTF-8')
         def filterString  = URLEncoder.encode(params.f ?: '', 'UTF-8')
         String search = grailsApplication.config.external.eol.search.service
@@ -39,22 +45,21 @@ class ExternalSiteController {
         def json = js.parseText(jsonText ?: '{}')
 
         //get first pageId
-        if(json.results){
+        if (json.results) {
             def pageId = json.results[0].id
             String page = grailsApplication.config.external.eol.page.service
             page = MessageFormat.format(page, pageId)
             log.debug("EOL page url = ${page}")
             def pageText = new URL(page).text ?: '{}'
-            response.setContentType("application/json")
-            render pageText
-        } else {
-            response.setContentType("application/json")
-            render ([:] as JSON)
+            jsonOutput =  pageText
         }
+
+        response.setContentType("application/json")
+        render jsonOutput
     }
 
     def genbank = {
-
+        genbankRateLimiter.acquire()
         def searchStrings = params.list("s")
         def searchParams = URLEncoder.encode("\"" + searchStrings.join("\" OR \"") + "\"", "UTF-8")
         def genbankBase = grailsApplication.config.literature?.genbank?.url ?: "https://www.ncbi.nlm.nih.gov"
