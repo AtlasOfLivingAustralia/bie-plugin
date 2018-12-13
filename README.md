@@ -2,7 +2,7 @@
 
 **bie-plugin** is a Grails plugin that provides the core functionality for the _Atlas of Living Australia_ (ALA) [BIE search and taxon pages application](http://bie.ala.org.au/search) front-end. It should be used by a client Grails application, e.g. [ala-bie](https://github.com/AtlasOfLivingAustralia/ala-bie).
 
-This application/plugin provides a web UI for the assocaited back-end service  [**bie-index**](https://github.com/AtlasOfLivingAustralia/bie-index) (see [bbie-service API](http://bie.ala.org.au/ws)) - a full-text search and record retreival for general document retieval and taxon profile pages, using JSON data format.
+This application/plugin provides a web UI for the associated back-end service  [**bie-index**](https://github.com/AtlasOfLivingAustralia/bie-index) (see [bbie-service API](http://bie.ala.org.au/ws)) - a full-text search and document retreival for taxon profile pages and general web content (Wordpress pages, data resources, etc.), using JSON data format.
 
 ### Languages
 
