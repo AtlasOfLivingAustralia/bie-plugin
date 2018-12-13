@@ -6,7 +6,7 @@ This application/plugin provides a web UI for the associated back-end service  [
 
 ### Getting started
 
-Checkout both this repository and [ala-bie](https://github.com/AtlasOfLivingAustralia/ala-bie) into the same directory. 
+[Download Grails](https://grails.org/download.html) version 3.2.11 or later. Checkout both this repository and [ala-bie](https://github.com/AtlasOfLivingAustralia/ala-bie) into the same directory. 
 
 To run and be able to make changes to the plugin "in place", edit these files in `ala-bie`:
 * build.gradle
