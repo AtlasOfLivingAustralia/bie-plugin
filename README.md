@@ -6,13 +6,15 @@ This application/plugin provides a web UI for the associated back-end service  [
 
 ### Getting started
 
-[Download Grails](https://grails.org/download.html) version 3.2.11 or later. Checkout both this repository and [ala-bie](https://github.com/AtlasOfLivingAustralia/ala-bie) into the same directory. 
+[Download Grails](https://grails.org/download.html) version 3.2.11 or later. Fork and then checkout both this repository and [ala-bie](https://github.com/AtlasOfLivingAustralia/ala-bie) into the same directory. 
 
 To run and be able to make changes to the plugin "in place", edit these files in `ala-bie`:
 * `build.gradle`
 * `settings.gradle`
 
 and change the following variable `inplace = true` in both files and save. Run the app with `grails run-app` and any changes made in `bie-plugin` will be reflected in the running web application. 
+
+Customisations of code and i18n files should be made in the copy of `ala-bie` (note: and file in the `bie-plugin` can be copied and pasted into `ala-bie` and this will override the plugin version). Bug fixes and enhancement for `bie-plugin` should be provided via a pull request.
 
 ### Languages
 
