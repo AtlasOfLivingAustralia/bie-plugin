@@ -517,8 +517,8 @@ function loadOverviewImages(){
 
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
-        SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&fq=-assertion_user_id:*&im=true&facet=off&pageSize=5&start=0&callback=?';
+        encodeURIComponent('"' + SHOW_CONF.guid + '"') +
+        '&fq=multimedia:Image&fq=-assertion_user_id:*&im=true&facet=off&pageSize=5&start=0&callback=?';
     //console.log('Loading images from: ' + url);
 
     $.getJSON(url, function(data){
@@ -602,8 +602,8 @@ function loadGalleryType(category, start) {
     var imageCategoryParams = {
         type: '&fq=type_status:*',
         specimen: '&fq=basis_of_record:PreservedSpecimen&fq=-type_status:*',
-        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:"Uncertain"&fq=-assertion_user_id:*&sort=identification_qualifier_s&dir=asc',
-        uncertain: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=identification_qualifier_s:"Uncertain"'
+        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:Uncertain&fq=-assertion_user_id:*&sort=identification_qualifier_s&dir=asc',
+        uncertain: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=identification_qualifier_s:Uncertain'
     };
 
     var pageSize = 20;
@@ -616,8 +616,8 @@ function loadGalleryType(category, start) {
     //TODO a toggle between LSID based searches and names searches
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
-        SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&pageSize=' + pageSize +
+        encodeURIComponent('"' + SHOW_CONF.guid + '"') +
+        '&fq=multimedia:Image&pageSize=' + pageSize +
         '&facet=off&start=' + start + imageCategoryParams[category] + '&im=true&callback=?';
 
     //console.log("URL: " + url);
