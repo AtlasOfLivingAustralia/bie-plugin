@@ -373,7 +373,7 @@
         bieUrl:             "${grailsApplication.config.bie.baseURL}",
         alertsUrl:          "${grailsApplication.config.alerts.baseUrl}",
         remoteUser:         "${request.remoteUser ?: ''}",
-        eolUrl:             "${raw(createLink(controller: 'externalSite', action: 'eol', params: [s: tc?.taxonConcept?.nameString ?: '', f:tc?.classification?.class?:tc?.classification?.phylum?:'']))}",
+        eolUrl:             "${raw(createLink(controller: 'externalSite', action: 'eol', params: [s: tc?.taxonConcept?.nameString ?: '', f:tc?.classification?.family?:tc?.classification?.order?:tc?.classification?.class?:tc?.classification?.phylum?:tc?.classification?.kingdom?:'']))}",
         genbankUrl:         "${raw(createLink(controller: 'externalSite', action: 'genbank', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
         scholarUrl:         "${raw(createLink(controller: 'externalSite', action: 'scholar', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
         soundUrl:           "${raw(createLink(controller: 'species', action: 'soundSearch', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
