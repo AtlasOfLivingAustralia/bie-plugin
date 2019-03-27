@@ -504,9 +504,14 @@ function loadOverviewImages(){
             //console.log("prefUrl", prefUrl, data);
             if (data && data.totalRecords > 0) {
                 addOverviewImage(data.occurrences[0]);
-                hasPreferredImage = true;
             } else {
-                hasPreferredImage = false;
+                var record = {
+                    'uuid': null,
+                    'image': SHOW_CONF.preferredImageId,
+                    'scientificName': SHOW_CONF.scientificName,
+                    'largeImageUrl': SHOW_CONF.imageServiceBaseUrl + "/image/proxyImageThumbnailLarge?imageId=" + SHOW_CONF.preferredImageId
+                }
+                addOverviewImage(record)
             }
 
         }).fail(function(jqxhr, textStatus, error) {
@@ -518,7 +523,7 @@ function loadOverviewImages(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&fq=-assertion_user_id:*&im=true&facet=off&pageSize=5&start=0&callback=?';
+        '&fq=multimedia:"Image"&fq=geospatial_kosher:true&fq=-user_assertions:50001&fq=-user_assertions:50005&im=true&facet=off&pageSize=5&start=0&callback=?';
     //console.log('Loading images from: ' + url);
 
     $.getJSON(url, function(data){
@@ -602,7 +607,7 @@ function loadGalleryType(category, start) {
     var imageCategoryParams = {
         type: '&fq=type_status:*',
         specimen: '&fq=basis_of_record:PreservedSpecimen&fq=-type_status:*',
-        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:"Uncertain"&fq=-assertion_user_id:*&sort=identification_qualifier_s&dir=asc',
+        other: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=-identification_qualifier_s:"Uncertain"&fq=geospatial_kosher:true&fq=-user_assertions:50001&fq=-user_assertions:50005&sort=identification_qualifier_s&dir=asc',
         uncertain: '&fq=-type_status:*&fq=-basis_of_record:PreservedSpecimen&fq=identification_qualifier_s:"Uncertain"'
     };
 
@@ -720,9 +725,11 @@ function getImageFooterFromOccurrence(el){
     }
 
     // write to DOM
-    detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a>' +
-                  '<br><br>If this image is incorrectly<br>identified please flag an<br>issue on the <a href=' + SHOW_CONF.biocacheUrl +
-                  '/occurrences/' + el.uuid + '>record.<br></div>';
+    if (el.uuid) {
+        detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a>' +
+            '<br><br>If this image is incorrectly<br>identified please flag an<br>issue on the <a href=' + SHOW_CONF.biocacheUrl +
+            '/occurrences/' + el.uuid + '>record.<br></div>';
+    }
     return detailHtml;
 }
 
