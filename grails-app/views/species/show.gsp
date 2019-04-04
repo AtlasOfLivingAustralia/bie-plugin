@@ -376,7 +376,7 @@
         eolUrl:             "${raw(createLink(controller: 'externalSite', action: 'eol', params: [s: tc?.taxonConcept?.nameString ?: '', f:tc?.classification?.class?:tc?.classification?.phylum?:'']))}",
         genbankUrl:         "${raw(createLink(controller: 'externalSite', action: 'genbank', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
         scholarUrl:         "${raw(createLink(controller: 'externalSite', action: 'scholar', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
-        soundUrl:           "${raw(createLink(controller: 'species', action: 'soundSearch', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
+        soundUrl:           "${raw(createLink(controller: 'species', action: 'soundSearch', params: [id: guid]))}",
         eolLanguage:        "${grailsApplication.config.eol.lang}",
         defaultDecimalLatitude: ${grailsApplication.config.defaultDecimalLatitude},
         defaultDecimalLongitude: ${grailsApplication.config.defaultDecimalLongitude},
