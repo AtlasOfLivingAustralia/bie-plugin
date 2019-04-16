@@ -215,7 +215,8 @@
 
                                 <h3>${result.rank}:
                                     <a href="${acceptedPageLink}"><bie:formatSciName rankId="${result.rankID}" taxonomicStatus="${result.taxonomicStatus}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a><%--
-                                    --%><g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
+                                    --%><g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if><%--
+                                    --%><g:if test="${result.favourite}"><span class="favourite favourite-${result.favourite}" title="<g:message code="favourite.${result.favourite}.detail"/>"><g:message code="favourite.${result.favourite}" encodeAs="raw"/></span></g:if>
                                 </h3>
 
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
@@ -228,8 +229,18 @@
                             </g:if>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'COMMON'}">
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
-                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
-                                    <a href="${speciesPageLink}">${result.name}</a></h4>
+                                <g:if test="${result.image}">
+                                    <div class="result-thumbnail">
+                                        <a href="${speciesPageLink}">
+                                            <img src="${grailsApplication.config.image.thumbnailUrl}${result.image}" alt="">
+                                        </a>
+                                    </div>
+                                </g:if>
+                                <h3><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                <a class="commonNameSummary" href="${speciesPageLink}">${result.name}</a><%--
+                                --%><g:if test="${result.acceptedConceptName}">&nbsp;&ndash;&nbsp;<bie:formatSciName rankId="${result.rankID}" taxonomicStatus="accepted" name="${result.acceptedConceptName}"/></g:if><%--
+                                --%><g:if test="${result.favourite}"><span class="favourite favourite-${result.favourite}" title="<g:message code="favourite.${result.favourite}.detail"/>"><g:message code="favourite.${result.favourite}" encodeAs="raw"/></span></g:if>
+                                </h3>
                             </g:elseif>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'IDENTIFIER'}">
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
