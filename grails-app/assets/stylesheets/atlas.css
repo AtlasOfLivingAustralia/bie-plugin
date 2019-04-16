@@ -176,6 +176,13 @@ html, body {height:100%;}
 .tag-tk-cv { }
 .tag-tk-cs { }
 
+/** Favourites */
+.favourite { display: inline; padding: 2px 0.5ex; font-size: xx-small; vertical-align: super; }
+.favourite-favourite { color: #228b22; }
+.favourite-iconic { color: #228b22; }
+.favourite-interest { color: #228b22; }
+.favourite-preferred { color: #228b22; }
+
 
 /* Media Queries
 ================================================== */

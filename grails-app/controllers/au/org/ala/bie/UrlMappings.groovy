@@ -3,11 +3,6 @@ package au.org.ala.bie
 class UrlMappings {
 
     static mappings = {
-        "/$controller/$action?/$id?"{
-            constraints {
-                // apply constraints here
-            }
-        }
         // Redirects for BIE web services URLs
         "/geo"(controller: "species", action: "geoSearch")
         "/species/$guid**"(controller: "species", action: "show")
@@ -21,6 +16,11 @@ class UrlMappings {
         "/logout"(controller: "species", action: "logout")
         "/i18n/$catalogue"(controller: "i18nMessages", action: "i18n")
         "/search/auto.jso*"(controller:"externalSite", action: "proxyAutocomplete") // legacy URL
+        "/$controller/$action?/$id?"{
+            constraints {
+                // apply constraints here
+            }
+        }
         "/"(view:"/index")
         "500"(view:'/error')
     }
