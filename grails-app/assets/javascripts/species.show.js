@@ -874,7 +874,7 @@ function cancelSearch(msg) {
 }
 
 function loadExpertDistroMap() {
-    var url = SHOW_CONF.layersServiceUrl + "/distribution/map/" + SHOW_CONF.guid + "?callback=?";
+    var url = SHOW_CONF.layersServiceUrl + "/distribution/map/" + SHOW_CONF.guid;
     $.getJSON(url, function(data){
         if (data.available) {
             $("#expertDistroDiv img").attr("src", data.url);
