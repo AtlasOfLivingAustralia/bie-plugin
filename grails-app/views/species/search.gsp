@@ -35,7 +35,7 @@
             bieUrl: "${grailsApplication.config.bie.baseURL}",
             biocacheUrl: "${grailsApplication.config.biocache.baseURL}",
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
-            bhlUrl: "${grailsApplication.config.bhl.baseURL}",
+            bhlUrl: "${grailsApplication.config.bhl.url}",
             biocacheQueryContext: '${raw(grailsApplication.config.biocacheService.queryContext)}',
             geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
         }

@@ -29,8 +29,6 @@
                                                  name="${tc?.taxonConcept?.name}"
                                                  taxonomicStatus="${tc?.taxonConcept?.taxonomicStatus}"
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
-<g:set var="synonymsQuery"><g:each in="${tc?.synonyms}" var="synonym" status="i">\"${synonym.nameString}\"<g:if
-        test="${i < tc.synonyms.size() - 1}"> OR </g:if></g:each></g:set>
 <g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}"/>
 <g:set bean="authService" var="authService"></g:set>
 <g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType?:'LEAFLET'}"></g:set>
@@ -47,10 +45,10 @@
     <!-- facebook tags -->
     <g:render template="facebookTags"/>
 
-    <asset:javascript src="show"/>
-    <asset:stylesheet src="show"/>
-    <asset:javascript src="charts"/>
-    <asset:stylesheet src="charts"/>
+    <asset:javascript src="show.js"/>
+    <asset:stylesheet src="show.css"/>
+    <asset:javascript src="charts.js"/>
+    <asset:stylesheet src="charts.css"/>
     <asset:javascript src="ala/images-client.js"/>
     <asset:stylesheet src="ala/images-client.css"/>
     <asset:javascript src="ala/images-client-gallery.js"/>
@@ -365,7 +363,7 @@
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
         taxonRankID:        "${tc?.taxonConcept?.rankID ?: ''}",
-        synonymsQuery:      "${synonymsQuery.replaceAll('""','"').encodeAsJavaScript()}",
+        synonyms:            [ <g:each in="${tc?.synonyms}" var="syn" status="si">"${syn.nameString.encodeAsJavaScript()}"<g:if test="${si < tc.synonyms.size() - 1}">, </g:if></g:each> ],
         preferredImageId:   "${tc?.imageIdentifier?: ''}",
         citizenSciUrl:      "${citizenSciUrl}",
         serverName:         "${grailsApplication.config.grails.serverURL}",
@@ -407,8 +405,8 @@
         addPreferenceButton: ${imageClient.checkAllowableEditRole()},
         mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
         mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}",
-        troveUrl: "${raw(grailsApplication.config.literature?.trove?.url ?: 'http://api.trove.nla.gov.au/result?key=fvt2q0qinduian5d&zone=book&encoding=json')}",
-        bhlUrl: "${raw(grailsApplication.config.literature?.bhl?.url ?: 'http://bhlidx.ala.org.au/select')}"
+        troveUrl: "${raw(grailsApplication.config.literature?.trove?.api + '/result?zone=book&encoding=json&key=' + grailsApplication.config.literature?.trove?.apikey )}",
+        bhlUrl: "${raw(createLink(controller: 'externalSite', action: 'bhl'))}"
     };
 
     $(function(){

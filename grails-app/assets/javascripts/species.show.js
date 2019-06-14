@@ -12,6 +12,7 @@
  * implied. See the License for the specific language governing
  * rights and limitations under the License.
  */
+
 function showSpeciesPage() {
 
     //console.log("Starting show species page");
@@ -28,7 +29,7 @@ function showSpeciesPage() {
     //
     ////setup controls
     addAlerts();
-    // loadBhl(); // now an external link to BHL
+    loadBhl();
     loadTrove(SHOW_CONF.troveUrl, SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
@@ -752,28 +753,19 @@ function loadBhl(start, rows, scroll) {
         rows = 10;
     }
     // var url = "http://localhost:8080/bhl-ftindex-demo/search/ajaxSearch?q=" + $("#tbSearchTerm").val();
-    var source = SHOW_CONF.bhlURL;
+    var source = SHOW_CONF.bhlUrl;
     var taxonName = SHOW_CONF.scientificName ;
-    var synonyms = SHOW_CONF.synonymsQuery;
+    var synonyms = SHOW_CONF.synonyms;
+    var i;
     var query = ""; // = taxonName.split(/\s+/).join(" AND ") + synonyms;
     if (taxonName) {
-        var terms = taxonName.split(/\s+/).length;
-        if (terms > 2) {
-            query += taxonName.split(/\s+/).join(" AND ");
-        } else if (terms == 2) {
-            query += '"' + taxonName + '"';
-        } else {
-            query += taxonName;
-        }
+        query = query + "s=" + encodeURIComponent(taxonName);
     }
-
     if (synonyms) {
-        synonyms = synonyms.replace(/\\\"/g,'"'); // remove escaped quotes
-
-        if (taxonName) {
-            query += ' OR (' + synonyms + ")"
-        } else {
-            query += synonyms
+        for (i = 0; i < synonyms.length; i++) {
+            if (query.length > 0)
+                query = query + "&";
+            query = query + "s=" + encodeURIComponent(synonyms[i]);
         }
     }
 
@@ -781,90 +773,12 @@ function loadBhl(start, rows, scroll) {
         return cancelSearch("No names were found to search BHL");
     }
 
-    var url = source + "?q=" + query + '&start=' + start + "&rows=" + rows +
-        "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
-        "group=true&group.field=itemId&group.limit=7&group.ngroups=true&taxa=false";
-
+    var url = source + "?" + query + '&start=' + start + "&rows=" + rows;
     var buf = "";
     $("#status-box").css("display", "block");
-    $("#synonyms").html("").css("display", "none")
     $("#bhl-results-list").html("");
 
-    $.ajax({
-        url: url,
-        dataType: 'jsonp',
-        jsonp: "json.wrf",
-        success:  function(data) {
-            var itemNumber = parseInt(data.responseHeader.params.start, 10) + 1;
-            var maxItems = parseInt(data.grouped.itemId.ngroups, 10);
-            if (maxItems == 0) {
-                return cancelSearch("No references were found for <pre>" + query + "</pre>");
-            }
-            var startItem = parseInt(start, 10);
-            var pageSize = parseInt(rows, 10);
-            var showingFrom = startItem + 1;
-            var showingTo = (startItem + pageSize <= maxItems) ? startItem + pageSize : maxItems ;
-            buf += '<div class="results-summary">Showing ' + showingFrom + " to " + showingTo + " of " + maxItems +
-                ' results for the query <pre>' + query + '</pre></div>'
-            // grab highlight text and store in map/hash
-            var highlights = {};
-            $.each(data.highlighting, function(idx, hl) {
-                highlights[idx] = hl.text[0];
-            });
-            //console.log("highlighting", highlights, itemNumber);
-            $.each(data.grouped.itemId.groups, function(idx, obj) {
-                buf += '<div class="result">';
-                buf += '<h3><b>' + itemNumber++;
-                buf += '.</b> <a target="item" href="http://biodiversitylibrary.org/item/' + obj.groupValue + '">' + obj.doclist.docs[0].name + '</a> ';
-                var suffix = '';
-                if (obj.doclist.numFound > 1) {
-                    suffix = 's';
-                }
-                buf += '(' + obj.doclist.numFound + '</b> matching page' + suffix + ')</h3><div class="thumbnail-container">';
-
-                $.each(obj.doclist.docs, function(idx, page) {
-                    var highlightText = $('<div>'+highlights[page.pageId]+'</div>').htmlClean({allowedTags: ["em"]}).html();
-                    buf += '<div class="page-thumbnail"><a target="page image" href="http://biodiversitylibrary.org/page/' +
-                        page.pageId + '"><img src="http://biodiversitylibrary.org/pagethumb/' + page.pageId +
-                        '" alt="' + escapeHtml(highlightText) + '"  width="60px" height="100px"/></a></div>';
-                })
-                buf += "</div><!--end .thumbnail-container -->";
-                buf += "</div>";
-            })
-
-            var prevStart = start - rows;
-            var nextStart = start + rows;
-
-            buf += '<div id="button-bar">';
-            if (prevStart >= 0) {
-                buf += '<input type="button" class="btn" value="Previous page" onclick="loadBhl(' + prevStart + ',' + rows + ', true)">';
-            }
-            buf += '&nbsp;&nbsp;&nbsp;';
-            if (nextStart <= maxItems) {
-                buf += '<input type="button" class="btn" value="Next page" onclick="loadBhl(' + nextStart + ',' + rows + ', true)">';
-            }
-
-            buf += '</div>';
-
-            $("#bhl-results-list").html(buf);
-            if (data.synonyms) {
-                buf = "<b>Synonyms used:</b>&nbsp;";
-                buf += data.synonyms.join(", ");
-                $("#synonyms").html(buf).css("display", "block");
-            } else {
-                $("#synonyms").html("").css("display", "none");
-            }
-            $("#status-box").css("display", "none");
-
-            if (scroll) {
-                $('html, body').animate({scrollTop: '300px'}, 300);
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $("#status-box").css("display", "none");
-            $("#solr-results").html('An error has occurred, probably due to invalid query syntax');
-        }
-    });
+    $("#bhl-results-list").load(url);
 } // end doSearch
 
 function cancelSearch(msg) {

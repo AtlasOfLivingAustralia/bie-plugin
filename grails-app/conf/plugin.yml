@@ -97,4 +97,20 @@ external:
     page:
       # {0} = page id
       service: https://eol.org/api/pages/1.0/{0,number,#0}.json?images_per_page=0&videos_per_page=0&sounds_per_page=0&maps_per_page=0&texts_per_page=30&subjects=overview&licenses=all&details=true&references=true&vetted=0&cache_ttl=
+literature:
+  bhl:
+    url: https://biodiversitylibrary.org
+    api: https://www.biodiversitylibrary.org/api3
+    apikey: "<key value>"
+    fulltext: false
+    pageSize: 200
+    extend: false
+  genbank:
+    url: https://www.ncbi.nlm.nih.gov
+  scholar:
+    url: https://scholar.google.com
+  trove:
+    url: https://trove.nla.gov.au
+    api: https://api.trove.nla.gov.au
+    apikey: "<key value>"
 

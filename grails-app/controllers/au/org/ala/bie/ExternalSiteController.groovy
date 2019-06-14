@@ -13,6 +13,7 @@
 
 package au.org.ala.bie
 
+import au.org.ala.citation.BHLAdaptor
 import com.google.common.util.concurrent.RateLimiter
 import grails.converters.JSON
 import groovy.json.JsonSlurper
@@ -27,6 +28,8 @@ import java.text.MessageFormat
  * and to make consumption of services easier from javascript.
  */
 class ExternalSiteController {
+    def externalSiteService
+
     RateLimiter eolRateLimiter = RateLimiter.create(1.0) // rate max requests per second (Double)
     RateLimiter genbankRateLimiter = RateLimiter.create(3.0) // rate max requests per second (Double)
 
@@ -46,12 +49,15 @@ class ExternalSiteController {
 
         //get first pageId
         if (json.results) {
-            def pageId = json.results[0].id
-            String page = grailsApplication.config.external.eol.page.service
-            page = MessageFormat.format(page, pageId)
-            log.debug("EOL page url = ${page}")
-            def pageText = new URL(page).text ?: '{}'
-            jsonOutput =  pageText
+            def match = json.results.find { it.title.equalsIgnoreCase(params.s) }
+            if (match) {
+                def pageId = match.id
+                String page = grailsApplication.config.external.eol.page.service
+                page = MessageFormat.format(page, pageId)
+                log.debug("EOL page url = ${page}")
+                def pageText = new URL(page).text ?: '{}'
+                jsonOutput = pageText
+            }
         }
 
         response.setContentType("application/json")
@@ -86,6 +92,27 @@ class ExternalSiteController {
         }
         response.setContentType("application/json")
         render ([total:totalResults, resultsUrl:url, results:formattedResults] as JSON)
+    }
+
+    def bhl() {
+        def start = params.int('start', 0)
+        def rows = params.int('rows', 10)
+        def fulltext = params.boolean('fulltext', false)
+        def searchStrings = params.list("s")
+        def model = externalSiteService.searchBhl(searchStrings, start, rows, fulltext)
+        withFormat {
+            json {
+                response.setContentType("application/json")
+                render (model as JSON)
+            }
+            '*' {
+                if (request.xhr) {
+                    render(template: 'bhl', model: model)
+                } else {
+                    model
+                }
+            }
+        }
     }
 
     def scholar = {
