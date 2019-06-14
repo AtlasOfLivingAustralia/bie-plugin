@@ -50,6 +50,7 @@ dependencies {
     testCompile "org.grails.plugins:geb"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+    testCompile 'com.stehno.ersatz:ersatz:1.9.0:safe@jar'
 
     compile ('org.jasig.cas.client:cas-client-core:3.4.1') {
         exclude group: 'javax.servlet', module: 'servlet-api'

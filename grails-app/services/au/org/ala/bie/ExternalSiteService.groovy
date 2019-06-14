@@ -49,7 +49,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
         def results = []
         if (bhlApiKey && bhlApi) {
             def searchTerms = URLEncoder.encode('"' + search.join('" OR "') + '"', 'UTF-8')
-            def url = "${bhlApi}?op=PublicationSearch&searchterm=${searchTerms}&searchtype=${searchtype}&page=${page}&apikey=${bhlApiKey}&format=json"
+            def encodedKey = URLEncoder.encode(bhlApiKey, 'UTF-8')
+            def url = "${bhlApi}?op=PublicationSearch&searchterm=${searchTerms}&searchtype=${searchtype}&page=${page}&apikey=${encodedKey}&format=json"
             def js = new JsonSlurper()
             try {
                 def json = js.parse(new URL(url))
