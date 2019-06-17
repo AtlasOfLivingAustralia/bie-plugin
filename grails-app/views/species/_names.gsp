@@ -126,7 +126,7 @@
                 <g:if test="${synonym.taxonRemarks}">
                     <tr class="remarks">
                         <td colspan="2">
-                            <g:each in="${synonyn.taxonRemarks}" var="remark">
+                            <g:each in="${synonym.taxonRemarks}" var="remark">
                                 <p class="taxonRemarks">${remark}</p>
                             </g:each>
                         </td>
@@ -163,7 +163,7 @@
                 <g:set var="datasetURL" value="${cn.datasetURL}"/>
                 <tr>
                     <td>
-                        <bie:markLanguage text="${name}" lang="${language}" href="${isInfoSourceURL && infoSource != datasetURL ? infoSource : null}"/></a>
+                        <bie:markLanguage text="${name}" lang="${language}" href="${isInfoSourceURL && infoSource != datasetURL ? infoSource : null}"/>
                         <bie:markCommonStatus status="${cn.status}" tags="${cn.labels}"/>
                         <g:if test="${cn.temporal}"><span title="${message(code: 'label.temporal.vernacular.detail', default: 'Used with a specific time period')}" class="annotation annotation-temporal">${cn.temporal}</span></g:if>
                         <g:if test="${cn.locality || cn.countryCode}"><span title="${message(code: 'label.locality.vernacular.detail', default: 'Used in a specific locality or country')}" class="annotation annotation-locality">${cn.locality} <bie:country code="${cn.countryCode}"/></span></g:if>
