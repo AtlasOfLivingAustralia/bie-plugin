@@ -92,7 +92,7 @@ endpoints:
 ---
 #Required so that the gbif-ecat library does not bugger up initialisation from its internal application.properties
 app:
-  name: ala-bie
+  name: bie-plugin
   dataDir: /tmp/gbif-ecat
 skin:
   layout: generic
@@ -100,7 +100,7 @@ skin:
   orgNameShort: BIE
   fluidLayout: false
 bie:
-  baseURL: http://localhost:8080
+  baseURL: http://dev.ala.org.au:8080
   searchPath: /search
   index:
     url: https://bie-ws.ala.org.au/ws
@@ -151,8 +151,7 @@ map:
     colour: e6704c
 bieService:
   queryContext:
-googleMapsApiKey: AIzaSyB0HIkSCV2EdkG50uM7s96IEbO6wUHTqy0
-languageCodesUrl: file:///data/ala-bie/config/languages.json
+googleMapsApiKey: <key value>
 geocode.querySuffix:
 occurrenceCounts:
   enabled: true
