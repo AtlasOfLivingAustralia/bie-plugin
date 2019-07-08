@@ -177,3 +177,8 @@ h5.json > a {
 .specieslist-table td:first-child {
     font-weight: bold;
 }
+
+.bhl-thumbnail {
+    max-width: 128px;
+    max-height: 120px;
+}
