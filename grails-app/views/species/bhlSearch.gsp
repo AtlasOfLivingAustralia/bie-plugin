@@ -31,7 +31,7 @@
         /**
          * OnLoad equavilent in JQuery
          */
-        $(document).ready(function() {
+        $(document).ready(function () {
             loadBhl(0, 10, false);
         });
 
@@ -68,10 +68,10 @@
                 return cancelSearch("No names were found to search BHL");
             }
 
-            var source = "${grailsApplication.config.literature.bhl.url}";
+            var source = "${grailsApplication.config.literature?.bhl?.url ?: '//bhlidx.ala.org.au/select'}";
             var url = source + "?q=" + query + '&start=' + start + "&rows=" + rows +
-                    "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
-                    "group=true&group.field=itemId&group.limit=11&group.ngroups=true&taxa=false";
+                "&wt=json&fl=name%2CpageId%2CitemId%2Cscore&hl=on&hl.fl=text&hl.fragsize=200&" +
+                "group=true&group.field=itemId&group.limit=11&group.ngroups=true&taxa=false";
             var buf = "";
             $("#status-box").css("display", "block");
             $("#synonyms").html("").css("display", "none")
@@ -82,7 +82,7 @@
                 dataType: 'jsonp',
                 //data: null,
                 jsonp: "json.wrf",
-                success:  function(data) {
+                success: function (data) {
                     var itemNumber = parseInt(data.responseHeader.params.start, 10) + 1;
                     var maxItems = parseInt(data.grouped.itemId.ngroups, 10);
                     if (maxItems == 0) {
@@ -91,19 +91,19 @@
                     var startItem = parseInt(start, 10);
                     var pageSize = parseInt(rows, 10);
                     var showingFrom = startItem + 1;
-                    var showingTo = (startItem + pageSize <= maxItems) ? startItem + pageSize : maxItems ;
+                    var showingTo = (startItem + pageSize <= maxItems) ? startItem + pageSize : maxItems;
                     //console.log(startItem, pageSize, showingTo);
                     var pageSize = parseInt(rows, 10);
                     buf += '<div class="results-summary">Showing ' + showingFrom + " to " + showingTo + " of " + maxItems +
-                            ' results for the query <code>' + query + '</code>.</div>'
+                        ' results for the query <code>' + query + '</code>.</div>'
                     // grab highlight text and store in map/hash
                     var highlights = {};
-                    $.each(data.highlighting, function(idx, hl) {
+                    $.each(data.highlighting, function (idx, hl) {
                         highlights[idx] = hl.text[0];
                         //console.log("highlighting", idx, hl);
                     });
                     //console.log("highlighting", highlights, itemNumber);
-                    $.each(data.grouped.itemId.groups, function(idx, obj) {
+                    $.each(data.grouped.itemId.groups, function (idx, obj) {
                         buf += '<div class="result-box">';
                         buf += '<b>' + itemNumber++;
                         buf += '.</b> <a target="item" href="//biodiversitylibrary.org/item/' + obj.groupValue + '">' + obj.doclist.docs[0].name + '</a> ';
@@ -113,12 +113,12 @@
                         }
                         buf += '(' + obj.doclist.numFound + '</b> matching page' + suffix + ')<div class="thumbnail-container">';
 
-                        $.each(obj.doclist.docs, function(idx, page) {
-                            var highlightText = $('<div>'+highlights[page.pageId]+'</div>').htmlClean({allowedTags: ["em"]}).html();
+                        $.each(obj.doclist.docs, function (idx, page) {
+                            var highlightText = $('<div>' + highlights[page.pageId] + '</div>').htmlClean({allowedTags: ["em"]}).html();
                             buf += '<div class="page-thumbnail"><a target="page image" href="//biodiversitylibrary.org/page/' +
-                                    page.pageId + '"><img src="//biodiversitylibrary.org/pagethumb/' + page.pageId +
-                                    '" alt="Page Id ' + page.pageId + '"  width="60px" height="100px"/><div class="highlight-context">' +
-                                    highlightText + '</div></a></div>';
+                                page.pageId + '"><img src="//biodiversitylibrary.org/pagethumb/' + page.pageId +
+                                '" alt="Page Id ' + page.pageId + '"  width="60px" height="100px"/><div class="highlight-context">' +
+                                highlightText + '</div></a></div>';
                         })
                         buf += "</div><!--end .thumbnail-container -->";
                         buf += "</div>";
@@ -148,7 +148,7 @@
                         $('html, body').animate({scrollTop: '300px'}, 300);
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     $("#status-box").css("display", "none");
                     $("#solr-results").html('An error has occurred, probably due to invalid query syntax');
                 }
@@ -163,43 +163,50 @@
 
     </script>
 </head>
+
 <body class="nav-species bhl-search">
-    <header id="page-header" class="heading-bar">
-        <div class="inner row-fluid">
-            <nav id="breadcrumb" class="span12">
-                <ol class="breadcrumb">
-                    <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li class="active">BHL Search</li>
-                </ol>
-            </nav>
-        </div>
-        <h1>Biodiversity Heritage Library</h1>
-    </header>
-    <div class="inner">
-        <section id="content-search">
-            <form id="search-form" action="" method="get" name="search-form">
+<header id="page-header" class="heading-bar">
+    <div class="inner row-fluid">
+        <nav id="breadcrumb" class="span12">
+            <ol class="breadcrumb">
+                <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
+                <li class="active"> <g:message code="bhl.search"/>BHL Search</li>
+            </ol>
+        </nav>
+    </div>
+
+    <h1><g:message code="bhl.search.bhl"/></h1>
+</header>
+
+<div class="inner">
+    <section id="content-search">
+        <form id="search-form" action="" method="get" name="search-form">
             %{--<label for="search">Search</label>--}%
             <div class="input-append">
-                <input id="search" class="span4" name="q" type="text" placeholder="Search BHL" autocomplete="off" value="${params.q?:''}">
+                <input id="search" class="span4" name="q" type="text" placeholder="Search BHL" autocomplete="off"
+                       value="${params.q ?: ''}">
                 <input type="submit" class="btn" alt="Search" value="Search">
             </div>
-            </form>
-        </section>
+        </form>
+    </section>
 
-        <div id="status-box" class="column-wrap" style="display: none;">
-            <div id="search-status" class="column-wrap" >
-                <span style="vertical-align: middle; ">
-                    Searching, please wait...
-                    <img src="${resource(dir: 'css/images', file: 'indicator.gif')}" alt="Searching" style="vertical-align: middle;"/>
-                </span>
-            </div>
-        </div>
-        <div id="results-home" class="column-wrap">
-            <div id="synonyms" style="display: none">
-            </div>
-            <div class="column-wrap" id="solr-results">
-            </div>
+    <div id="status-box" class="column-wrap" style="display: none;">
+        <div id="search-status" class="column-wrap">
+            <span style="vertical-align: middle; ">
+                <g:message code="bhl.search.wait"/>
+                <img src="${resource(dir: 'css/images', file: 'indicator.gif')}" alt="Searching"
+                     style="vertical-align: middle;"/>
+            </span>
         </div>
     </div>
+
+    <div id="results-home" class="column-wrap">
+        <div id="synonyms" style="display: none">
+        </div>
+
+        <div class="column-wrap" id="solr-results">
+        </div>
+    </div>
+</div>
 </body>
 </html>

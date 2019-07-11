@@ -4,13 +4,8 @@
 
             <div class="taxon-summary-gallery">
                 <div class="main-img hide">
-                    <a class="lightbox-img"
-                       data-toggle="lightbox"
-                       data-gallery="taxon-summary-gallery"
-                       data-parent=".taxon-summary-gallery"
-                       data-title=""
-                       data-footer=""
-                       href="">
+                    <a class="lightbox-img" data-toggle="lightbox" data-gallery="taxon-summary-gallery"
+                       data-parent=".taxon-summary-gallery" data-title="" data-footer="" href="">
                         <img class="mainOverviewImage img-responsive" src="">
                     </a>
 
@@ -30,7 +25,7 @@
             <g:if test="${tc.conservationStatuses}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Conservation Status</h3>
+                        <h3 class="panel-title"><g:message code="overview.status.conservation"/></h3>
                     </div>
 
                     <div class="panel-body">
@@ -61,7 +56,7 @@
 
             <div class="panel panel-default panel-resources">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Online Resources</h3>
+                    <h3 class="panel-title"><g:message code="overview.online.resources"/></h3>
                 </div>
 
                 <div class="panel-body">
@@ -73,12 +68,21 @@
 
         <div class="col-md-6">
             <div id="expertDistroDiv" style="display:none;margin-bottom: 20px;">
-                <h3>Compiled distribution map</h3>
-                <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg" style="width:316px;" alt="occurrence map" onerror="this.style.display='none'"/>
-                <p class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></p>
+                <h3><g:message code="overview.map.occurrence.compile.mapa.attribution"/></h3>
+                <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg"
+                     style="width:316px;" alt="occurrence map" onerror="this.style.display = 'none'"/>
+
+                <p class="mapAttribution"><g:message code="overview.map.occurrence.mapa.attribution.01"/>
+                    <span id="dataResource">[<g:message code="overview.map.occurrence.mapa.attribution.02"/>]</span></p>
             </div>
+
             <div class="taxon-map">
-                <h3>Occurrence records map (<span class="occurrenceRecordCount">0</span> records)</h3>
+                <h3>
+                    <g:message code="overview.map.occurrence.records.01"/>
+                    (<span class="occurrenceRecordCount">0</span>
+                    <g:message code="overview.map.occurrence.records.02"/>)
+                </h3>
+
                 <div id="leafletMap"></div>
 
                 <g:if test="${grailsApplication.config.spatial.baseURL}">
@@ -91,17 +95,20 @@
                 <div class="map-buttons">
                     <a class="btn btn-primary btn-lg"
                        href="${mapUrl}"
-                       title="${g.message(code:'overview.map.button.records.map.title', default:'View interactive map')}"
-                       role="button"><g:message code="overview.map.button.records.map" default="View Interactive Map"/></a>
+                       title="${g.message(code: 'overview.map.button.records.map.title', default: 'View interactive map')}"
+                       role="button">
+                        <g:message code="overview.map.button.records.map" default="View Interactive Map"/>
+                    </a>
                     <g:if test="${grailsApplication.config.map.simpleMapButton.toBoolean()}">
                         <a class="btn btn-primary btn-lg"
                            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
-                           title="${g.message(code:'overview.map.button.records.simplemap.title', default:'View map')}"
-                           role="button"><g:message code="overview.map.button.records.simplemap" default="View map"/></a>
+                           title="${g.message(code: 'overview.map.button.records.simplemap.title', default: 'View map')}"
+                           role="button"><g:message code="overview.map.button.records.simplemap"
+                                                    default="View map"/></a>
                     </g:if>
                     <a class="btn btn-primary btn-lg"
                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
-                       title="${g.message(code:'overview.map.button.records.list.title', default:'View records')}"
+                       title="${g.message(code: 'overview.map.button.records.list.title', default: 'View records')}"
                        role="button"><g:message code="overview.map.button.records.list" default="View records"/></a>
                 </div>
             </div>
@@ -111,37 +118,50 @@
                     <ul class="list-unstyled">
                         <g:if test="${citizenSciUrl}">
                             <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
-                                    class="glyphicon glyphicon-map-marker"></span> Record a sighting</a>
+                                    class="glyphicon glyphicon-map-marker"></span>
+                                <g:message code="overview.map.record.sighting"/></a>
                             </li>
-                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
-                                    class="glyphicon glyphicon-camera"></span> Submit a photo</a></li>
+                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}">
+                                <span class="glyphicon glyphicon-camera"></span>
+                                <g:message code="overview.map.submit.photo"/></a></li>
                         </g:if>
-                        <li><a id="alertsButton" href="#"><span
-                                class="glyphicon glyphicon-bell"></span> Receive alerts when new records are added
-                        </a></li>
+                        <li>
+                            <a id="alertsButton" href="#">
+                                <span class="glyphicon glyphicon-bell"></span>
+                                <g:message code="overview.map.receive.alerts"/>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
 
             <div class="panel panel-default panel-data-providers">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Datasets</h3>
+                    <h3 class="panel-title"><g:message code="overview.datasets"/></h3>
                 </div>
 
                 <div class="panel-body">
                     <p><strong><span class="datasetCount"></span>
-                    </strong> <span class="datasetLabel">datasets have</span> provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
+                    </strong>
+                        <span class="datasetLabel">
+                            <g:message code="overview.datasets.count.have"/>
+                        </span>
+                        <g:message
+                                code="overview.datasets.count.provided"/> ${grailsApplication.config.skin.orgNameShort}
+                        <g:message code="overview.datasets.count.for"/> ${tc.taxonConcept.rankString}.
                     </p>
 
-                    <p><a class="tab-link"
-                          href="#data-partners">Browse the list of datasets</a> and find organisations you can join if you are
-                    interested in participating in a survey for
-                    <g:if test="${tc.taxonConcept?.rankID > 6000}">
-                        species like ${raw(sciNameFormatted)}
-                    </g:if>
-                    <g:else>
-                        species of ${raw(sciNameFormatted)}.
-                    </g:else>
+                    <p>
+                        <a class="tab-link" href="#data-partners">
+                            <g:message code="overview.datasets.lists.01"/>
+                        </a>
+                        <g:message code="overview.datasets.lists.02"/>
+                        <g:if test="${tc.taxonConcept?.rankID > 6000}">
+                            <g:message code="overview.datasets.species.like"/> ${raw(sciNameFormatted)}
+                        </g:if>
+                        <g:else>
+                            <g:message code="overview.datasets.species.of"/> ${raw(sciNameFormatted)}.
+                        </g:else>
                     </p>
                 </div>
             </div>

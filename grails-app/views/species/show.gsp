@@ -31,8 +31,8 @@
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}"/>
 <g:set bean="authService" var="authService"></g:set>
-<g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType?:'LEAFLET'}"></g:set>
-<g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout?:"false".toBoolean()}"/>
+<g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType ?: 'LEAFLET'}"></g:set>
+<g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout ?: "false".toBoolean()}"/>
 <g:set var="logoFile" value="${grailsApplication.config.skin.logoFile}"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +70,8 @@
                 <ol class="list-inline breadcrumb">
                     <g:each in="${taxonHierarchy}" var="taxon">
                         <g:if test="${taxon.guid != tc.taxonConcept.guid}">
-                            <li><g:link controller="species" action="show" title="${taxon.rank}" data-toggle="tooltip" data-placement="bottom"
+                            <li><g:link controller="species" action="show" title="${taxon.rank}" data-toggle="tooltip"
+                                        data-placement="bottom"
                                         params="[guid: taxon.guid]">${taxon.scientificName}</g:link></li>
                         </g:if>
                         <g:else>
@@ -83,21 +84,28 @@
         <div class="header-inner">
             <h5 class="pull-right json">
                 <a href="${jsonLink}" target="data"
-                   title="${message(code:"show.view.json.title")}" class="btn btn-sm btn-default active"
-                   data-toggle="tooltip" data-placement="bottom"><g:message code="show.json" /></a>
+                   title="${message(code: "show.view.json.title")}" class="btn btn-sm btn-default active"
+                   data-toggle="tooltip" data-placement="bottom"><g:message code="show.json"/></a>
             </h5>
+
             <h1>${raw(sciNameFormatted)}</h1>
             <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.opt(0)?.nameString : ''}"/>
-            <g:if test="${commonNameDisplay}">
-                <h2>${raw(commonNameDisplay)}</h2>
-            </g:if>
+            <g:if test="${commonNameDisplay}"><h2>${raw(commonNameDisplay)}</h2></g:if>
             <g:if test="${tc?.taxonConcept?.acceptedConceptName}">
-                <h2><g:link uri="/species/${tc.taxonConcept.acceptedConceptID}">${tc.taxonConcept.acceptedConceptName}</g:link></h2>
+                <h2>
+                    <g:link uri="/species/${tc.taxonConcept.acceptedConceptID}">${tc.taxonConcept.acceptedConceptName}</g:link>
+                </h2>
             </g:if>
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
-            <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
+            <g:if test="${tc.taxonConcept.taxonomicStatus}">
+                <h5 class="inline-head taxonomic-status"
+                    title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}">
+                    <g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}"
+                               default="${tc.taxonConcept.taxonomicStatus}"/>
+                </h5>
+            </g:if>
             <h5 class="inline-head name-authority">
-                <strong>Name authority:</strong>
+                <strong><g:message code="show.name.authority"/>:</strong>
                 <span class="name-authority">${tc?.taxonConcept.nameAuthority ?: grailsApplication.config.defaultNameAuthority}</span>
             </h5>
         </div>
@@ -111,6 +119,7 @@
                             code="label.${tab}" default="${tab}"/></a></li>
                 </g:each>
             </ul>
+
             <div class="tab-content">
                 <g:each in="${tabs}" status="ts" var="tab">
                     <g:render template="${tab}"/>
@@ -220,8 +229,10 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-1">
         </div>
+
         <div class="col-md-3 hide main-audio padding-bottom-2">
             <div class="row">
                 <div class="col-md-8 panel-heading">
@@ -268,6 +279,7 @@
                 <div class="col-md-2 "></div>
             </div>
         </div>
+
         <div class="col-md-1">
         </div>
     </div>
@@ -276,18 +288,22 @@
         <div class="row">
             <div class="col-md-2 ">
             </div>
+
             <div class="col-md-8 panel-heading">
                 <h3 class="panel-title">Main Video</h3>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-2 ">
             </div>
+
             <div class="col-md-7 ">
                 <div class="video-embedded embed-responsive embed-responsive-16by9 col-xs-12 text-center">
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-2 "></div>
 
@@ -317,6 +333,7 @@
                 </div>
 
             </div>
+
             <div class="col-md-2 "></div>
         </div>
     </div>
@@ -344,7 +361,8 @@
 
                 </div>
                 <!-- dialog buttons -->
-                <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div>
+                <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -363,15 +381,17 @@
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
         taxonRankID:        "${tc?.taxonConcept?.rankID ?: ''}",
-        synonyms:            [ <g:each in="${tc?.synonyms}" var="syn" status="si">"${syn.nameString.encodeAsJavaScript()}"<g:if test="${si < tc.synonyms.size() - 1}">, </g:if></g:each> ],
-        preferredImageId:   "${tc?.imageIdentifier?: ''}",
+        synonyms:            [ <g:each in="${tc?.synonyms}" var="syn"
+                                       status="si">"${syn.nameString.encodeAsJavaScript()}"<g:if
+            test="${si < tc.synonyms.size() - 1}">,</g:if></g:each> ],
+        preferredImageId:   "${tc?.imageIdentifier ?: ''}",
         citizenSciUrl:      "${citizenSciUrl}",
         serverName:         "${grailsApplication.config.grails.serverURL}",
         speciesListUrl:     "${grailsApplication.config.speciesList.baseURL}",
         bieUrl:             "${grailsApplication.config.bie.baseURL}",
         alertsUrl:          "${grailsApplication.config.alerts.baseUrl}",
         remoteUser:         "${request.remoteUser ?: ''}",
-        eolUrl:             "${raw(createLink(controller: 'externalSite', action: 'eol', params: [s: tc?.taxonConcept?.nameString ?: '', f:tc?.classification?.class?:tc?.classification?.phylum?:'']))}",
+        eolUrl:             "${raw(createLink(controller: 'externalSite', action: 'eol', params: [s: tc?.taxonConcept?.nameString ?: '', f: tc?.classification?.class ?: tc?.classification?.phylum ?: '']))}",
         genbankUrl:         "${raw(createLink(controller: 'externalSite', action: 'genbank', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
         scholarUrl:         "${raw(createLink(controller: 'externalSite', action: 'scholar', params: [s: tc?.taxonConcept?.nameString ?: '']))}",
         soundUrl:           "${raw(createLink(controller: 'species', action: 'soundSearch', params: [id: guid]))}",
@@ -396,16 +416,16 @@
         userRatingUrl: "${createLink(controller: 'imageClient', action: 'userRating')}",
         disableLikeDislikeButton: ${authService.getUserId() ? false : true},
         userRatingHelpText: '<div><b>Up vote (<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>) an image:</b>'+
-        ' Image supports the identification of the species or is representative of the species.  Subject is clearly visible including identifying features.<br/><br/>'+
-        '<b>Down vote (<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>) an image:</b>'+
-        ' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/></div>',
+' Image supports the identification of the species or is representative of the species.  Subject is clearly visible including identifying features.<br/><br/>'+
+'<b>Down vote (<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>) an image:</b>'+
+' Image does not support the identification of the species, subject is unclear and identifying features are difficult to see or not visible.<br/><br/></div>',
         savePreferredSpeciesListUrl: "${createLink(controller: 'imageClient', action: 'saveImageToSpeciesList')}",
         getPreferredSpeciesListUrl: "${grailsApplication.config.speciesList.baseURL}",
         druid: "${grailsApplication.config.speciesList.preferredSpeciesListDruid}",
         addPreferenceButton: ${imageClient.checkAllowableEditRole()},
         mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
-        mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}",
-        troveUrl: "${raw(grailsApplication.config.literature?.trove?.api + '/result?zone=book&encoding=json&key=' + grailsApplication.config.literature?.trove?.apikey )}",
+        mapEnvOptions: "${grailsApplication.config.map.env?.options ?: 'color:' + grailsApplication.config.map.records.colour + ';name:circle;size:4;opacity:0.8'}",
+        troveUrl: "${raw(grailsApplication.config.literature?.trove?.api + '/result?zone=book&encoding=json&key=' + grailsApplication.config.literature?.trove?.apikey)}",
         bhlUrl: "${raw(createLink(controller: 'externalSite', action: 'bhl'))}"
     };
 
@@ -417,12 +437,12 @@
         var target = $(e.target).attr("href");
         if(target == "#records"){
             $('#charts').html(''); //prevent multiple loads
-            <charts:biocache
-                biocacheServiceUrl="${grailsApplication.config.biocacheService.baseURL}"
-                biocacheWebappUrl="${grailsApplication.config.biocache.baseURL}"
-                q="lsid:${guid}"
-                qc="${grailsApplication.config.biocacheService.queryContext ?: ''}"
-                fq=""/>
+    <charts:biocache
+            biocacheServiceUrl="${grailsApplication.config.biocacheService.baseURL}"
+            biocacheWebappUrl="${grailsApplication.config.biocache.baseURL}"
+            q="lsid:${guid}"
+            qc="${grailsApplication.config.biocacheService.queryContext ?: ''}"
+            fq=""/>
     }
     if(target == '#overview'){
         loadMap();

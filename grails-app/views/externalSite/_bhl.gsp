@@ -1,6 +1,6 @@
 <div class="results-summary">
     <g:if test="${!max}">
-        <g:message code="page.bhl.none" args="${[search.join(', ')]}"/>
+        <g:message code="bhl.page.none" args="${[search.join(', ')]}"/>
     </g:if>
     <g:else>
     <g:message code="page.bhl.showing" args="${[ start + 1, Math.min(max, start + rows), max, search.join(', ')]}"/>
