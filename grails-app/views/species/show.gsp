@@ -29,6 +29,7 @@
                                                  name="${tc?.taxonConcept?.name}"
                                                  taxonomicStatus="${tc?.taxonConcept?.taxonomicStatus}"
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
+<g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.get(0)?.nameString : ''}"/>
 <g:set var="locale" value="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request)}"/>
 <g:set bean="authService" var="authService"></g:set>
 <g:set var="imageViewerType" value="${grailsApplication.config.imageViewerType?:'LEAFLET'}"></g:set>
@@ -39,7 +40,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${tc?.taxonConcept?.nameString} ${(tc?.commonNames) ? ' : ' + tc?.commonNames?.get(0)?.nameString : ''} | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
+    <title>${tc?.taxonConcept?.nameString}<g:if test="${commonNameDisplay}"> : ${commonNameDisplay}</g:if> | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
 
     <!-- facebook tags -->
@@ -87,19 +88,25 @@
                    data-toggle="tooltip" data-placement="bottom"><g:message code="show.json" /></a>
             </h5>
             <h1>${raw(sciNameFormatted)}</h1>
-            <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.opt(0)?.nameString : ''}"/>
-            <g:if test="${commonNameDisplay}">
-                <h2>${raw(commonNameDisplay)}</h2>
-            </g:if>
-            <g:if test="${tc?.taxonConcept?.acceptedConceptName}">
-                <h2><g:link uri="/species/${tc.taxonConcept.acceptedConceptID}">${tc.taxonConcept.acceptedConceptName}</g:link></h2>
-            </g:if>
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
             <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
             <h5 class="inline-head name-authority">
                 <strong>Name authority:</strong>
                 <span class="name-authority">${tc?.taxonConcept.nameAuthority ?: grailsApplication.config.defaultNameAuthority}</span>
             </h5>
+            <g:if test="${commonNameDisplay}">
+                <h2>${raw(commonNameDisplay)}</h2>
+            </g:if>
+            <g:if test="${tc?.taxonConcept?.acceptedConceptName}">
+                <h2><g:link uri="/species/${tc.taxonConcept.acceptedConceptID}">${tc.taxonConcept.acceptedConceptName}</g:link></h2>
+            </g:if>
+            <g:if test="${grailsApplication.config.vernacularName.pull.showHeader && tc.pullCommonNames}">
+                <g:each in="${tc.pullCommonNames}" var="cn" status="cni">
+                    <g:if test="${cni % 2 == 0}"><g:if test="${cni != 0}"></div></g:if><div class="row"></g:if>
+                    <div class="col-md-6"><h2><bie:markLanguage text="${cn.nameString}" lang="${cn.language}" mark="${grailsApplication.config.vernacularName.pull.showLanguage}" tag="${false}"/></h2></div>
+                </g:each>
+                </div>
+            </g:if>
         </div>
     </header>
 

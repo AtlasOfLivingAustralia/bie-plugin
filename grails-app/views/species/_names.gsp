@@ -146,7 +146,80 @@
         </table>
     </g:if>
 
-    <g:if test="${tc.commonNames}">
+    <g:if test="${tc.pullCommonNames}">
+        <table class="table name-table table-responsive">
+            <thead>
+            <tr>
+                <th title="${grailsApplication.config.vernacularName.pull.labelDetail}">${grailsApplication.config.vernacularName.pull.label}</th>
+                <th title="<g:message code="label.source.detail"/>"><g:message code="label.source"/></th>
+            </tr>
+            </thead>
+            <tbody>
+            <g:each in="${tc.pullCommonNames}" var="cn">
+                <g:set var="name" value="${cn.nameString}"/>
+                <g:set var="language" value="${cn.language}"/>
+                <g:set var="infoSource" value="${cn.infoSourceURL}"/>
+                <g:set var="isInfoSourceURL" value="${infoSource && infoSource.matches('[a-z]+://.*')}"/>
+                <g:set var="datasetURL" value="${cn.datasetURL}"/>
+                <tr>
+                    <td>
+                        <bie:markLanguage text="${name}" lang="${language}" mark="${!grailsApplication.config.vernacularName.pull.showLanguage}" href="${isInfoSourceURL && infoSource != datasetURL ? infoSource : null}"/>
+                        <bie:markCommonStatus status="common" tags="${cn.labels}"/>
+                        <g:if test="${cn.temporal}"><span title="${message(code: 'label.temporal.vernacular.detail', default: 'Used with a specific time period')}" class="annotation annotation-temporal">${cn.temporal}</span></g:if>
+                        <g:if test="${cn.locality || cn.countryCode}"><span title="${message(code: 'label.locality.vernacular.detail', default: 'Used in a specific locality or country')}" class="annotation annotation-locality">${cn.locality} <bie:country code="${cn.countryCode}"/></span></g:if>
+                        <g:if test="${cn.sex}"><span title="${message(code: 'label.sex.vernacular.detail', default: 'Used with a specific sex')}" class="annotation annotation-sex">${cn.sex}</span></g:if>
+                        <g:if test="${cn.lifeStage}"><span title="${message(code: 'label.lifeStage.vernacular.detail', default: 'Used with a specific life-stage')}" class="annotation annotation-life-stage">${cn.lifeStage}</span></g:if>
+                        <g:if test="${cn.isPlural}"><span title="${message(code: 'label.isPlural.vernacular.detail', default: 'Plural form of name')}" class="annotation annotation-is-plural"><g:message code="label.isPlural.vernacular" default="plural"/></span></g:if>
+                        <g:if test="${cn.organismPart}"><span title="${message(code: 'label.organismPart.vernacular.detail', default: 'Used for a specific part')}" class="annotation annotation-organism-part">${cn.organismPart}</span></g:if>
+                    </td>
+                    <td class="source">
+                        <ul>
+                            <g:if test="${grailsApplication.config.vernacularName.pull.showLanguage}">
+                                <li>
+                                    <bie:showLanguage lang="${language}"/>
+                                </li>
+                            </g:if>
+                            <li>
+                                <g:if test="${cn.datasetURL}"><a href="${cn.datasetURL}"
+                                                                 onclick="window.open(this.href);
+                                                                 return false;">${cn.infoSourceName}</a></g:if>
+                                <g:else>${cn.infoSourceName}</g:else>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <g:if test="${!isInfoSourceURL && infoSource}">
+                    <tr class="cite">
+                        <td colspan="2">
+                            <cite><g:message code="label.namePublishedIn"/><span
+                                    class="publishedIn">${infoSource}</span>
+                            </cite>
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${cn.taxonRemarks}">
+                    <tr class="remarks">
+                        <td colspan="2">
+                            <g:each in="${cn.taxonRemarks}" var="remark">
+                                <p class="taxonRemarks">${remark}</p>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${cn.provenance}">
+                    <tr class="provenance">
+                        <td colspan="2">
+                            <g:each in="${cn.provenance}" var="statement">
+                                <p class="provenanceStatement">${statement}</p>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:if>
+            </g:each>
+            </tbody></table>
+    </g:if>
+
+    <g:if test="${tc.standardCommonNames}">
         <table class="table name-table table-responsive">
             <thead>
             <tr>
@@ -155,7 +228,7 @@
             </tr>
             </thead>
             <tbody>
-            <g:each in="${tc.commonNames}" var="cn">
+            <g:each in="${tc.standardCommonNames}" var="cn">
                 <g:set var="name" value="${cn.nameString}"/>
                 <g:set var="language" value="${cn.language}"/>
                 <g:set var="infoSource" value="${cn.infoSourceURL}"/>

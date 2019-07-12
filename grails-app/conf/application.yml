@@ -160,6 +160,15 @@ admin_role: ROLE_ADMIN
 allowedImageEditingRoles: ROLE_ADMIN
 additionalMapFilter:
 synonymsTypes: synonym
+vernacularName:
+  # A category of vernacular names pulled out from the standard list and given special display treatment
+  pull:
+    categories:
+    active: false
+    label: Special Common Names
+    labelDetail: Common names with a special status
+    showHeader: false
+    showLanguage: false
 external:
   eol:
     search:
