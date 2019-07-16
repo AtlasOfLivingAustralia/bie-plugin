@@ -246,16 +246,24 @@ class BieTagLib implements GrailsConfigurationAware {
      * Show language information, including a link to the language definition, if available
      *
      * @attr lang The language code
+     * @attr format Format into HTML (truye by default)
+     * @attr default The default language name, if not found
      */
     def showLanguage = { attrs ->
         Locale lang = buildLocale(attrs.lang)
-        def name = languages[lang.language] ?: [code: lang.toLanguageTag(), name: lang.displayName]
-        out << "<span class=\"language-name\" title=\"${name.code}\">"
-        if (name.uri)
-            out << "<a href=\"${name.uri}\" onclick=\"window.open(this.href); return false;\">${name.name ?: lang.language}</a>"
-        else
-            out << name.name ?: lang.language
-        out << "</span>"
+        boolean format = attrs.containsKey('format') ? attrs.format : true
+        def name = languages[lang.language]
+        def display = name?.name ?: attrs.default ?: lang.displayName
+        if (!format) {
+            out << display
+        } else {
+            out << "<span class=\"language-name\" title=\"${name?.code ?: lang.language}\">"
+            if (name.uri)
+                out << "<a href=\"${name.uri}\" onclick=\"window.open(this.href); return false;\">${display}</a>"
+            else
+                out << display
+            out << "</span>"
+        }
     }
 
     /**
