@@ -2,14 +2,12 @@ package au.org.ala.bie
 
 import groovy.json.JsonSlurper
 import org.apache.commons.lang.StringEscapeUtils
-import au.org.ala.names.parser.PhraseNameParser
+import org.gbif.nameparser.PhraseNameParser
 import org.springframework.web.servlet.support.RequestContextUtils
 
 import java.text.MessageFormat
 
 class BieTagLib {
-    def grailsApplication
-
     static namespace = 'bie'     // namespace for headers and footers
 
     static languages = null      // Lazy iniitalisation
@@ -29,7 +27,7 @@ class BieTagLib {
         def rankId = attrs.rankId ?: 0
         def name = attrs.nameComplete ?: attrs.name
         def rank = cssRank(rankId)
-        def accepted = attrs.acceptedName
+        String accepted = attrs.acceptedName
         def taxonomicStatus = attrs.taxonomicStatus
         def parsed = { n, r, incAuthor ->
             PhraseNameParser pnp = new PhraseNameParser()
@@ -52,7 +50,7 @@ class BieTagLib {
                 output = parsed(name, rank, true)
             nameFormatted = output
         }
-        if (accepted) {
+        if (accepted && accepted.tokenize(" ").size() < 7) {
             accepted = parsed(accepted, rank, false)
         }
         out << MessageFormat.format(format, nameFormatted, accepted)
@@ -189,21 +187,66 @@ class BieTagLib {
      * Mark a phrase with language, optionally with a specific language marker
      *
      * @attr text The text to mark
-     * @attr lang The language code (ISO)
+     * @attr lang The language code (ISO) (defaults to the request locale or the default locale)
      * @attr mark Mark the language in text (defaults to true)
+     * @attr href Link to the text
      */
     def markLanguage = { attrs ->
         Locale defaultLocale = RequestContextUtils.getLocale(request)
         String text = attrs.text ?: ""
         Locale lang = Locale.forLanguageTag(attrs.lang ?: defaultLocale.language)
+        String href = attrs.href
         boolean mark = attrs.mark ?: true
 
-        out << "<span lang=\"${lang}\">${text}"
+        out << "<span lang=\"${lang}\">"
+        if (href)
+            out << "<a href=\"${href}\" target=\"_blank\" class=\"external\">${text}</a>"
+        else
+            out << text
         if (mark && defaultLocale.language != lang.language) {
             String name = languageName(lang.language)
             out << "&nbsp;<span class=\"annotation annotation-language\" title=\"${lang}\">${name}</span>"
         }
         out << "</span>"
+    }
+
+    /**
+     * Mark a common name with status information
+     *
+     * @attr status The status term
+     * @attr tags tags, separated by a |
+     */
+    def markCommonStatus = { attrs ->
+        String status = attrs.status ?: "common"
+        List<String> tags = attrs.tags?.split("\\|")
+
+        if (status != "common" || tags) {
+            String statusDetail = message(code: "commonStatus.${status}.detail", default: '')
+            String statusText = message(code: "commonStatus.${status}", default: status)
+            out << "<span class=\"annotation annotation-status\" title=\"${statusDetail}\">${statusText}</span>"
+            tags.each {
+                String labelCode = it.trim().replaceAll("\\W", "-").toLowerCase()
+                String labelDetail = message(code: "tag.${labelCode}.detail", default: '')
+                String labelText = message(code: "tag.${labelCode}", default: it)
+                out << "&nbsp;<span class=\"tag tag-${labelCode}\" title=\"${labelDetail}\">${labelText}</span>"
+            }
+        }
+
+    }
+
+    /**
+     * Convert a country code into a country name
+     *
+     * @attr code The country code
+     * @attr lang The language to use (defaults to the request locale or the default locale)
+     */
+    def country = { attrs ->
+        if (!attrs.code)
+            return
+        Locale defaultLocale = RequestContextUtils.getLocale(request)
+        Locale lang = Locale.forLanguageTag(attrs.lang ?: defaultLocale.language)
+        Locale country = new Locale(lang.language, attrs.code)
+        out << "<span lang=\"${lang}\">${country ? country.getDisplayCountry(lang) : attrs.code}</span>"
     }
 
     def displaySearchHighlights = {  attrs, body ->

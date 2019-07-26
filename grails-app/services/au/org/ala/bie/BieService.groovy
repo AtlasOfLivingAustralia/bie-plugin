@@ -1,6 +1,8 @@
 package au.org.ala.bie
+
+import au.org.ala.bie.webapp2.SearchRequestParamsDTO
 import grails.converters.JSON
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 class BieService {
 
@@ -19,7 +21,7 @@ class BieService {
 
         //add a query context for biocache - this will influence record counts
         if(grailsApplication.config.biocacheService.queryContext){
-            queryUrl = queryUrl + "&bqc=" + grailsApplication.config.biocacheService.queryContext
+            queryUrl = queryUrl + "&bqc=" + URLEncoder.encode(grailsApplication.config.biocacheService.queryContext, "UTF-8")
         }
 
         def json = webService.get(queryUrl)
@@ -27,7 +29,7 @@ class BieService {
     }
 
     def getSpeciesList(guid){
-        if(!guid){
+        if(!guid || !grailsApplication.config.speciesList.baseURL){
             return null
         }
         try {

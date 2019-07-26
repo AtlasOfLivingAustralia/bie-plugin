@@ -1,0 +1,42 @@
+vocabulary:
+  server: https://voc.ala.org.au
+  service: https://voc.ala.org.au/ws
+  rdf:
+    type:
+      iri: http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+  format:
+    asset:
+      iri: http://www.ala.org.au/format/1.0/asset
+    height:
+      iri: http://www.ala.org.au/format/1.0/height
+    icon:
+      iri: http://www.ala.org.au/format/1.0/icon
+    style:
+      iri: http://www.ala.org.au/format/1.0/style
+    width:
+      iri: http://www.ala.org.au/format/1.0/width
+  image:
+    types:
+      image: http://www.ala.org.au/format/1.0/Image
+  tag:
+    types:
+      concept: http://www.ala.org.au/format/1.0/Concept
+      language: http://www.ala.org.au/format/1.0/Language
+      term: http://www.ala.org.au/format/1.0/Term
+  label:
+    sources:
+      - - http://www.w3.org/2004/02/skos/core#prefLabel
+        - http://www.w3.org/2000/01/rdf-schema#label
+      - - http://purl.org/dc/terms/title
+        - http://purl.org/dc/elements/1.1/title
+      - - http://www.w3.org/2004/02/skos/core#notation
+        - http://www.w3.org/2004/02/skos/core#altLabel
+  title:
+    sources:
+      - - http://purl.org/dc/terms/title
+        - http://purl.org/dc/elements/1.1/title
+  description:
+    sources:
+      - - http://purl.org/dc/terms/description
+        - http://purl.org/dc/elements/1.1/description
+      - - http://www.w3.org/2000/01/rdf-schema#comment

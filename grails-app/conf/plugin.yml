@@ -1,0 +1,116 @@
+---
+grails:
+    profile: web-plugin
+    codegen:
+        defaultPackage: au.org.ala.bie.plugin
+    spring:
+        transactionManagement:
+            proxies: false
+    gorm:
+        # Whether to autowire entities. 
+        # Disabled by default for performance reasons.
+        autowire: false         
+        reactor:
+            # Whether to translate GORM events into Reactor events
+            # Disabled by default for performance reasons
+            events: false
+info:
+    app:
+        name: '@info.app.name@'
+        version: '@info.app.version@'
+        grailsVersion: '@info.app.grailsVersion@'
+spring:
+    main:
+        banner-mode: "off"
+    groovy:
+        template:
+            check-template-location: false
+
+# Spring Actuator Endpoints are Disabled by Default
+endpoints:
+    enabled: false
+    jmx:
+        enabled: true
+
+---
+grails:
+    mime:
+        disable:
+            accept:
+                header:
+                    userAgents:
+                        - Gecko
+                        - WebKit
+                        - Presto
+                        - Trident
+        types:
+            all: '*/*'
+            atom: application/atom+xml
+            css: text/css
+            csv: text/csv
+            form: application/x-www-form-urlencoded
+            html:
+              - text/html
+              - application/xhtml+xml
+            js: text/javascript
+            json:
+              - application/json
+              - text/json
+            multipartForm: multipart/form-data
+            pdf: application/pdf
+            rss: application/rss+xml
+            text: text/plain
+            hal:
+              - application/hal+json
+              - application/hal+xml
+            xml:
+              - text/xml
+              - application/xml
+    urlmapping:
+        cache:
+            maxsize: 1000
+    controllers:
+        defaultScope: singleton
+    converters:
+        encoding: UTF-8
+    views:
+        default:
+            codec: html
+        gsp:
+            encoding: UTF-8
+            htmlcodec: xml
+            codecs:
+                expression: html
+                scriptlets: html
+                taglib: none
+                staticparts: none
+endpoints:
+    jmx:
+        unique-names: true
+---
+external:
+  eol:
+    search:
+      # {0}= name to search for, {1} = filter string
+      # service: https://eol.org/api/search/1.0.json?q={0}&page=1&exact=true&filter_by_string={1}&cache_ttl=
+      service: https://eol.org/api/search/1.0.json?q={0}&page=1&exact=true&cache_ttl=
+    page:
+      # {0} = page id
+      service: https://eol.org/api/pages/1.0/{0,number,#0}.json?images_per_page=0&videos_per_page=0&sounds_per_page=0&maps_per_page=0&texts_per_page=30&subjects=overview&licenses=all&details=true&references=true&vetted=0&cache_ttl=
+literature:
+  bhl:
+    url: https://biodiversitylibrary.org
+    api: https://www.biodiversitylibrary.org/api3
+    apikey: "<key value>"
+    fulltext: false
+    pageSize: 200
+    extend: false
+  genbank:
+    url: https://www.ncbi.nlm.nih.gov
+  scholar:
+    url: https://scholar.google.com
+  trove:
+    url: https://trove.nla.gov.au
+    api: https://api.trove.nla.gov.au
+    apikey: "<key value>"
+

@@ -1,0 +1,60 @@
+{
+  "Status": "ok",
+  "ErrorMessage": "",
+  "Result": [
+    {
+      "BHLType": "Part",
+      "FoundIn": "Metadata",
+      "ExternalUrl": "http://www.scielo.cl/scielo.php?script=sci_arttext\u0026pid=S0717-66432015000200007",
+      "Authors": [
+        {
+          "Name": "AGUILERA,NARCISO"
+        },
+        {
+          "Name": "Becerra,José"
+        },
+        {
+          "Name": "GUEDES,LUBIA M."
+        },
+        {
+          "Name": "VILLASEÑOR-PARADA,CRISTOBAL"
+        },
+        {
+          "Name": "GONZÁLEZ,LUIS"
+        },
+        {
+          "Name": "Hernández,Víctor"
+        }
+      ],
+      "PartUrl": "https://www.biodiversitylibrary.org/part/167889",
+      "PartID": "167889",
+      "Genre": "Article",
+      "Title": "Allelopathic effect of the invasive Acacia dealbata Link (Fabaceae) on two native plant species in south-central Chile",
+      "ContainerTitle": "Facultad de Ciencias Naturales y Oceanográficas, Universidad de Concepción"
+    },
+    {
+      "BHLType": "Part",
+      "FoundIn": "Metadata",
+      "ExternalUrl": "http://www.scielo.cl/scielo.php?script=sci_arttext\u0026pid=S0717-66432010000200004",
+      "Authors": [
+        {
+          "Name": "Fuentes-Ramírez,Andrés"
+        },
+        {
+          "Name": "Pauchard,Aníbal"
+        },
+        {
+          "Name": "Marticorena,Alicia"
+        },
+        {
+          "Name": "Sánchez,Paulina"
+        }
+      ],
+      "PartUrl": "https://www.biodiversitylibrary.org/part/115730",
+      "PartID": "115730",
+      "Genre": "Article",
+      "Title": "Relación entre la invasión de Acacia dealbata Link (Fabaceae: Mimosoideae) y la riqueza de especies vegetales en el centro-sur de Chile",
+      "ContainerTitle": "Gayana. Botánica"
+    }
+  ]
+}

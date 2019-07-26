@@ -20,13 +20,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<g:set var="alaUrl" value="${grailsApplication.config.ala.baseURL}"/>
+<g:set var="alaUrl" value="${grailsApplication.config.getProperty('ala.baseURL')}"/>
+<g:set var="fluidLayout" value="${grailsApplication.config.getProperty('skin.fluidLayout').toBoolean()}"/>
 <!doctype html>
 <html>
 <head>
-    <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if> Image browser | ${grailsApplication.config.skin.orgNameLong}</title>
-    <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <script type="text/javascript">
+    <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if>
+            Image browser | ${grailsApplication.config.getProperty('skin.orgNameLong')}</title>
+    <meta name="layout" content="${grailsApplication.config.getProperty('skin.layout')}"/>
+    <asset:script type="text/javascript">
         var prevPage = 0;
         var currentPage = 0;
         var lastPage, noOfColumns;
@@ -59,7 +61,7 @@
             //send a query to server side to present new content
             $.ajax({
                 type: "GET",
-                url: "${grailsApplication.config.bie.index.url}/imageSearch/${taxonConcept?.taxonConcept?.guid}?start=" + (currentPage * pageSize) + "&rows=" + pageSize,
+                url: "${grailsApplication.config.getProperty('bie.index.url')}/imageSearch/${taxonConcept?.taxonConcept?.guid}?start=" + (currentPage * pageSize) + "&rows=" + pageSize,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
@@ -83,12 +85,12 @@
                     if(el.image) {
                         var scientificName = (el.nameComplete) ? "<i>" + el.nameComplete + "</i>" : "";
                         var commonName = (el.commonNameSingle) ? el.commonNameSingle + "<br/> " : "";
-                        var imageUrl = "${grailsApplication.config.image.thumbnailUrl}" + el.image;
+                        var imageUrl = "${grailsApplication.config.getProperty('image.thumbnailUrl')}" + el.image;
                         var titleText = $("<div/>" + commonName.replace("<br/>", " - ") + scientificName).text();
                         var $ImgCon = $('.imgConTmpl').clone();
                         $ImgCon.removeClass('imgConTmpl').removeClass('hide');
                         var link = $ImgCon.find('a.thumbImage');
-                        link.attr('href', '${grailsApplication.config.grails.serverURL}/species/' + el.guid);
+                        link.attr('href', '${grailsApplication.config.getProperty('grails.serverURL')}/species/' + el.guid);
                         link.attr('title', titleText);
                         $ImgCon.find('img').attr('src', imageUrl);
                         $ImgCon.find('.brief').html(commonName + scientificName);
@@ -120,7 +122,7 @@
             return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
         }
 
-    </script>
+    </asset:script>
     <style type="text/css">
 
     body { padding-left: 15px; padding-right: 15px; }
@@ -196,7 +198,7 @@
         <h1>Images of <b id="totalImageCount">...</b> species
             <g:if test="${taxonConcept}">
                 from ${taxonConcept.taxonConcept.taxonRank}
-                <a href="${grailsApplication.config.grails.serverURL}/species/${taxonConcept?.taxonConcept?.guid}" title="More information on this ${taxonConcept?.taxonConcept?.taxonRank}">${taxonConcept?.taxonConcept?.nameString}</a></h1>
+                <a href="${grailsApplication.config.getProperty('grails.serverURL')}/species/${taxonConcept?.taxonConcept?.guid}" title="More information on this ${taxonConcept?.taxonConcept?.taxonRank}">${taxonConcept?.taxonConcept?.nameString}</a></h1>
             </g:if>
     </header>
     <div>

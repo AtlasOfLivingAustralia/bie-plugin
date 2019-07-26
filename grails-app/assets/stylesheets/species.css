@@ -1,0 +1,184 @@
+section#classification dl#classificationList {
+    margin-left:0;
+}
+section#classification dl {
+    margin:3px 0 0 24px;
+}
+@media screen and (max-width: 600px) {
+    section#classification dl {
+        margin:3px 0 0 0px;
+    }
+}
+section#classification dl dt {
+    float:left;
+    padding-right:10px;
+}
+section#classification dl dd {
+    display: block;
+}
+section#classification dd img {
+    vertical-align:middle;
+}
+section#classification dl.childClassification dt,section#classification dl.childClassification dd {
+    float:none;
+}
+
+.conservationList {
+    list-style-type: none;
+    -webkit-padding-start: 1em;
+    -moz-padding-start: 1em;
+    padding-start: 1em;
+}
+
+span.iucn {
+    height: 40px;
+    width: 40px;
+    margin: 0 6px 12px 0;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 40px;
+    color: #333a3f;
+    text-align: center;
+    -moz-border-radius: 2em;
+    -webkit-border-radius: 2em;
+    border-radius: 2em;
+    font-variant: small-caps;
+    border: 1px solid #3d464c;
+    background-color: #fff;
+
+}
+
+span.iucn.green {
+    background-color:#005454;
+    border-color:#005454;
+    color:#fff;
+}
+
+span.iucn.near-threatened {
+    background-color:#005454;
+    border-color:#005454;
+    color:#84c684;
+}
+
+span.iucn.yellow {
+    background-color: #c90;
+    border-color: #c90;
+    color:#ffc;
+}
+
+span.iucn.orange {
+    background-color: #c63;
+    border-color: #c63;
+    color: #fc9;
+}
+
+span.iucn.red {
+    background-color: #c33;
+    border-color: #c33;
+    color:#fcc;
+}
+
+span.iucn.black {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+span.iucn.extinct {
+    background-color: black;
+    border-color: black;
+    color: #c33;
+}
+
+/* anchor offset for floating header */
+:target:before {
+    content:"";
+    display:block;
+    height:67px; /* fixed header height*/
+    margin:-67px 0 0; /* negative fixed header height */
+}
+
+.sidebarCol .navbar li {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#gallery > div {
+    margin-bottom: 20px;
+}
+
+h5.json > a {
+    font-size: 14px;
+}
+
+/*
+ * For content retrieved from the ALA Profiles application
+ */
+.inline-attribute-image.pull-left {
+    margin-right: 5px;
+}
+
+.inline-attribute-image.pull-right {
+    margin-left: 5px;
+}
+
+.inline-attribute-image.small {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.inline-attribute-image.medium {
+    max-width: 275px;
+    max-height: 275px;
+}
+
+.inline-attribute-image.large {
+    max-width: 350px;
+    max-height: 350px;
+}
+
+.collection-logo img {
+    max-width: 250px;
+}
+
+.profile-name {
+    display: inline-block;
+    padding-right: 20px;
+    /* Default Bootstrap H3 font-weight: 500 will break profile-name on Chrome */
+    font-weight: bold;
+}
+
+
+#imageDialog.modal{
+    min-height:80%;
+    margin: auto auto auto auto; /* place center */
+}
+#imageDialog .modal-dialog {
+    width: 90%;
+}
+
+#imageDialog .modal-body{overflow-y: hidden;position:static;top:50px;bottom:50px;right:0px;left:0px;}
+
+#imageDialog .modal-footer {position: absolute;bottom: 0;right: 0;left: 0;}
+
+
+.species-list-block .content, .content > .specieslist-table {
+    margin-bottom: 0;
+}
+.content > .specieslist-table > thead > tr > th, .content > .specieslist-table > tbody > tr > td {
+    padding: 4px;
+    line-height: 1.6em;
+    vertical-align: top;
+    border-top: 1px solid #bbb;
+}
+.content > .specieslist-table > tbody > tr:first-child > td {
+    border-top: none;
+}
+.specieslist-table td:first-child {
+    font-weight: bold;
+}
+
+.bhl-thumbnail {
+    max-width: 128px;
+    max-height: 120px;
+}

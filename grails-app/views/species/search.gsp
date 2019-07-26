@@ -15,31 +15,36 @@
 <%@ page import="au.org.ala.bie.BieTagLib" contentType="text/html;charset=UTF-8" %>
 <g:set var="alaUrl" value="${grailsApplication.config.ala.baseURL}"/>
 <g:set var="biocacheUrl" value="${grailsApplication.config.biocache.baseURL}"/>
+<g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout?:"false".toBoolean()}"/>
 <!doctype html>
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <title>${query} | Search | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="breadcrumb" content="Search results"/>
-    <r:require modules="search"/>
-    <r:script disposition='head'>
+    <asset:javascript src="search"/>
+    <asset:javascript src="atlas"/>
+    <asset:stylesheet src="atlas"/>
+    <asset:script type="text/javascript">
         // global var to pass GSP vars into JS file
         SEARCH_CONF = {
             searchResultTotal: ${searchResults.totalRecords},
             query: "${BieTagLib.escapeJS(query)}",
+            queryTitle: "${searchResults.queryTitle}",
             serverName: "${grailsApplication.config.grails.serverURL}",
             bieUrl: "${grailsApplication.config.bie.baseURL}",
             biocacheUrl: "${grailsApplication.config.biocache.baseURL}",
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
-            bhlUrl: "${grailsApplication.config.bhl.baseURL}",
-            biocacheQueryContext: "${grailsApplication.config.biocacheService.queryContext}",
+            bhlUrl: "${grailsApplication.config.bhl.url}",
+            biocacheQueryContext: '${raw(grailsApplication.config.biocacheService.queryContext)}',
             geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
         }
-    </r:script>
+    </asset:script>
+
 </head>
 <body class="general-search page-search">
 
-<section class="container">
+<section class="${fluidLayout ? 'container-fluid' : 'container'}">
 
     <header class="pg-header">
         <div class="row">
@@ -198,21 +203,24 @@
                         <g:set var="sectionText"><g:if test="${!facetMap.idxtype}"><span><b>Section:</b> <g:message code="idxType.${result.idxType}"/></span></g:if></g:set>
                             <g:if test="${result.has("idxtype") && result.idxtype == 'TAXON'}">
 
-                                <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.guid}</g:set>
+                                <g:set var="taxonPageLink">${request.contextPath}/species/${result.linkIdentifier ?: result.guid}</g:set>
+                                <g:set var="acceptedPageLink">${request.contextPath}/species/${result.acceptedConceptID ?: result.linkIdentifier ?: result.guid}</g:set>
                                 <g:if test="${result.image}">
                                     <div class="result-thumbnail">
-                                        <a href="${speciesPageLink}">
+                                        <a href="${acceptedPageLink}">
                                             <img src="${grailsApplication.config.image.thumbnailUrl}${result.image}" alt="">
                                         </a>
                                     </div>
                                 </g:if>
 
                                 <h3>${result.rank}:
-                                    <a href="${speciesPageLink}"><bie:formatSciName rankId="${result.rankID}" taxonomicStatus="${result.taxonomicStatus}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a>
-                                    <g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if>
+                                    <a href="${acceptedPageLink}"><bie:formatSciName rankId="${result.rankID}" taxonomicStatus="${result.taxonomicStatus}" nameFormatted="${result.nameFormatted}" nameComplete="${result.nameComplete}" name="${result.name}" acceptedName="${result.acceptedConceptName}"/></a><%--
+                                    --%><g:if test="${result.commonNameSingle}"><span class="commonNameSummary">&nbsp;&ndash;&nbsp;${result.commonNameSingle}</span></g:if><%--
+                                    --%><g:if test="${result.favourite}"><span class="favourite favourite-${result.favourite}" title="<g:message code="favourite.${result.favourite}.detail"/>"><g:message code="favourite.${result.favourite}" encodeAs="raw"/></span></g:if>
                                 </h3>
 
                                 <g:if test="${result.commonName != result.commonNameSingle}"><p class="alt-names">${result.commonName}</p></g:if>
+                                <g:if test="${taxonPageLink != acceptedPageLink}"><p class="alt-names"</g:if>
                                 <g:each var="fieldToDisplay" in="${grailsApplication.config.additionalResultsFields.split(",")}">
                                     <g:if test='${result."${fieldToDisplay}"}'>
                                         <p class="summary-info"><strong><g:message code="${fieldToDisplay}" default="${fieldToDisplay}"/>:</strong> ${result."${fieldToDisplay}"}</p>
@@ -221,8 +229,18 @@
                             </g:if>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'COMMON'}">
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
-                                <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
-                                    <a href="${speciesPageLink}">${result.name}</a></h4>
+                                <g:if test="${result.image}">
+                                    <div class="result-thumbnail">
+                                        <a href="${speciesPageLink}">
+                                            <img src="${grailsApplication.config.image.thumbnailUrl}${result.image}" alt="">
+                                        </a>
+                                    </div>
+                                </g:if>
+                                <h3><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                <a class="commonNameSummary" href="${speciesPageLink}">${result.name}</a><%--
+                                --%><g:if test="${result.acceptedConceptName}">&nbsp;&ndash;&nbsp;<bie:formatSciName rankId="${result.rankID}" taxonomicStatus="accepted" name="${result.acceptedConceptName}"/></g:if><%--
+                                --%><g:if test="${result.favourite}"><span class="favourite favourite-${result.favourite}" title="<g:message code="favourite.${result.favourite}.detail"/>"><g:message code="favourite.${result.favourite}" encodeAs="raw"/></span></g:if>
+                                </h3>
                             </g:elseif>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'IDENTIFIER'}">
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
@@ -302,6 +320,9 @@
                                         <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
                                         </li>
                                     </g:if>
+                                    <g:if test="${result.acceptedConceptID && result.acceptedConceptID != result.guid}">
+                                        <li><g:link controller="species" action="show" params="[guid:result.guid]"><g:message code="taxonomicStatus.${result.taxonomicStatus}" default="${result.taxonomicStatus}"/></g:link></li
+                                    </g:if>
                                 </ul>
                             </g:if>
                         </li>
@@ -309,9 +330,9 @@
                 </ol><!--close results-->
 
                 <div>
-                    <tb:paginate total="${searchResults?.totalRecords}"
+                    <tb:paginate total="${searchResults?.totalRecords}" max="${params.rows}"
                             action="search"
-                            params="${[q: params.q, fq: params.fq, dir: params.dir]}"
+                            params="${[q: params.q, fq: params.fq, dir: params.dir, sortField: params.sortField, rows: params.rows]}"
                     />
                 </div>
             </div><!--end .col-wide last-->
@@ -332,7 +353,7 @@
 </div>
 
 <g:if test="${searchResults.totalRecords == 0}">
-    <r:script>
+    <asset:script type="text/javascript" >
         $(function(){
             console.log(SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix);
             $.get( SEARCH_CONF.serverName + "/geo?q=" + SEARCH_CONF.query  + ' ' + SEARCH_CONF.geocodeLookupQuerySuffix, function( searchResults ) {
@@ -353,7 +374,7 @@
                 }
             });
         });
-    </r:script>
+    </asset:script>
 </g:if>
 
 </body>
