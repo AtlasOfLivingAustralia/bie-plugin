@@ -3,6 +3,13 @@
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <title>Species search | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
+    <asset:script type="text/javascript">
+        // global var to pass GSP vars into JS file
+        SEARCH_CONF = {
+            bieWebServiceUrl: "${grailsApplication.config.bie.index.url}"
+        }
+    </asset:script>
+    <asset:javascript src="search"/>
 </head>
 <body class="page-search">
 
