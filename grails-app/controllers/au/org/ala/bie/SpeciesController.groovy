@@ -103,6 +103,8 @@ class SpeciesController {
                     facetMap: utilityService.addFacetMap(filterQuery),
                     query: query?.trim(),
                     filterQuery: filterQuery,
+                    sortField: sortField,
+                    dir: sortDirection,
                     idxTypes: utilityService.getIdxtypes(searchResults?.searchResults?.facetResults),
                     isAustralian: false,
                     collectionsMap: utilityService.addFqUidMap(filterQuery)
