@@ -199,7 +199,8 @@ html, body {height:100%;}
 #charts { margin-top:30px; padding-top:20px; }
 .chart { width:50%;  margin-bottom: 20px; float:left; padding-right: 10px; }
 .chart-legend { font-size:12px; }
-#data_resource_uid-chart { width:100%; }
+.data_resource_uid-chart, .collection_uid-chart { width:100%; }
+
 
 /* Hide wikipedia links */
 .mw-editsection { display:none; }
