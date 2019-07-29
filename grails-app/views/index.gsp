@@ -9,7 +9,7 @@
             bieWebServiceUrl: "${grailsApplication.config.bie.index.url}"
         }
     </asset:script>
-    <asset:javascript src="search"/>
+    <asset:javascript src="autocomplete-configuration.js"/>
 </head>
 <body class="page-search">
 

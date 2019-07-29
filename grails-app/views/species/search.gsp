@@ -46,46 +46,46 @@
 <body class="general-search page-search">
 
 <section class="${fluidLayout ? 'container-fluid' : 'container'}">
-    <div class="row margin-bottom-30">
-        <div class="col-sm-offset-3 col-sm-9">
-            <form method="get" action="${g.createLink(controller: 'species', action: 'search')}">
-                <g:each in="${filterQuery}" var="fq">
-                    <input name="fq" value="${fq?.encodeAsHTML()}" hidden>
-                </g:each>
-                <input name="sortField" value="${sortField?.encodeAsHTML()}" hidden>
-                <input name="dir" value="${dir?.encodeAsHTML()}" hidden>
-                <div class="input-group">
-                    <input id="autocompleteResultPage" type="text" name="q" placeholder="Search species, datasets, and more..." class="form-control" autocomplete="off" value="${query?.encodeAsHTML()?:""}">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" title="submit">
-                            Search
-                        </button>
-                    </span>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <header class="pg-header">
-        <div class="row">
-            <div class="col-sm-9">
-                <h1>
-                    Search for <strong>${searchResults.queryTitle == "*:*" ? 'everything' : searchResults.queryTitle}</strong>
-                    returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
-                    results.
-                 </h1>
-            </div>
-            <div class="col-sm-3">
-                <div id="related-searches" class="related-searches hide">
-                    <h4>Related Searches</h4>
-                    <ul class="list-unstyled"></ul>
-                </div>
-            </div>
-        </div>
-    </header>
-
     <div class="main-content panel panel-body">
+        <div class="row margin-bottom-30">
+            <div class="col-sm-12">
+                <form method="get" action="${g.createLink(controller: 'species', action: 'search')}">
+                    <g:each in="${filterQuery}" var="fq">
+                        <input name="fq" value="${fq?.encodeAsHTML()}" hidden>
+                    </g:each>
+                    <input name="sortField" value="${sortField?.encodeAsHTML()}" hidden>
+                    <input name="dir" value="${dir?.encodeAsHTML()}" hidden>
+                    <div class="input-group">
+                        <input id="autocompleteResultPage" type="text" name="q" placeholder="Search species, datasets, and more..." class="form-control" autocomplete="off" value="${query?.encodeAsHTML()?:""}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" title="submit">
+                                Search
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <header class="pg-header">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h1>
+                        Search for <strong>${searchResults.queryTitle == "*:*" ? 'everything' : searchResults.queryTitle}</strong>
+                        returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
+                        results.
+                    </h1>
+                </div>
+                <div class="col-sm-3">
+                    <div id="related-searches" class="related-searches hide">
+                        <h4>Related Searches</h4>
+                        <ul class="list-unstyled"></ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
         <g:if test="${searchResults.totalRecords}">
         <g:set var="paramsValues" value="${[:]}"/>
         <div class="row">
