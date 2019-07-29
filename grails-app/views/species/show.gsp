@@ -46,9 +46,9 @@
     <g:render template="facebookTags"/>
 
     <asset:javascript src="show.js"/>
-    <asset:stylesheet src="show.css"/>
     <asset:javascript src="charts.js"/>
     <asset:stylesheet src="charts.css"/>
+    <asset:stylesheet src="show.css"/>
     <asset:javascript src="ala/images-client.js"/>
     <asset:stylesheet src="ala/images-client.css"/>
     <asset:javascript src="ala/images-client-gallery.js"/>
