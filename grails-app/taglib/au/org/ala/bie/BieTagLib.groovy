@@ -236,7 +236,7 @@ class BieTagLib implements GrailsConfigurationAware {
                 out << "&nbsp;<span class=\"annotation annotation-language\" title=\"${name.code}\">${name.name}</span>"
             } else {
                 String inLabel = message(code: 'label.in', default: 'in')
-                out << "<span class=\"in-marker\">&nbsp;${inLabel}&nbsp;</span><span class=\"language-name\" title=\"${lang}\">${name.name}</span>"
+                out << "<span class=\"in-marker\">&nbsp;${inLabel}&nbsp;</span><span class=\"language-name\" title=\"${lang.language}\">${name.name}</span>"
             }
         }
         out << "</span>"
@@ -259,7 +259,7 @@ class BieTagLib implements GrailsConfigurationAware {
         } else {
             out << "<span class=\"language-name\" title=\"${name?.code ?: lang.language}\">"
             if (name.uri)
-                out << "<a href=\"${name.uri}\" onclick=\"window.open(this.href); return false;\">${display}</a>"
+                out << "<a href=\"${name.uri}\" target=\"_blank\" onclick=\"window.open(this.href); return false;\">${display}</a>"
             else
                 out << display
             out << "</span>"

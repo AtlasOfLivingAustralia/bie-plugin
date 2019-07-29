@@ -29,7 +29,7 @@ To do this, use the following configuration settings:
 * `vernacularName.pull.active` Set to true for a pull display (*false* by default)
 * `vernacularName.pull.categories` A comma-separated list of status values that will cause the names to be pulled (*empty* by default)
 * `vernacularName.pull.label` The label for the pull section in the names tab (*Special Common Names* by default)
-* `vernacularName.pull.labelDetail` The detail to put into the label title
+* `vernacularName.pull.labelDetail` The detail to put into the label title (empty by default)
 * `vernacularName.pull.showHeader` List these names in the header, just below the preferred common name (*false* by default)
 * `vernacularName.pull.showLanguage` Show the language of the common name (*false* by default)
 
