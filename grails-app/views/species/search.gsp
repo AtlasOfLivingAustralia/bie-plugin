@@ -48,7 +48,7 @@
 <section class="${fluidLayout ? 'container-fluid' : 'container'}">
     <div class="main-content panel panel-body">
         <div class="row margin-bottom-30">
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <form method="get" action="${g.createLink(controller: 'species', action: 'search')}">
                     <g:each in="${filterQuery}" var="fq">
                         <input name="fq" value="${fq?.encodeAsHTML()}" hidden>
