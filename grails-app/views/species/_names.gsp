@@ -180,9 +180,7 @@
                                 </li>
                             </g:if>
                             <li>
-                                <g:if test="${cn.datasetURL}"><a href="${cn.datasetURL}"
-                                                                 onclick="window.open(this.href);
-                                                                 return false;">${cn.infoSourceName}</a></g:if>
+                                <g:if test="${cn.datasetURL}"><a href="${cn.datasetURL}" target="_blank">${cn.infoSourceName}</a></g:if>
                                 <g:else>${cn.infoSourceName}</g:else>
                             </li>
                         </ul>

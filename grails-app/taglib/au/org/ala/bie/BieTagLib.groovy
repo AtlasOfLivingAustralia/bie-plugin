@@ -259,7 +259,7 @@ class BieTagLib implements GrailsConfigurationAware {
         } else {
             out << "<span class=\"language-name\" title=\"${name?.code ?: lang.language}\">"
             if (name.uri)
-                out << "<a href=\"${name.uri}\" target=\"_blank\" onclick=\"window.open(this.href); return false;\">${display}</a>"
+                out << "<a href=\"${name.uri}\" target=\"_blank\">${display}</a>"
             else
                 out << display
             out << "</span>"
