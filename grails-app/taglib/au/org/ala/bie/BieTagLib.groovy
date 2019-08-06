@@ -1,5 +1,7 @@
 package au.org.ala.bie
 
+import grails.config.Config
+import grails.core.support.GrailsConfigurationAware
 import groovy.json.JsonSlurper
 import org.apache.commons.lang.StringEscapeUtils
 import org.gbif.nameparser.PhraseNameParser
@@ -7,10 +9,31 @@ import org.springframework.web.servlet.support.RequestContextUtils
 
 import java.text.MessageFormat
 
-class BieTagLib {
+class BieTagLib implements GrailsConfigurationAware {
     static namespace = 'bie'     // namespace for headers and footers
 
-    static languages = null      // Lazy iniitalisation
+    def languages
+
+    @Override
+    void setConfiguration(Config config) {
+        JsonSlurper slurper = new JsonSlurper()
+        def ld = slurper.parse(new URL(config.languageCodesUrl))
+        languages = [:]
+        ld.codes.each { code ->
+            if (languages.containsKey(code.code))
+                log.warn "Duplicate language code ${code.code}"
+            languages[code.code] = code
+            def lc = code.code.toLowerCase()
+            if (lc != code.code && !languages.containsKey(lc))
+                languages[lc] = code
+            if (code.part2b && !languages.containsKey(code.part2b))
+                languages[code.part2b] = code
+            if (code.part2t && !languages.containsKey(code.part2t))
+                languages[code.part2t] = code
+            if (code.part1 && !languages.containsKey(code.part1))
+                languages[code.part1] = code
+        }
+    }
 
     /**
      * Format a scientific name with appropriate italics depending on rank
@@ -185,18 +208,22 @@ class BieTagLib {
 
     /**
      * Mark a phrase with language, optionally with a specific language marker
+     * <p>
+     * This can be done two ways, one as a semantic tag.
      *
      * @attr text The text to mark
      * @attr lang The language code (ISO) (defaults to the request locale or the default locale)
      * @attr mark Mark the language in text (defaults to true)
      * @attr href Link to the text
+     * @attr tag Use a tag marker, if false, use "in *language*" (defaults to true)
      */
     def markLanguage = { attrs ->
         Locale defaultLocale = RequestContextUtils.getLocale(request)
         String text = attrs.text ?: ""
-        Locale lang = Locale.forLanguageTag(attrs.lang ?: defaultLocale.language)
+        Locale lang = buildLocale(attrs.lang)
         String href = attrs.href
-        boolean mark = attrs.mark ?: true
+        boolean mark = attrs.containsKey('mark') ? attrs.mark : true
+        boolean tag = attrs.containsKey('tag') ? attrs.tag : true
 
         out << "<span lang=\"${lang}\">"
         if (href)
@@ -204,10 +231,39 @@ class BieTagLib {
         else
             out << text
         if (mark && defaultLocale.language != lang.language) {
-            String name = languageName(lang.language)
-            out << "&nbsp;<span class=\"annotation annotation-language\" title=\"${lang}\">${name}</span>"
+            def name = languages[lang.language] ?: [code: lang.toLanguageTag(), name: lang.displayName]
+            if (tag) {
+                out << "&nbsp;<span class=\"annotation annotation-language\" title=\"${name.code}\">${name.name}</span>"
+            } else {
+                String inLabel = message(code: 'label.in', default: 'in')
+                out << "<span class=\"in-marker\">&nbsp;${inLabel}&nbsp;</span><span class=\"language-name\" title=\"${lang.language}\">${name.name}</span>"
+            }
         }
         out << "</span>"
+    }
+
+    /**
+     * Show language information, including a link to the language definition, if available
+     *
+     * @attr lang The language code
+     * @attr format Format into HTML (truye by default)
+     * @attr default The default language name, if not found
+     */
+    def showLanguage = { attrs ->
+        Locale lang = buildLocale(attrs.lang)
+        boolean format = attrs.containsKey('format') ? attrs.format : true
+        def name = languages[lang.language]
+        def display = name?.name ?: attrs.default ?: lang.displayName
+        if (!format) {
+            out << display
+        } else {
+            out << "<span class=\"language-name\" title=\"${name?.code ?: lang.language}\">"
+            if (name.uri)
+                out << "<a href=\"${name.uri}\" target=\"_blank\">${display}</a>"
+            else
+                out << display
+            out << "</span>"
+        }
     }
 
     /**
@@ -246,7 +302,7 @@ class BieTagLib {
         Locale defaultLocale = RequestContextUtils.getLocale(request)
         Locale lang = Locale.forLanguageTag(attrs.lang ?: defaultLocale.language)
         Locale country = new Locale(lang.language, attrs.code)
-        out << "<span lang=\"${lang}\">${country ? country.getDisplayCountry(lang) : attrs.code}</span>"
+        out << "<span lang=\"${lang.toLanguageTag()}\">${country ? country.getDisplayCountry(lang) : attrs.code}</span>"
     }
 
     def displaySearchHighlights = {  attrs, body ->
@@ -300,7 +356,7 @@ class BieTagLib {
         if (rankId <= 4400)
             return "order"
         if (rankId <= 5700)
-            return "famnily"
+            return "family"
         if (rankId < 7000)
             return "genus"
         if (rankId < 8000)
@@ -308,25 +364,21 @@ class BieTagLib {
         return "subspecies"
     }
 
-    private String languageName(String lang) {
-        synchronized (this.class) {
-            if (languages == null) {
-                JsonSlurper slurper = new JsonSlurper()
-                def ld = slurper.parse(new URL(grailsApplication.config.languageCodesUrl))
-                languages = [:]
-                ld.codes.each { code ->
-                    if (languages.containsKey(code.code))
-                        log.warn "Duplicate language code ${code.code}"
-                    languages[code.code] = code
-                    if (code.part2b && !languages.containsKey(code.part2b))
-                        languages[code.part2b] = code
-                    if (code.part2t && !languages.containsKey(code.part2t))
-                        languages[code.part2t] = code
-                    if (code.part1 && !languages.containsKey(code.part1))
-                        languages[code.part1] = code
-                }
-            }
+    /**
+     * Build a locale.
+     *
+     * If it's well-known locale, then use that.
+     * Otherwise, build a new locale from the language definition
+     *
+     * @param lang The language code
+     *
+     * @return A corresponding locale
+     */
+    private buildLocale(String lang) {
+        def locale = Locale.forLanguageTag(lang ?: request.locale.language)
+        if (!locale || !locale.language) {
+            locale = new Locale(lang)
         }
-        return languages[lang]?.name ?: lang
+        return locale
     }
 }
