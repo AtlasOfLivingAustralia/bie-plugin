@@ -158,6 +158,9 @@ html, body {height:100%;}
 .annotation-taxonomic-status { }
 .annotation-temporal { }
 
+.in-marker { font-weight: lighter; }
+.language-name { }
+
 /* Tags (intended for labels) */
 .tag { display: inline; color: #202020; background: #F0F0F0; font-size: smaller; padding: 2px 1ex; border: thin solid #202020; border-radius: 5px; }
 .tag-tk-f { }

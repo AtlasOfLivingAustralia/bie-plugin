@@ -15,7 +15,9 @@
 package au.org.ala.bie
 
 import au.org.ala.bie.webapp2.SearchRequestParamsDTO
+import grails.config.Config
 import grails.converters.JSON
+import grails.core.support.GrailsConfigurationAware
 import groovy.json.JsonSlurper
 import org.grails.web.json.JSONObject
 
@@ -24,7 +26,7 @@ import org.grails.web.json.JSONObject
  *
  * @author "Nick dos Remedios <Nick.dosRemedios@csiro.au>"
  */
-class SpeciesController {
+class SpeciesController implements GrailsConfigurationAware {
     // Caused by the grails structure eliminating the // from http://x.y.z type URLs
     static BROKEN_URLPATTERN = /^[a-z]+:\/[^\/].*/
 
@@ -32,6 +34,17 @@ class SpeciesController {
     def utilityService
     def biocacheService
     def authService
+
+    /** Pull selected categories into a separate section */
+    boolean pull
+    /** The set of categories to pull */
+    Set<String> pullCategories
+
+    @Override
+    void setConfiguration(Config config) {
+        pull = config.getProperty('vernacularName.pull.active', Boolean, false)
+        pullCategories = config.getProperty('vernacularName.pull.categories', String, '').split(',').collect({ it.trim() }) as Set
+    }
 
     def geoSearch = {
 
@@ -146,6 +159,12 @@ class SpeciesController {
             // old identifier so redirect to current taxon page
             redirect(uri: "/species/${taxonDetails.taxonConcept.guid}")
         } else {
+            def nameSplit = [true: [], false: taxonDetails.commonNames]
+            if (pull) {
+                nameSplit = taxonDetails.commonNames.groupBy { cn -> pullCategories.contains(cn.status) }
+            }
+            taxonDetails.standardCommonNames = nameSplit[false]
+            taxonDetails.pullCommonNames = nameSplit[true]
             render(view: 'show', model: [
                     tc: taxonDetails,
                     statusRegionMap: utilityService.getStatusRegionCodes(),
