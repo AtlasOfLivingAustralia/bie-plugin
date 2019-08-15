@@ -3,6 +3,13 @@
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <title><g:message code="page.index.title" args="${[ grailsApplication.config.skin.orgNameLong ]}"/></title>
+    <asset:script type="text/javascript">
+        // global var to pass GSP vars into JS file
+        SEARCH_CONF = {
+            bieWebServiceUrl: "${grailsApplication.config.bie.index.url}"
+        }
+    </asset:script>
+    <asset:javascript src="autocomplete-configuration.js"/>
 </head>
 <body class="page-search">
 
