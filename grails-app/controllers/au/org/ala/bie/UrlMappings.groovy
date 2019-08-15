@@ -5,6 +5,7 @@ class UrlMappings {
     static mappings = {
         // Redirects for BIE web services URLs
         "/geo"(controller: "species", action: "geoSearch")
+        "/species"(view:"/species/index")
         "/species/$guid**"(controller: "species", action: "show")
         "/search"(controller: "species", action: "search")
         "/image-search"(controller: "species", action: "imageSearch")
