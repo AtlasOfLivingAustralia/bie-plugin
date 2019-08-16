@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
+    <meta name="breadcrumb" content="${ message(code: 'label.search') }"/>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <title><g:message code="page.index.title" args="${[ grailsApplication.config.skin.orgNameLong ]}"/></title>
     <asset:script type="text/javascript">
@@ -24,9 +25,9 @@
             <div class="col-lg-8">
                 <form id="search-inpage" action="search" method="get" name="search-form">
                     <div class="input-group">
-                        <input id="search" class="form-control ac_input general-search" name="q" type="text" placeholder="<g:message code="label.searchAtlas"/>" autocomplete="off">
+                        <input id="search" class="form-control ac_input general-search" name="q" type="text" placeholder="${ message(code: 'label.searchAtlas') }" autocomplete="on">
                         <span class="input-group-btn">
-                            <input type="submit" class="form-control btn btn-primary" alt="<g:message code="label.search"/>" value="<g:message code="label.search"/>">
+                            <input type="submit" class="form-control btn btn-primary" alt="${ message(code: 'label.search') }" value="${ message(code: 'label.search') }">
                         </span>
                     </div>
                 </form>
