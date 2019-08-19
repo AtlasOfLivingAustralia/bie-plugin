@@ -92,10 +92,19 @@ class UtilityService {
 
     def addFacetMap(List list) {
         def facetMap = [:]
-        list.each {
-            if (it.contains(":")) {
-                String[] fqBits = StringUtils.split(it, ":", 2);
-                facetMap.put(fqBits[0], fqBits[-1]?:"");
+        list.each { String facet ->
+            List disj
+            if (facet.contains(" OR ")) {
+                disj = facet.split(" OR ").toList()
+            } else {
+                disj = [facet]
+            }
+            disj.each { term ->
+                if (term.contains(":")) {
+                    String[] fqBits = StringUtils.split(term, ":", 2);
+                    def values = facetMap.get(fqBits[0], [])
+                    values << fqBits[-1] ?: ""
+                }
             }
         }
         facetMap

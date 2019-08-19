@@ -29,6 +29,7 @@
         // global var to pass GSP vars into JS file
         SEARCH_CONF = {
             searchResultTotal: ${searchResults.totalRecords},
+            bieWebServiceUrl: "${grailsApplication.config.bie.index.url}",
             query: "${BieTagLib.escapeJS(query)}",
             queryTitle: "${searchResults.queryTitle}",
             serverName: "${grailsApplication.config.grails.serverURL}",
@@ -40,31 +41,51 @@
             geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
         }
     </asset:script>
-
+    <asset:javascript src="autocomplete-configuration"/>
 </head>
 <body class="general-search page-search">
 
 <section class="${fluidLayout ? 'container-fluid' : 'container'}">
-
-    <header class="pg-header">
-        <div class="row">
+    <div class="main-content panel panel-body">
+        <div class="row margin-bottom-30">
             <div class="col-sm-9">
-                <h1>
-                    Search for <strong>${searchResults.queryTitle == "*:*" ? 'everything' : searchResults.queryTitle}</strong>
-                    returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
-                    results.
-                 </h1>
-            </div>
-            <div class="col-sm-3">
-                <div id="related-searches" class="related-searches hide">
-                    <h4>Related Searches</h4>
-                    <ul class="list-unstyled"></ul>
-                </div>
+                <form method="get" action="${g.createLink(controller: 'species', action: 'search')}">
+                    <g:each in="${filterQuery}" var="fq">
+                        <input name="fq" value="${fq?.encodeAsHTML()}" hidden>
+                    </g:each>
+                    <input name="sortField" value="${sortField?.encodeAsHTML()}" hidden>
+                    <input name="dir" value="${dir?.encodeAsHTML()}" hidden>
+                    <div class="input-group">
+                        <input id="autocompleteResultPage" type="text" name="q" placeholder="Search species, datasets, and more..." class="form-control" autocomplete="off" value="${query?.encodeAsHTML()?:""}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" title="submit">
+                                Search
+                            </button>
+                        </span>
+                    </div>
+                </form>
             </div>
         </div>
-    </header>
 
-    <div class="main-content panel panel-body">
+
+        <header class="pg-header">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h1>
+                        Search for <strong>${searchResults.queryTitle == "*:*" ? 'everything' : searchResults.queryTitle}</strong>
+                        returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
+                        results.
+                    </h1>
+                </div>
+                <div class="col-sm-3">
+                    <div id="related-searches" class="related-searches hide">
+                        <h4>Related Searches</h4>
+                        <ul class="list-unstyled"></ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
         <g:if test="${searchResults.totalRecords}">
         <g:set var="paramsValues" value="${[:]}"/>
         <div class="row">
@@ -88,11 +109,18 @@
                                         <g:each var="item" in="${facetMap}" status="facetIdx">
                                             <li>
                                                 <g:if test="${item.key?.contains("uid")}">
-                                                    <g:set var="resourceType">${item.value}_resourceType</g:set>
-                                                    ${collectionsMap?.get(resourceType)}: <strong>&nbsp;${collectionsMap?.get(item.value)}</strong>
+                                                    <g:each var="value" in="${item.value}" status="fvIdx">
+                                                        <g:set var="resourceType">${value}_resourceType</g:set>
+                                                        <g:if test="${fvIdx > 0}">, </g:if>
+                                                        ${collectionsMap?.get(resourceType)}: <strong>&nbsp;${collectionsMap?.get(value)}</strong>
+                                                    </g:each>
                                                 </g:if>
                                                 <g:else>
-                                                    <g:message code="facet.${item.key}" default="${item.key}"/>: <strong><g:message code="${item.key}.${item.value}" default="${item.value}"/></strong>
+                                                    <g:message code="facet.${item.key}" default="${item.key}"/>:
+                                                    <g:each var="value" in="${item.value}" status="fvIdx">
+                                                        <g:if test="${fvIdx > 0}">, </g:if>
+                                                        <strong><g:message code="${item.key}.${value}" default="${value}"/></strong>
+                                                    </g:each>
                                                 </g:else>
                                                 <a href="#" onClick="javascript:removeFacet(${facetIdx}); return true;" title="remove filter"><span class="glyphicon glyphicon-remove-sign"></span></a>
                                             </li>
@@ -151,7 +179,6 @@
             </div>
 
             <div class="col-sm-9">
-
                 <div class="result-options">
 
                     <g:if test="${idxTypes.contains("TAXON")}">
@@ -229,6 +256,7 @@
                             </g:if>
                             <g:elseif test="${result.has("idxtype") && result.idxtype == 'COMMON'}">
                                 <g:set var="speciesPageLink">${request.contextPath}/species/${result.linkIdentifier?:result.taxonGuid}</g:set>
+                                <g:set var="commonNameLanguage"><bie:showLanguage lang="${result.language}" format="${false}" default="${message(code: 'label.common', default: 'Common')}"/></g:set>
                                 <g:if test="${result.image}">
                                     <div class="result-thumbnail">
                                         <a href="${speciesPageLink}">
@@ -236,7 +264,7 @@
                                         </a>
                                     </div>
                                 </g:if>
-                                <h3><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
+                                <h3><g:message code="idxtype.${result.idxtype}.formatted" default="${result.idxtype}" args="${[commonNameLanguage]}"/>:
                                 <a class="commonNameSummary" href="${speciesPageLink}">${result.name}</a><%--
                                 --%><g:if test="${result.acceptedConceptName}">&nbsp;&ndash;&nbsp;<bie:formatSciName rankId="${result.rankID}" taxonomicStatus="accepted" name="${result.acceptedConceptName}"/></g:if><%--
                                 --%><g:if test="${result.favourite}"><span class="favourite favourite-${result.favourite}" title="<g:message code="favourite.${result.favourite}.detail"/>"><g:message code="favourite.${result.favourite}" encodeAs="raw"/></span></g:if>

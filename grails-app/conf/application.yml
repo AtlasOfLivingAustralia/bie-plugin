@@ -109,6 +109,7 @@ speciesParent: https://lists.ala.org.au/iconic-species
 serverName: http://dev.ala.org.au:8080
 projectNameShort: ALA
 projectName: Atlas of Living Australia
+languageCodesUrl: /languages.json
 biocache:
   baseURL: "http://biocache.ala.org.au"
 biocacheService:
@@ -160,6 +161,15 @@ admin_role: ROLE_ADMIN
 allowedImageEditingRoles: ROLE_ADMIN
 additionalMapFilter:
 synonymsTypes: synonym
+vernacularName:
+  # A category of vernacular names pulled out from the standard list and given special display treatment
+  pull:
+    categories:
+    active: false
+    label: Special Common Names
+    labelDetail: Common names with a special status
+    showHeader: false
+    showLanguage: false
 external:
   eol:
     search:

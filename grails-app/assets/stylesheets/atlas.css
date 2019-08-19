@@ -158,6 +158,9 @@ html, body {height:100%;}
 .annotation-taxonomic-status { }
 .annotation-temporal { }
 
+.in-marker { font-weight: lighter; }
+.language-name { }
+
 /* Tags (intended for labels) */
 .tag { display: inline; color: #202020; background: #F0F0F0; font-size: smaller; padding: 2px 1ex; border: thin solid #202020; border-radius: 5px; }
 .tag-tk-f { }
@@ -199,7 +202,8 @@ html, body {height:100%;}
 #charts { margin-top:30px; padding-top:20px; }
 .chart { width:50%;  margin-bottom: 20px; float:left; padding-right: 10px; }
 .chart-legend { font-size:12px; }
-#data_resource_uid-chart { width:100%; }
+.data_resource_uid-chart, .collection_uid-chart { width:100%; }
+
 
 /* Hide wikipedia links */
 .mw-editsection { display:none; }
@@ -209,3 +213,7 @@ html, body {height:100%;}
 
 /* Fixes tab border issue */
 .tab-pane { overflow: hidden; }
+
+.margin-bottom-30 {
+	margin-bottom: 30px;
+}
