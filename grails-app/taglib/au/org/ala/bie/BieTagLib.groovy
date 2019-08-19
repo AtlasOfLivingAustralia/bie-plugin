@@ -17,7 +17,8 @@ class BieTagLib implements GrailsConfigurationAware {
     @Override
     void setConfiguration(Config config) {
         JsonSlurper slurper = new JsonSlurper()
-        def ld = slurper.parse(this.class.getResource(config.languageCodesUrl))
+        URL cu = this.class.getResource(config.languageCodesUrl) ?: new URL(config.languageCodesUrl)
+        def ld = slurper.parse(cu)
         languages = [:]
         ld.codes.each { code ->
             if (languages.containsKey(code.code))
