@@ -1,4 +1,4 @@
-dist: trust
+dist: trusty
 language: groovy
 jdk:
 - openjdk8
