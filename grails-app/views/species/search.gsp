@@ -109,11 +109,18 @@
                                         <g:each var="item" in="${facetMap}" status="facetIdx">
                                             <li>
                                                 <g:if test="${item.key?.contains("uid")}">
-                                                    <g:set var="resourceType">${item.value}_resourceType</g:set>
-                                                    ${collectionsMap?.get(resourceType)}: <strong>&nbsp;${collectionsMap?.get(item.value)}</strong>
+                                                    <g:each var="value" in="${item.value}" status="fvIdx">
+                                                        <g:set var="resourceType">${value}_resourceType</g:set>
+                                                        <g:if test="${fvIdx > 0}">, </g:if>
+                                                        ${collectionsMap?.get(resourceType)}: <strong>&nbsp;${collectionsMap?.get(value)}</strong>
+                                                    </g:each>
                                                 </g:if>
                                                 <g:else>
-                                                    <g:message code="facet.${item.key}" default="${item.key}"/>: <strong><g:message code="${item.key}.${item.value}" default="${item.value}"/></strong>
+                                                    <g:message code="facet.${item.key}" default="${item.key}"/>:
+                                                    <g:each var="value" in="${item.value}" status="fvIdx">
+                                                        <g:if test="${fvIdx > 0}">, </g:if>
+                                                        <strong><g:message code="${item.key}.${value}" default="${value}"/></strong>
+                                                    </g:each>
                                                 </g:else>
                                                 <a href="#" onClick="javascript:removeFacet(${facetIdx}); return true;" title="remove filter"><span class="glyphicon glyphicon-remove-sign"></span></a>
                                             </li>

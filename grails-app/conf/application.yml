@@ -109,6 +109,7 @@ speciesParent: https://lists.ala.org.au/iconic-species
 serverName: http://dev.ala.org.au:8080
 projectNameShort: ALA
 projectName: Atlas of Living Australia
+languageCodesUrl: /languages.json
 biocache:
   baseURL: "http://biocache.ala.org.au"
 biocacheService:

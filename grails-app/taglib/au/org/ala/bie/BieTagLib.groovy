@@ -17,7 +17,8 @@ class BieTagLib implements GrailsConfigurationAware {
     @Override
     void setConfiguration(Config config) {
         JsonSlurper slurper = new JsonSlurper()
-        def ld = slurper.parse(new URL(config.languageCodesUrl))
+        URL cu = this.class.getResource(config.languageCodesUrl) ?: new URL(config.languageCodesUrl)
+        def ld = slurper.parse(cu)
         languages = [:]
         ld.codes.each { code ->
             if (languages.containsKey(code.code))
@@ -66,7 +67,7 @@ class BieTagLib implements GrailsConfigurationAware {
         }
         if (!taxonomicStatus)
             taxonomicStatus = accepted ? "synonym" : "name"
-        def format = message(code: "taxonomicStatus.${taxonomicStatus}.format", default: "<span class=\"taxon-name\">{0}<span>")
+        def format = message(code: "taxonomicStatus.${taxonomicStatus}.format", default: "<span class=\"taxon-name\">{0}</span>")
         if (!nameFormatted) {
             def output = "<span class=\"scientific-name rank-${rank}\"><span class=\"name\">${name}</span></span>"
             if (rankId >= 6000)
@@ -245,8 +246,8 @@ class BieTagLib implements GrailsConfigurationAware {
     /**
      * Show language information, including a link to the language definition, if available
      *
-     * @attr lang The language code
-     * @attr format Format into HTML (truye by default)
+     * @attr lang REQUIRED The language code
+     * @attr format Format into HTML (true by default)
      * @attr default The default language name, if not found
      */
     def showLanguage = { attrs ->
