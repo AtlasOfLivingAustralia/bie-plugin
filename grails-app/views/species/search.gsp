@@ -13,6 +13,7 @@
   - rights and limitations under the License.
   --}%
 <%@ page import="au.org.ala.bie.BieTagLib" contentType="text/html;charset=UTF-8" %>
+<%@ page import="java.text.MessageFormat" %>
 <g:set var="alaUrl" value="${grailsApplication.config.ala.baseURL}"/>
 <g:set var="biocacheUrl" value="${grailsApplication.config.biocache.baseURL}"/>
 <g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout?:"false".toBoolean()}"/>
@@ -339,8 +340,8 @@
                                         <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
                                     </g:if>
 
-                                    <g:if test="${grailsApplication.config.sightings.guidUrl}">
-                                        <li><a href="${grailsApplication.config.sightings.guidUrl}${result.guid}">Record a sighting/share a photo</a></li>
+                                    <g:if test="${grailsApplication.config.sightings.url}">
+                                        <li><a href="${MessageFormat.format(grailsApplication.config.sightings.url, [result.guid, result.name].toArray(new Object[0]))}"><g:message code="label.recordSighting" default="Record a sighting"/></a></li>
                                     </g:if>
                                     <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
