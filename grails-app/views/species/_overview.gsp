@@ -110,11 +110,9 @@
                 <div class="panel-body">
                     <ul class="list-unstyled">
                         <g:if test="${citizenSciUrl}">
-                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
-                                    class="glyphicon glyphicon-map-marker"></span> Record a sighting</a>
+                            <li>
+                                <a href="${java.text.MessageFormat.format(citizenSciUrl, URLEncoder.encode(guid), URLEncoder.encode(scientificName))}"><span class="glyphicon glyphicon-map-marker"></span> <g:message code="label.recordSighting" default="Record a sighting"/></a>
                             </li>
-                            <li><a href="${citizenSciUrl}/${tc.taxonConcept.guid}"><span
-                                    class="glyphicon glyphicon-camera"></span> Submit a photo</a></li>
                         </g:if>
                         <li><a id="alertsButton" href="#"><span
                                 class="glyphicon glyphicon-bell"></span> Receive alerts when new records are added
