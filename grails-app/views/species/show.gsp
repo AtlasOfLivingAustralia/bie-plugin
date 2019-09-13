@@ -18,15 +18,16 @@
 <g:set var="speciesListUrl" value="${grailsApplication.config.speciesList.baseURL}"/>
 <g:set var="spatialPortalUrl" value="${grailsApplication.config.spatial.baseURL}"/>
 <g:set var="collectoryUrl" value="${grailsApplication.config.collectory.baseURL}"/>
-<g:set var="citizenSciUrl" value="${grailsApplication.config.sightings.guidUrl}"/>
+<g:set var="citizenSciUrl" value="${grailsApplication.config.sightings.url}"/>
 <g:set var="alertsUrl" value="${grailsApplication.config.alerts.url}"/>
 <g:set var="guid" value="${tc?.previousGuid ?: tc?.taxonConcept?.guid ?: ''}"/>
+<g:set var="scientificName" value="${tc?.taxonConcept?.nameString ?: ''}" />
 <g:set var="tabs" value="${grailsApplication.config.show.tabs.split(',')}"/>
 <g:set var="jsonLink" value="${grailsApplication.config.bie.index.url}/species/${tc?.taxonConcept?.guid}.json"/>
 <g:set var="sciNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
                                                  nameFormatted="${tc?.taxonConcept?.nameFormatted}"
                                                  nameComplete="${tc?.taxonConcept?.nameComplete}"
-                                                 name="${tc?.taxonConcept?.name}"
+                                                 name="${tc?.taxonConcept?.nameString}"
                                                  taxonomicStatus="${tc?.taxonConcept?.taxonomicStatus}"
                                                  acceptedName="${tc?.taxonConcept?.acceptedConceptName}"/></g:set>
 <g:set var="commonNameDisplay" value="${(tc?.commonNames) ? tc?.commonNames?.get(0)?.nameString : ''}"/>
