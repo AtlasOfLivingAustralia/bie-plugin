@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.4.19.2"
+version "1.4.20"
 group "au.org.ala.plugins.grails"
 
 apply plugin:"eclipse"
@@ -70,10 +70,10 @@ dependencies {
     compile "org.jsoup:jsoup:1.8.3"
 
     compile group: 'org.grails.plugins', name: 'ala-bootstrap3', version: '3.0.6'
-    compile group: 'org.grails.plugins', name: 'ala-auth', version:'3.1.0', changing: true
+    compile group: 'org.grails.plugins', name: 'ala-auth', version:'3.1.2', changing: true
     compile group: 'au.org.ala.plugins.grails', name: 'ala-citation-plugin', version: '1.0'
     runtime group: 'au.org.ala.plugins.grails', name: 'ala-charts-plugin', version: '2.0.1'
-    compile group: 'au.org.ala.plugins.grails', name: 'images-client-plugin', version: '1.0'
+    compile group: 'au.org.ala.plugins.grails', name: 'images-client-plugin', version: '1.2'
     //runtime group: 'org.grails.plugins', name: 'ala-charts-plugin', version: '1.3', changing: true
     //compile (group: 'org.grails.plugins', name: 'images-client-plugin', version: '0.8', changing: true) {
     //    exclude group: 'org.grails.plugins', module: 'ala-auth'

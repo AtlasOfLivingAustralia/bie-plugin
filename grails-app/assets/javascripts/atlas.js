@@ -55,7 +55,7 @@ $(document).ready(function() {
 			dislikeUrl: SHOW_CONF.dislikeUrl + '?id=' + imageId,
 			userRatingUrl: SHOW_CONF.userRatingUrl + '?id=' + imageId,
 			userRatingHelpText: SHOW_CONF.userRatingHelpText.replace('RECORD_URL', recordUrl),
-			savePreferredSpeciesListUrl: SHOW_CONF.savePreferredSpeciesListUrl + '?id=' + imageId + '&scientificName=' + SHOW_CONF.scientificName,
+			savePreferredSpeciesListUrl: SHOW_CONF.savePreferredSpeciesListUrl + '?id=' + imageId + '&scientificName=' + SHOW_CONF.scientificName + '&family=' + SHOW_CONF.family,
 			getPreferredSpeciesListUrl: SHOW_CONF.getPreferredSpeciesListUrl,
 			druid: SHOW_CONF.druid
 		});
