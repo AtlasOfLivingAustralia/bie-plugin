@@ -372,6 +372,8 @@
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
         taxonRankID:        "${tc?.taxonConcept?.rankID ?: ''}",
         synonyms:            [ <g:each in="${tc?.synonyms}" var="syn" status="si">"${syn.nameString.encodeAsJavaScript()}"<g:if test="${si < tc.synonyms.size() - 1}">, </g:if></g:each> ],
+        family:             "${tc?.classification?.family ?: ''}",
+        kingdom:            "${tc?.classification?.kingdom ?: ''}",
         preferredImageId:   "${tc?.imageIdentifier?: ''}",
         citizenSciUrl:      "${citizenSciUrl}",
         serverName:         "${grailsApplication.config.grails.serverURL}",

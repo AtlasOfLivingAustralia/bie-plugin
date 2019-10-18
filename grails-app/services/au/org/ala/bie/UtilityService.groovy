@@ -7,7 +7,7 @@ import org.grails.web.json.JSONObject
 class UtilityService {
 
     def grailsApplication
-    def webService
+    def webClientService
 
     /**
      * Get a map of region names to collectory codes

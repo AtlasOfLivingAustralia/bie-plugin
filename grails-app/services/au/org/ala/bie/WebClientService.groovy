@@ -7,7 +7,7 @@ import org.grails.web.converters.exceptions.ConverterException
 import org.grails.web.json.JSONObject
 import org.springframework.beans.factory.InitializingBean
 
-class WebService implements InitializingBean {
+class WebClientService implements InitializingBean {
 
     public void afterPropertiesSet() {
         // JSONObject.NULL.metaClass.asBoolean = {-> false}

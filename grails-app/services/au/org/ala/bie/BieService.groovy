@@ -6,7 +6,7 @@ import org.grails.web.json.JSONObject
 
 class BieService {
 
-    def webService
+    def webClientService
     def grailsApplication
 
     def searchBie(SearchRequestParamsDTO requestObj) {
@@ -24,7 +24,7 @@ class BieService {
             queryUrl = queryUrl + "&bqc=" + URLEncoder.encode(grailsApplication.config.biocacheService.queryContext, "UTF-8")
         }
 
-        def json = webService.get(queryUrl)
+        def json = webClientService.get(queryUrl)
         JSON.parse(json)
     }
 
@@ -33,7 +33,7 @@ class BieService {
             return null
         }
         try {
-            def json = webService.get(grailsApplication.config.speciesList.baseURL + "/ws/species/" + guid.replaceAll(/\s+/,'+') + "?isBIE=true", true)
+            def json = webClientService.get(grailsApplication.config.speciesList.baseURL + "/ws/species/" + guid.replaceAll(/\s+/,'+') + "?isBIE=true", true)
             return JSON.parse(json)
         } catch(Exception e){
             //handles the situation where time out exceptions etc occur.
@@ -46,7 +46,7 @@ class BieService {
         if (!guid && guid != "undefined") {
             return null
         }
-        def json = webService.get(grailsApplication.config.bie.index.url + "/taxon/" + guid.replaceAll(/\s+/,'+'))
+        def json = webClientService.get(grailsApplication.config.bie.index.url + "/taxon/" + guid.replaceAll(/\s+/,'+'))
         //log.debug "ETC json: " + json
         try{
             JSON.parse(json)
@@ -58,7 +58,7 @@ class BieService {
 
     def getClassificationForGuid(guid) {
         def url = grailsApplication.config.bie.index.url + "/classification/" + guid.replaceAll(/\s+/,'+')
-        def json = webService.getJson(url)
+        def json = webClientService.getJson(url)
         log.debug "json type = " + json
         if (json instanceof JSONObject && json.has("error")) {
             log.warn "classification request error: " + json.error
@@ -76,7 +76,7 @@ class BieService {
             url = url + "?" + URLEncoder.encode(grailsApplication.config.bieService.queryContext, "UTF-8")
         }
 
-        def json = webService.getJson(url).sort() { it.rankID?:0 }
+        def json = webClientService.getJson(url).sort() { it.rankID?:0 }
 
         if (json instanceof JSONObject && json.has("error")) {
             log.warn "child concepts request error: " + json.error
