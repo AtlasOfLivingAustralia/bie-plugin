@@ -13,8 +13,10 @@
 
 package au.org.ala.bie
 
-import au.org.ala.citation.BHLAdaptor
+import org.owasp.html.HtmlPolicyBuilder
+import org.owasp.html.PolicyFactory
 import com.google.common.util.concurrent.RateLimiter
+import org.apache.commons.lang.StringEscapeUtils
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.jsoup.Jsoup
@@ -22,6 +24,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
 import java.text.MessageFormat
+import java.util.regex.Pattern
 
 /**
  * Controller that proxies external webservice calls to get around cross domain issues
@@ -34,6 +37,54 @@ class ExternalSiteController {
     RateLimiter genbankRateLimiter = RateLimiter.create(3.0) // rate max requests per second (Double)
 
     def index() {}
+
+    /**
+     * Utility to sanitise HTML text and only allow links to be kept, removing any
+     * other HTML markup. Links get <code>target="_blank"</code> added unless
+     * <code>openInNewWindow</code> is set to false.
+     *
+     * @param input HTML String
+     * @param openInNewWindow Boolean default to to true
+     * @return output sanitized HTML String
+     */
+    String sanitizeBodyText(String input, Boolean openInNewWindow) {
+        // text with HTML tags will be escaped, so first we need to unescape it
+        String unescapedHtml =  StringEscapeUtils.unescapeHtml(input)
+        // Sanitize the HTML and only allow links with valid URLs, span and br tags
+        PolicyFactory policy = new HtmlPolicyBuilder()
+                .allowElements("a")
+                .allowElements("br")
+                .allowElements("i")
+                .allowElements("b")
+                .allowElements("span")
+                .allowStandardUrlProtocols()
+                .allowAttributes("href").matching(Pattern.compile("^(http|https|mailto).+", Pattern.CASE_INSENSITIVE))
+                .onElements("a")
+                .requireRelNofollowOnLinks()
+                .allowAttributes("class").onElements("span")
+                .allowAttributes("id").onElements("span")
+                .toFactory()
+        String sanitizedHtml = policy.sanitize(unescapedHtml)
+
+        if (openInNewWindow) {
+            // hack to force links to be opened in new window/tab
+            sanitizedHtml =  sanitizedHtml.replaceAll("<a ", "<a target=\"_blank\" ")
+        }
+
+        sanitizedHtml
+    }
+
+    String updateBodyText(String text){
+        String updateFile = grailsApplication.config.update.file.location
+        if (new File(updateFile).exists()){
+            new File(updateFile).eachLine { line ->
+                String[] valuePairs = line.split(',')
+                String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
+                text = text.replace(valuePairs[0], replacement)
+            }
+        }
+        text
+    }
 
     def eol = {
         eolRateLimiter.acquire()
@@ -56,10 +107,11 @@ class ExternalSiteController {
                 page = MessageFormat.format(page, pageId)
                 log.debug("EOL page url = ${page}")
                 def pageText = new URL(page).text ?: '{}'
-                jsonOutput = pageText
+                jsonOutput = updateBodyText(pageText)
+//                jsonOutput = StringEscapeUtils.unescapeJava(jsonOutput);
+//                sanitizeBodyText(jsonOutput, false)
             }
         }
-
         response.setContentType("application/json")
         render jsonOutput
     }

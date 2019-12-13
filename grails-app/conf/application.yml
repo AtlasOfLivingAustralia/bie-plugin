@@ -193,7 +193,7 @@ literature:
     url: https://scholar.google.com
   trove:
     url: https://trove.nla.gov.au
-    api: https://api.trove.nla.gov.au
+    api: https://api.trove.nla.gov.au/v2
     apikey: "<key value>"
 show:
   tabs: overview,gallery,names,classification,records,literature,sequences,data-partners

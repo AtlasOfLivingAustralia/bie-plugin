@@ -111,6 +111,6 @@ literature:
     url: https://scholar.google.com
   trove:
     url: https://trove.nla.gov.au
-    api: https://api.trove.nla.gov.au
+    api: https://api.trove.nla.gov.au/v2
     apikey: "<key value>"
 

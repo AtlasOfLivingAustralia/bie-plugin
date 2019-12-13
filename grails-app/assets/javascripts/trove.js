@@ -14,24 +14,36 @@
  */
 
 var TROVE = {
-  s: 0,
-  n: 10,
-  url: "http://api.trove.nla.gov.au/result?key=fvt2q0qinduian5d&zone=book&encoding=json",
-  q: "",
-  totalResults: 0,
-  divId: '',
-  nextButtonId:'',
-  previousButtonId:'',
-    containerDivId:''
+    s: '*',
+    sPrevious: '',
+    n: 10,
+    url: "https://api.trove.nla.gov.au/v2/result?key=fvt2q0qinduian5d&zone=book&encoding=json",
+    q: "",
+    totalResults: 0,
+    nextStart: null,
+    divId: '',
+    nextButtonId: '',
+    previousButtonId: '',
+    containerDivId: ''
 }
 
 function getTroveUrl(){
-  return TROVE.url + '&q=' + TROVE.q + '&s=' + TROVE.s + '&n=' + TROVE.n;
+    var sNext = (TROVE.nextStart != null) ? TROVE.nextStart : TROVE.s;
+    var url = TROVE.url + '&q=' + encodeURIComponent(TROVE.q) + '&s=' + encodeURIComponent(sNext) + '&n=' + TROVE.n;
+    // console.log("url..... " + url);
+    return url;
 }
 
-function loadTrove(url, query, containerDivId, resultsDivId, previousButtonId, nextButtonId){
+function loadTrove(url, query, synonyms, containerDivId, resultsDivId, previousButtonId, nextButtonId){
+    if (synonyms) {
+        for (var i = 0; i < synonyms.length; i++) {
+            query = query + '" OR "' + (synonyms[i]);
+        }
+    }
+    console.log("query: " + query);
+
     TROVE.url = url;
-    TROVE.q = query;
+    TROVE.q = '"' + query + '"';
     TROVE.containerDivId = containerDivId
     TROVE.divId = resultsDivId
     TROVE.nextButtonId =  nextButtonId;
@@ -42,16 +54,16 @@ function loadTrove(url, query, containerDivId, resultsDivId, previousButtonId, n
 }
 
 function troveNextPage(){
-    if( (TROVE.s + TROVE.n) < TROVE.totalResults){
-        TROVE.s += TROVE.n;
+    if(TROVE.nextStart != null){
+        // TROVE.s += TROVE.nextStart;
         queryTrove();
         scrollToTopOfTrove();
     }
 }
 
 function trovePreviousPage(){
-    if(TROVE.s > 0){
-        TROVE.s -= TROVE.n;
+    if(TROVE.sPrevious != "*"){
+        TROVE.s = TROVE.sPrevious;
         queryTrove();
         scrollToTopOfTrove();
     }
@@ -71,6 +83,11 @@ function queryTrove(){
         success:  function(data) {
            // console.log("Success....results: " + data.response.zone[0].records.total);
             TROVE.totalResults = data.response.zone[0].records.total;
+            TROVE.nextStart = (data.response.zone[0].records.nextStart == undefined) ? null : data.response.zone[0].records.nextStart;
+            TROVE.sPrevious = data.response.zone[0].records.s;
+            console.log("TROVE.nextStart " + TROVE.nextStart);
+            console.log("TROVE.sPrevious " + TROVE.sPrevious);
+
             if(TROVE.totalResults == 0){
                 $('#'+TROVE.containerDivId).css({display:'none'});
             } else {
@@ -80,9 +97,9 @@ function queryTrove(){
                     buff += '<div class="result">';
                     //buff +=  '<a href="' + value.troveUrl + '">';
                     buff += '<h3>';
-                    buff += '<span class="troveIdx">';
-                    buff += '<b>'+ (index + TROVE.s + 1) +'</b>.&nbsp;';
-                    buff += '</span>';
+                    // buff += '<span class="troveIdx">';
+                    // buff += '<b>'+ (index + TROVE.s + 1) +'</b>.&nbsp;';
+                    // buff += '</span>';
                     buff += '<span class="title"><a href="' + value.troveUrl + '">' + value.title + '</a></span>';
                     buff += '</h3>';
                     if(value.contributor != null){
@@ -103,16 +120,13 @@ function queryTrove(){
                     }
                     buff +=  '</div>';
                 });
-                var prevStart = TROVE.s;
-                var nextStart = TROVE.s + TROVE.n;
-                var maxItems = TROVE.totalResults;
 
                 buff += '<div id="trove-button-bar">';
-                if (prevStart > 0) {
+                if (TROVE.sPrevious != "*") {
                     buff += '<input type="button" class="btn" value="Previous page" onclick="trovePreviousPage()">';
                 }
                 buff += '&nbsp;&nbsp;&nbsp;';
-                if (nextStart < maxItems) {
+                if (TROVE.nextStart != null) {
                     buff += '<input type="button" class="btn" value="Next page" onclick="troveNextPage()">';
                 }
 
