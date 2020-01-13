@@ -69,6 +69,7 @@ class ExternalSiteController {
      */
     String updateEolOutput(String text){
         String updateFile = grailsApplication.config.update.file.location
+        
         if (updateFile != null && new File(updateFile).exists()){
             new File(updateFile).eachLine { line ->
                 String[] valuePairs = line.split(',')
