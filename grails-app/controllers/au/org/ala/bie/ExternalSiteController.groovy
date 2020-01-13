@@ -69,12 +69,13 @@ class ExternalSiteController {
      */
     String updateEolOutput(String text){
         String updateFile = grailsApplication.config.update.file.location
-        
         if (updateFile != null && new File(updateFile).exists()){
             new File(updateFile).eachLine { line ->
-                String[] valuePairs = line.split(',')
-                String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
-                text = text.replace(valuePairs[0], replacement)
+                if (!line.startsWith("#")) {
+                    String[] valuePairs = line.split(',')
+                    String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
+                    text = text.replace(valuePairs[0], replacement)
+                }
             }
         }
         text
