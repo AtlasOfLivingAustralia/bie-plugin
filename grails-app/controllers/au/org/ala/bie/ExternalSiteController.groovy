@@ -13,15 +13,18 @@
 
 package au.org.ala.bie
 
-import au.org.ala.citation.BHLAdaptor
 import com.google.common.util.concurrent.RateLimiter
 import grails.converters.JSON
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import org.owasp.html.HtmlPolicyBuilder
+import org.owasp.html.PolicyFactory
 
 import java.text.MessageFormat
+import java.util.regex.Pattern
 
 /**
  * Controller that proxies external webservice calls to get around cross domain issues
@@ -32,6 +35,9 @@ class ExternalSiteController {
 
     RateLimiter eolRateLimiter = RateLimiter.create(1.0) // rate max requests per second (Double)
     RateLimiter genbankRateLimiter = RateLimiter.create(3.0) // rate max requests per second (Double)
+
+    // by default do not sanitise EOL response
+    boolean sanitiseEol = grailsApplication.config.eol.sanitise ?: false
 
     def index() {}
 
@@ -56,29 +62,13 @@ class ExternalSiteController {
                 page = MessageFormat.format(page, pageId)
                 log.debug("EOL page url = ${page}")
                 def pageText = new URL(page).text ?: '{}'
-                jsonOutput = updateEolOutput(pageText)
+                def updatedPageText = updateEolOutput(pageText)
+                jsonOutput = sanitiseEol ? sanitiseEolOutput(updatedPageText) : updatedPageText
             }
         }
 
         response.setContentType("application/json")
         render jsonOutput
-    }
-
-    /**
-     * Update EOL content before rendering, rules specified in an external file.
-     */
-    String updateEolOutput(String text){
-        String updateFile = grailsApplication.config.update.file.location
-        if (updateFile != null && new File(updateFile).exists()){
-            new File(updateFile).eachLine { line ->
-                if (!line.startsWith("#")) {
-                    String[] valuePairs = line.split(',')
-                    String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
-                    text = text.replace(valuePairs[0], replacement)
-                }
-            }
-        }
-        text
     }
 
     def genbank = {
@@ -133,7 +123,6 @@ class ExternalSiteController {
     }
 
     def scholar = {
-
         def searchStrings = params.list("s")
         def searchParams = "\"" + searchStrings.join("\" OR \"") + "\""
         def scholarBase = grailsApplication.config.literature?.scholar?.url ?: "https://scholar.google.com"
@@ -195,5 +184,86 @@ class ExternalSiteController {
                 bufferedReader.close() // can throw exception but passing on to Grails error handling
             }
         }
+    }
+
+    /**
+     * Update EOL content before rendering, rules specified in an external file.
+     * @param text EOL response
+     * @return updated EOL response
+     */
+    String updateEolOutput(String text){
+        String updateFile = grailsApplication.config.update.file.location
+        if (updateFile && new File(updateFile).exists()){
+            new File(updateFile).eachLine { line ->
+                if (!line.startsWith("#")) {
+                    String[] valuePairs = line.split(",")
+                    String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
+                    text = text.replace(valuePairs[0], replacement)
+                }
+            }
+        }
+        text
+    }
+
+    /**
+     * Sanitise EOL response with defined policy.
+     * @param text EOL response
+     * @return processed EOL response
+     */
+    String sanitiseEolOutput(String text) {
+        def json = new JsonSlurper().parseText(text)
+
+        if(json.taxonConcept?.dataObjects){
+            PolicyFactory policy = getPolicyFactory()
+            json.taxonConcept.dataObjects.each { dataObject ->
+                String desc = dataObject.description
+                String processedDesc = sanitiseBodyText(policy, desc)
+                dataObject.description = processedDesc
+            }
+        }
+        JsonOutput.toJson(json)
+    }
+
+    /**
+     * Utility to sanitise HTML text and only allow links to be kept, removing any
+     * other HTML markup.
+     * @param policy PolicyFactory
+     * @param input HTML String
+     * @return output sanitized HTML String
+     */
+    String sanitiseBodyText(PolicyFactory policy, String input) {
+        // Sanitize the HTML based on given policy
+        String sanitisedHtml = policy.sanitize(input)
+        sanitisedHtml
+    }
+
+    private PolicyFactory getPolicyFactory(){
+        HtmlPolicyBuilder builder = new HtmlPolicyBuilder()
+                .allowStandardUrlProtocols()
+                .requireRelNofollowOnLinks()
+
+        String allowedElements = grailsApplication.config.eol.html.allowedElements
+        if (allowedElements){
+            String[] elements = allowedElements.split(",")
+            elements.each {
+                builder.allowElements(it)
+            }
+        }
+
+        String allowedAttributes = grailsApplication.config.eol.html.allowAttributes
+        if (allowedAttributes){
+            String[] attributes = allowedAttributes.split(",")
+            attributes.each { attribute ->
+                String[] values = attribute.split (";")
+                if (values.length == 2){
+                    builder.allowAttributes(values[0]).onElements(values[1])
+                } else {
+                    builder.allowAttributes(values[0]).matching(Pattern.compile(values[2], Pattern.CASE_INSENSITIVE)).onElements(values[1])
+                }
+
+            }
+        }
+
+        builder.toFactory()
     }
 }
