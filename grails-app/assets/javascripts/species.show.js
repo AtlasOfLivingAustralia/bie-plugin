@@ -353,6 +353,7 @@ function loadExternalSources(){
         //clone a description template...
         if(data.taxonConcept && data.taxonConcept.dataObjects){
             //console.log('Loading EOL content - ' + data.taxonConcept.dataObjects.length);
+            var eolIdentifier = data.taxonConcept.identifier;
             $.each(data.taxonConcept.dataObjects, function(idx, dataObject){
                 //console.log('Loading EOL content -> ' + dataObject.description);
                 if(dataObject.language == SHOW_CONF.eolLanguage || !dataObject.language){
@@ -391,7 +392,8 @@ function loadExternalSources(){
                         $description.find(".rights").css({'display':'none'});
                     }
 
-                    $description.find(".providedBy").attr('href', 'http://eol.org/pages/' + data.identifier);
+                    $description.find(".providedBy").attr('href', 'https://eol.org/pages/' + eolIdentifier);
+                    $description.find(".providedBy").attr('target', '_blank');
                     $description.find(".providedBy").html("Encyclopedia of Life");
                     $description.appendTo('#descriptiveContent');
                 }
