@@ -366,7 +366,7 @@
         layersServiceUrl:   "${grailsApplication.config.layersService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
         profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
-        imageServiceBaseUrl:"${grailsApplication.config.image.baseURL}",
+        imageServiceBaseUrl:"${grailsApplication.config.imageServiceBaseURL}",
         guid:               "${guid}",
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
