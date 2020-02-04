@@ -25,7 +25,7 @@
             <div id="trove-integration" class="column-wrap" style="padding-top:50px;">
                 %{--<h2>&nbsp;</h2>--}%
                 <hr />
-                <h3>Name references found in <a href="${grailsApplication.config.literature.trove.url}/result?q=%22${synonyms?.join('%22+OR+%22')}%22" target="_blank">Trove - NLA</a></h3>
+                <h3>Name references found in <a href="${grailsApplication.config.literature.trove.url}/result?q=%22${synonyms?.join('%22+OR+%22')}%22" target="_trove">Trove - NLA</a></h3>
 
                 <div id="trove-result-list" class="result-list">
                     <!-- Search results go here -->

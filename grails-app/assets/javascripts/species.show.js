@@ -30,7 +30,7 @@ function showSpeciesPage() {
     ////setup controls
     addAlerts();
     loadBhl();
-    loadTrove(SHOW_CONF.troveUrl, SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
+    loadTrove(SHOW_CONF.troveUrl, SHOW_CONF.scientificName, SHOW_CONF.synonyms, 'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
 function loadSpeciesLists(){
