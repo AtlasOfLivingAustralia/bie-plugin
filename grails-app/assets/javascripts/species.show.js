@@ -754,7 +754,6 @@ function loadBhl(start, rows, scroll) {
     if (!rows) {
         rows = 10;
     }
-    // var url = "http://localhost:8080/bhl-ftindex-demo/search/ajaxSearch?q=" + $("#tbSearchTerm").val();
     var source = SHOW_CONF.bhlUrl;
     var taxonName = SHOW_CONF.scientificName ;
     var synonyms = SHOW_CONF.synonyms;

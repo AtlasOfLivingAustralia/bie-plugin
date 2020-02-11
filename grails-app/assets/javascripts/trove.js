@@ -16,9 +16,14 @@
 var TROVE = {
     s: '*',
     sPrevious: '',
+    previousUrl: null,
+    showPrevious: false,
+    currentUrl: null,
     n: 10,
-    q: "",
+    q: '',
+    query: '',
     totalResults: 0,
+    pageNumber: 0,
     nextStart: null,
     divId: '',
     nextButtonId: '',
@@ -28,15 +33,18 @@ var TROVE = {
 
 function getTroveUrl(){
     var sNext = (TROVE.nextStart != null) ? TROVE.nextStart : TROVE.s;
-    var url = TROVE.url + '&q=' + encodeURIComponent(TROVE.q) + '&s=' + encodeURIComponent(sNext) + '&n=' + TROVE.n;
-    // console.log("url..... " + url);
+    var url = TROVE.showPrevious ? TROVE.previousUrl :
+        TROVE.url + '&q=' + encodeURIComponent(TROVE.q) + '&s=' + encodeURIComponent(sNext) + '&n=' + TROVE.n + '&bulkHarvest=true';
+    TROVE.currentUrl = url;
     return url;
 }
 
 function loadTrove(url, query, synonyms, containerDivId, resultsDivId, previousButtonId, nextButtonId){
+    TROVE.query = query;
     if (synonyms) {
         for (var i = 0; i < synonyms.length; i++) {
             query = query + '" OR "' + (synonyms[i]);
+            TROVE.query += ', ' + synonyms[i];
         }
     }
     // console.log("query: " + query);
@@ -45,24 +53,26 @@ function loadTrove(url, query, synonyms, containerDivId, resultsDivId, previousB
     TROVE.q = '"' + query + '"';
     TROVE.containerDivId = containerDivId
     TROVE.divId = resultsDivId
-    // TROVE.nextButtonId =  nextButtonId;
-    // TROVE.previousButtonId =  previousButtonId;
-    // $('#'+TROVE.nextButtonId).click(function(){ troveNextPage();});
-    // $('#'+TROVE.previousButtonId).click(function(){ trovePreviousPage();});
+    TROVE.nextButtonId =  nextButtonId;
+    TROVE.previousButtonId =  previousButtonId;
+    $('#'+TROVE.nextButtonId).click(function(){ troveNextPage();});
+    $('#'+TROVE.previousButtonId).click(function(){ trovePreviousPage();});
     queryTrove();
 }
 
 function troveNextPage(){
-    if(TROVE.nextStart != null){
-        // TROVE.s += TROVE.nextStart;
+    if(TROVE.nextStart != null){ //not first or last page
+        TROVE.previousUrl = TROVE.currentUrl;
+        TROVE.pageNumber++;
         queryTrove();
         scrollToTopOfTrove();
     }
 }
 
 function trovePreviousPage(){
-    if(TROVE.sPrevious != "*"){
-        TROVE.s = TROVE.sPrevious;
+    if (TROVE.sPrevious != "*"){
+        TROVE.showPrevious = true;
+        TROVE.pageNumber--;
         queryTrove();
         scrollToTopOfTrove();
     }
@@ -81,23 +91,22 @@ function queryTrove(){
         jsonp: "callback",
         success:  function(data) {
             TROVE.totalResults = data.response.zone[0].records.total;
-            // TROVE.nextStart = (data.response.zone[0].records.nextStart == undefined) ? null : data.response.zone[0].records.nextStart;
-            // TROVE.sPrevious = data.response.zone[0].records.s;
+            TROVE.nextStart = (data.response.zone[0].records.nextStart == undefined) ? null : data.response.zone[0].records.nextStart;
+            TROVE.sPrevious = data.response.zone[0].records.s;
+            TROVE.showPrevious = false;
 
             if(TROVE.totalResults == 0){
                 $('#'+TROVE.containerDivId).css({display:'none'});
             } else {
-                var showTroveLink = (TROVE.totalResults > TROVE.n);
-                var toRecord = showTroveLink ? 10 : TROVE.totalResults;
-                var buff = '<div class="results-summary">Showing 1 ' + ' to ' + toRecord + " of " + TROVE.totalResults + ' results.</div>';
-
+                var buff = '<div class="results-summary">Number of matches in Trove: ' + TROVE.totalResults;
+                buff += ' for ' + TROVE.query + '</div>'
                 $.each(data.response.zone[0].records.work, function(index, value){
                     buff += '<div class="result">';
-                    //buff +=  '<a href="' + value.troveUrl + '">';
+                    // buff +=  '<a href="' + value.troveUrl + '">';
                     buff += '<h3>';
-                    // buff += '<span class="troveIdx">';
-                    // buff += '<b>'+ (index + TROVE.s + 1) +'</b>.&nbsp;';
-                    // buff += '</span>';
+                    buff += '<span class="troveIdx">';
+                    buff += '<b>'+ (index + 1 + (TROVE.pageNumber*TROVE.n)) +'</b>.&nbsp;';
+                    buff += '</span>';
                     buff += '<span class="title"><a href="' + value.troveUrl + '">' + value.title + '</a></span>';
                     buff += '</h3>';
                     if(value.contributor != null){
@@ -119,21 +128,16 @@ function queryTrove(){
                     buff +=  '</div>';
                 });
 
-                // buff += '<div id="trove-button-bar">';
-                // if (TROVE.sPrevious != "*") {
-                //     buff += '<input type="button" class="btn" value="Previous page" onclick="trovePreviousPage()">';
-                // }
-                // buff += '&nbsp;&nbsp;&nbsp;';
-                // if (TROVE.nextStart != null) {
-                //     buff += '<input type="button" class="btn" value="Next page" onclick="troveNextPage()">';
-                // }
-                //
-                // buff += '</div>';
-                var url = SHOW_CONF.troveSiteUrl+ '/result?q=' + encodeURIComponent(TROVE.q);
-
-                if (showTroveLink) {
-                    buff += '<a href=' + url + ' target="_trove">More results</a>';
+                buff += '<div id="trove-button-bar">';
+                if (TROVE.sPrevious != "*") {
+                    buff += '<input type="button" class="btn" value="Previous page" onclick="trovePreviousPage()">';
+                    buff += '&nbsp;&nbsp;&nbsp;';
                 }
+                if (TROVE.nextStart != null) {
+                    buff += '<input type="button" class="btn" value="Next page" onclick="troveNextPage()">';
+                }
+
+                buff += '</div>';
                 $('#'+TROVE.divId).html(buff);
             }
         },
