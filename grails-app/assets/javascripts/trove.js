@@ -33,6 +33,7 @@ var TROVE = {
 
 function getTroveUrl(){
     var sNext = (TROVE.nextStart != null) ? TROVE.nextStart : TROVE.s;
+    // https://help.nla.gov.au/trove/building-with-trove/api-version-2-technical-guide
     var url = TROVE.showPrevious ? TROVE.previousUrl :
         TROVE.url + '&q=' + encodeURIComponent(TROVE.q) + '&s=' + encodeURIComponent(sNext) + '&n=' + TROVE.n + '&bulkHarvest=true';
     TROVE.currentUrl = url;
