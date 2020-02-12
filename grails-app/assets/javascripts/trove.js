@@ -48,7 +48,6 @@ function loadTrove(url, query, synonyms, containerDivId, resultsDivId, previousB
             TROVE.query += ', ' + synonyms[i];
         }
     }
-    // console.log("query: " + query);
 
     TROVE.url = url;
     TROVE.q = '"' + query + '"';
@@ -124,9 +123,9 @@ function queryTrove(){
                         buff +=  '</p>';
                     }
                     if(value.issued != null){
-                        buff +=  '<p class="dateIssued">Date issued: ' + value.issued + '</p>';
+                        buff += '<p class="dateIssued">Date issued: ' + value.issued + '</p>';
                     }
-                    buff +=  '</div>';
+                    buff += '</div>';
                 });
 
                 buff += '<div id="trove-button-bar">';
