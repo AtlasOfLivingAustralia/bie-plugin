@@ -30,7 +30,7 @@ function showSpeciesPage() {
     ////setup controls
     addAlerts();
     loadBhl();
-    loadTrove(SHOW_CONF.troveUrl, SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
+    loadTrove(SHOW_CONF.troveUrl, SHOW_CONF.scientificName, SHOW_CONF.synonyms, 'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
 function loadSpeciesLists(){
@@ -353,6 +353,7 @@ function loadExternalSources(){
         //clone a description template...
         if(data.taxonConcept && data.taxonConcept.dataObjects){
             //console.log('Loading EOL content - ' + data.taxonConcept.dataObjects.length);
+            var eolIdentifier = data.taxonConcept.identifier;
             $.each(data.taxonConcept.dataObjects, function(idx, dataObject){
                 //console.log('Loading EOL content -> ' + dataObject.description);
                 if(dataObject.language == SHOW_CONF.eolLanguage || !dataObject.language){
@@ -391,7 +392,8 @@ function loadExternalSources(){
                         $description.find(".rights").css({'display':'none'});
                     }
 
-                    $description.find(".providedBy").attr('href', 'http://eol.org/pages/' + data.identifier);
+                    $description.find(".providedBy").attr('href', 'https://eol.org/pages/' + eolIdentifier);
+                    $description.find(".providedBy").attr('target', '_blank');
                     $description.find(".providedBy").html("Encyclopedia of Life");
                     $description.appendTo('#descriptiveContent');
                 }
@@ -752,7 +754,6 @@ function loadBhl(start, rows, scroll) {
     if (!rows) {
         rows = 10;
     }
-    // var url = "http://localhost:8080/bhl-ftindex-demo/search/ajaxSearch?q=" + $("#tbSearchTerm").val();
     var source = SHOW_CONF.bhlUrl;
     var taxonName = SHOW_CONF.scientificName ;
     var synonyms = SHOW_CONF.synonyms;

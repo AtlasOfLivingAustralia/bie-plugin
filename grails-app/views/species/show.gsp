@@ -366,7 +366,7 @@
         layersServiceUrl:   "${grailsApplication.config.layersService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
         profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
-        imageServiceBaseUrl:"${grailsApplication.config.image.baseURL}",
+        imageServiceBaseUrl:"${grailsApplication.config.imageServiceBaseURL}",
         guid:               "${guid}",
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
@@ -415,6 +415,7 @@
         addPreferenceButton: ${imageClient.checkAllowableEditRole()},
         mapOutline: ${grailsApplication.config.map.outline ?: 'false'},
         mapEnvOptions: "${grailsApplication.config.map.env?.options?:'color:' + grailsApplication.config.map.records.colour+ ';name:circle;size:4;opacity:0.8'}",
+        troveSiteUrl: "${grailsApplication.config.literature.trove.url}",
         troveUrl: "${raw(grailsApplication.config.literature?.trove?.api + '/result?zone=book&encoding=json&key=' + grailsApplication.config.literature?.trove?.apikey )}",
         bhlUrl: "${raw(createLink(controller: 'externalSite', action: 'bhl'))}"
     };
