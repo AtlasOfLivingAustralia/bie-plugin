@@ -109,9 +109,9 @@
             <div class="panel panel-default panel-actions">
                 <div class="panel-body">
                     <ul class="list-unstyled">
-                        <g:if test="${citizenSciUrl}">
+                        <g:if test="${citizenSciUrl && guid && scientificName}">
                             <li>
-                                <a href="${java.text.MessageFormat.format(citizenSciUrl, URLEncoder.encode(guid), URLEncoder.encode(scientificName))}"><span class="glyphicon glyphicon-map-marker"></span> <g:message code="label.recordSighting" default="Record a sighting"/></a>
+                                <a href="${java.text.MessageFormat.format(citizenSciUrl, URLEncoder.encode(guid, "UTF-8"), URLEncoder.encode(scientificName, "UTF-8"))}"><span class="glyphicon glyphicon-map-marker"></span> <g:message code="label.recordSighting" default="Record a sighting"/></a>
                             </li>
                         </g:if>
                         <li><a id="alertsButton" href="#"><span
