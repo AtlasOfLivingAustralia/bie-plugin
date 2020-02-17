@@ -30,7 +30,7 @@ function showSpeciesPage() {
     ////setup controls
     addAlerts();
     loadBhl();
-    loadTrove(SHOW_CONF.troveUrl, SHOW_CONF.scientificName,'trove-integration','trove-result-list','previousTrove','nextTrove');
+    loadTrove(SHOW_CONF.troveUrl, SHOW_CONF.scientificName, SHOW_CONF.synonyms, 'trove-integration','trove-result-list','previousTrove','nextTrove');
 }
 
 function loadSpeciesLists(){
@@ -754,7 +754,6 @@ function loadBhl(start, rows, scroll) {
     if (!rows) {
         rows = 10;
     }
-    // var url = "http://localhost:8080/bhl-ftindex-demo/search/ajaxSearch?q=" + $("#tbSearchTerm").val();
     var source = SHOW_CONF.bhlUrl;
     var taxonName = SHOW_CONF.scientificName ;
     var synonyms = SHOW_CONF.synonyms;

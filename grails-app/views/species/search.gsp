@@ -339,8 +339,8 @@
                                         <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
                                     </g:if>
 
-                                    <g:if test="${grailsApplication.config.sightings.url}">
-                                        <li><a href="${java.text.MessageFormat.format(grailsApplication.config.sightings.url, URLEncoder.encode(result.guid), URLEncoder.encode(result.name))}"><g:message code="label.recordSighting" default="Record a sighting"/></a></li>
+                                    <g:if test="${grailsApplication.config.sightings.url && result.guid && result.name}">
+                                        <li><a href="${java.text.MessageFormat.format(grailsApplication.config.sightings.url, URLEncoder.encode(result.guid, "UTF-8"), URLEncoder.encode(result.name, "UTF-8"))}"><g:message code="label.recordSighting" default="Record a sighting"/></a></li>
                                     </g:if>
                                     <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
