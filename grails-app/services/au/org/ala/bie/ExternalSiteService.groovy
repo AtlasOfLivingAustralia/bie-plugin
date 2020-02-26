@@ -30,7 +30,7 @@ class ExternalSiteService implements GrailsConfigurationAware {
     }
 
     /**
-     * Search the BHL for terms
+     * Search the BHL for terms (PublicationSearch)
      *
      * @param search The terms to search for
      * @param start The start position
@@ -40,6 +40,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
      * @return A map containing
      */
     def searchBhl(List<String> search, int start = 0, int rows = 10, boolean fulltext = false) {
+        //https://www.biodiversitylibrary.org/docs/api3.html
+        // searchtype - 'C' for a catalog-only search; 'F' for a catalog+full-text search
         def searchtype = fulltext ? 'F' : 'C'
         def page = (start / bhlPageSize) + 1 as Integer
         def from = start % bhlPageSize

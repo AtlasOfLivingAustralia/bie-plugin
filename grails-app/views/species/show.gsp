@@ -371,7 +371,7 @@
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
         taxonRankID:        "${tc?.taxonConcept?.rankID ?: ''}",
-        synonyms:            [ <g:each in="${tc?.synonyms}" var="syn" status="si">"${syn.nameString.encodeAsJavaScript()}"<g:if test="${si < tc.synonyms.size() - 1}">, </g:if></g:each> ],
+        synonyms:           [ <g:each in="${synonyms}" var="syn" status="idx">"${syn.encodeAsJavaScript()}"<g:if test="${idx < synonyms.size() - 1}">, </g:if></g:each> ],
         family:             "${tc?.classification?.family ?: ''}",
         kingdom:            "${tc?.classification?.kingdom ?: ''}",
         preferredImageId:   "${tc?.imageIdentifier?: ''}",
