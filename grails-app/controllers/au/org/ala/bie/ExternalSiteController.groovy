@@ -187,18 +187,17 @@ class ExternalSiteController {
     }
 
     /**
-     * Update EOL content before rendering.
-     * @param text EOL response
-     * @return updated EOL response
+     * Update EOL content before rendering, rules specified in an external file.
      */
     String updateEolOutput(String text){
-        String updateValues = grailsApplication.config.eol.response.update
-        if (updateValues){
-            String[] values = updateValues.split(",")
-            values.each { pairs ->
-                String[] valuePairs = pairs.split(";")
-                String replacement = valuePairs.length == 1 ? "''" :valuePairs[1]
-                text = text.replace(valuePairs[0], replacement)
+        String updateFile = grailsApplication.config.update.file.location
+        if (updateFile != null && new File(updateFile).exists()){
+            new File(updateFile).eachLine { line ->
+                if (!line.startsWith("#")) {
+                    String[] valuePairs = line.split('--')
+                    String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
+                    text = text.replace(valuePairs[0], replacement)
+                }
             }
         }
         text
