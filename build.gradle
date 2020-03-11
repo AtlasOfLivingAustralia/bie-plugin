@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.4.25-SNAPSHOT"
+version "1.4.25"
 
 group "au.org.ala.plugins.grails"
 
