@@ -47,7 +47,7 @@ $(document).ready(function() {
 			addDrawer: false,
 			addCloseButton: true,
 			addAttribution: true,
-			addLikeDislikeButton: true,
+			addLikeDislikeButton: false,
 			addPreferenceButton: SHOW_CONF.addPreferenceButton,
 			attribution: attribution,
 			disableLikeDislikeButton: SHOW_CONF.disableLikeDislikeButton,
