@@ -1,8 +1,11 @@
-<g:set var="description" value="${raw(grailsApplication.config.skin.orgNameLong)} species page for the ${commonNameDisplay}"/>
+<g:set var="description" value="${raw(grailsApplication.config.skin.orgNameLong)} species page for the ${scientificName}"/>
 
 <meta property="og:url" content="${grailsApplication.config.bie.baseURL}/species/${tc?.taxonConcept?.guid}"/>
 <meta property="og:type" content="website"/>
-<meta property="og:title" content="Species: ${commonNameDisplay} (${scientificName})"/>
+<meta property="og:title" content="Species: ${scientificName}${commonNameDisplay ? ' (' + commonNameDisplay +')' : ''}"/>
+
+
+
 <meta property="og:description" content="${description}"/>
 
 <meta name="twitter:card" content="summary"/>
