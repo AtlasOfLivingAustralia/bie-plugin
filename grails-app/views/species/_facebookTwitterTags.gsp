@@ -3,12 +3,9 @@
 <meta property="og:url" content="${grailsApplication.config.bie.baseURL}/species/${tc?.taxonConcept?.guid}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Species: ${scientificName}${commonNameDisplay ? ' (' + commonNameDisplay +')' : ''}"/>
-
-
-
 <meta property="og:description" content="${description}"/>
 
-<meta name="twitter:card" content="summary"/>
+<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:description" content="${description}"/>
 
 <g:if test="${grailsApplication.config.facebook.app_id}">
@@ -18,7 +15,7 @@
 <g:if test="${tc.imageIdentifier}">
     <g:set var="image" value="${grailsApplication.config.image.thumbnailUrl}${tc.imageIdentifier}"/>
     <meta name="twitter:image" content="${image}"/>
-    <meta name="twitter:image:alt" content="${scientificName}"/>
+    <meta name="twitter:image:alt" content="Photograph of ${scientificName}"/>
 
     <meta property="og:image" content="${image}"/>
     <meta property="og:image:type" content="image/jpeg"/>
@@ -30,6 +27,7 @@
         <g:set var="image" value="${resource(dir: 'images', file: logoFile)}"/>
         <meta name="twitter:image" content="${image}"/>
         <meta name="twitter:image:alt" content="logo"/>
+
         <meta property="og:image" content="${image}"/>
         <meta property="og:image:type" content="image/png"/>
         <meta property="og:image:width" content="300"/>
@@ -39,6 +37,7 @@
         <g:set var="image" value="${resource(dir: 'images', file: 'noImage.jpg')}"/>
         <meta name="twitter:image" content="${image}"/>
         <meta name="twitter:image:alt" content="no image"/>
+
         <meta property="og:image" content="${image}"/>
         <meta property="og:image:type" content="image/jpeg"/>
         <meta property="og:image:width" content="300"/>
