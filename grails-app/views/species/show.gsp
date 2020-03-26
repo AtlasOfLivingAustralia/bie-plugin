@@ -44,8 +44,8 @@
     <title>${tc?.taxonConcept?.nameString}<g:if test="${commonNameDisplay}"> : ${commonNameDisplay}</g:if> | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
 
-    <!-- facebook tags -->
-    <g:render template="facebookTags"/>
+    <!-- facebook and twitter tags -->
+    <g:render template="facebookTwitterTags"/>
 
     <asset:javascript src="show.js"/>
     <asset:javascript src="charts.js"/>
