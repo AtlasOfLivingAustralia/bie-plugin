@@ -764,6 +764,9 @@ function loadBhl(start, rows, scroll) {
     }
     if (synonyms) {
         for (i = 0; i < synonyms.length; i++) {
+            if (synonyms[i] == taxonName) {
+                continue;
+            }
             if (query.length > 0)
                 query = query + "&";
             query = query + "s=" + encodeURIComponent(synonyms[i]);
