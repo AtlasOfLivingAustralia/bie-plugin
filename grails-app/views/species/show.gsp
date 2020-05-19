@@ -22,6 +22,7 @@
 <g:set var="alertsUrl" value="${grailsApplication.config.alerts.url}"/>
 <g:set var="guid" value="${tc?.previousGuid ?: tc?.taxonConcept?.guid ?: ''}"/>
 <g:set var="scientificName" value="${tc?.taxonConcept?.nameString ?: ''}" />
+<g:set var="taxonRank" value="${tc?.taxonConcept?.rankString?.capitalize() ?: ''}" />
 <g:set var="tabs" value="${grailsApplication.config.show.tabs.split(',')}"/>
 <g:set var="jsonLink" value="${grailsApplication.config.bie.index.url}/species/${tc?.taxonConcept?.guid}.json"/>
 <g:set var="sciNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
