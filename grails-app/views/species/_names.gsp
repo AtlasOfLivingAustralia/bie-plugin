@@ -174,7 +174,7 @@
                     </td>
                     <td class="source">
                         <ul>
-                            <g:if test="${grailsApplication.config.vernacularName.pull.showLanguage}">
+                            <g:if test="${grailsApplication.config.vernacularName.pull.showLanguage?:"false".toBoolean()}">
                                 <li>
                                     <bie:showLanguage lang="${language}"/>
                                 </li>
