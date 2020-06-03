@@ -102,7 +102,7 @@
             <g:if test="${tc?.taxonConcept?.acceptedConceptName}">
                 <h2><g:link uri="/species/${tc.taxonConcept.acceptedConceptID}">${tc.taxonConcept.acceptedConceptName}</g:link></h2>
             </g:if>
-            <g:if test="${grailsApplication.config.vernacularName.pull.showHeader?:"false".toBoolean() && tc.pullCommonNames}">
+            <g:if test="${grailsApplication.config.getProperty("vernacularName.pull.showHeader", Boolean, false) && tc.pullCommonNames}">
                 <g:each in="${tc.pullCommonNames}" var="cn" status="cni">
                     <g:if test="${cni % 2 == 0}"><g:if test="${cni != 0}"></div></g:if><div class="row"></g:if>
                     <div class="col-md-6"><h2><bie:markLanguage text="${cn.nameString}" lang="${cn.language}" mark="${grailsApplication.config.vernacularName.pull.showLanguage}" tag="${false}"/></h2></div>

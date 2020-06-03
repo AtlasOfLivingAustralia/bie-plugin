@@ -37,7 +37,7 @@ class ExternalSiteController {
     RateLimiter genbankRateLimiter = RateLimiter.create(3.0) // rate max requests per second (Double)
 
     // by default do not sanitise EOL response
-    boolean sanitiseEol = grailsApplication.config.eol.sanitise ?: "false".toBoolean()
+    boolean sanitiseEol = grailsApplication.config.getProperty("eol.sanitise", Boolean, false)
 
     def index() {}
 
