@@ -2,7 +2,7 @@
 
 <meta property="og:url" content="${grailsApplication.config.bie.baseURL}/species/${tc?.taxonConcept?.guid}"/>
 <meta property="og:type" content="website"/>
-<meta property="og:title" content="Species: ${scientificName}${commonNameDisplay ? ' (' + commonNameDisplay +')' : ''}"/>
+<meta property="og:title" content="${taxonRank}: ${scientificName}${commonNameDisplay ? ' (' + commonNameDisplay +')' : ''}"/>
 <meta property="og:description" content="${description}"/>
 
 <meta name="twitter:card" content="summary_large_image"/>

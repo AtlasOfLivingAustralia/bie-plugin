@@ -44,8 +44,10 @@ function loadTrove(url, query, synonyms, containerDivId, resultsDivId, previousB
     TROVE.query = query;
     if (synonyms) {
         for (var i = 0; i < synonyms.length; i++) {
-            query = query + '" OR "' + (synonyms[i]);
-            TROVE.query += ', ' + synonyms[i];
+            if (synonyms[i] != query) {
+                query = query + '" OR "' + (synonyms[i]);
+                TROVE.query += ', ' + synonyms[i];
+            }
         }
     }
 
