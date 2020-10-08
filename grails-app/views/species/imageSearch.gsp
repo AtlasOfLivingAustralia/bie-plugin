@@ -27,7 +27,7 @@
 <head>
     <title>
         <g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} |</g:if>
-        Image browser | ${grailsApplication.config.getProperty('skin.orgNameLong')}
+        <g:message code="images.search.title" /> | ${grailsApplication.config.getProperty('skin.orgNameLong')}
     </title>
     <meta name="layout" content="${grailsApplication.config.getProperty('skin.layout')}"/>
     <asset:script type="text/javascript">
@@ -127,10 +127,7 @@
     </asset:script>
     <style type="text/css">
 
-    body {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
+    body { padding-left: 15px; padding-right: 15px; }
 
     #imageResults {
         margin-top: 20px;
@@ -156,11 +153,9 @@
         margin: 2px 0 2px 0;
         position: relative;
     }
-
     .imgCon img {
         height: 200px;
     }
-
     .imgCon .meta {
         opacity: 0.8;
         position: absolute;
@@ -171,12 +166,10 @@
         text-align: left;
         padding: 4px 5px 2px 5px;
     }
-
     .imgCon .brief {
         color: black;
         background-color: white;
     }
-
     .imgCon .detail {
         color: white;
         background-color: black;
@@ -185,7 +178,6 @@
 
     </style>
 </head>
-
 <body class="nav-species  image-search">
 <header id="page-header" class="heading-bar">
     <div class="inner row">
