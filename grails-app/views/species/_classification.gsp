@@ -10,7 +10,7 @@
             <a href="${grailsApplication.config.bie.index.url}/download?q=rkid_${tc.taxonConcept.rankString}:${tc.taxonConcept.guid}&fq=rank:species&${grailsApplication.config.bieService.queryContext}"
                class="btn btn-default" style="text-align:left;">
                 <i class="glyphicon glyphicon-arrow-down"></i>
-                <g:message code="classification.download.especies"/> ${tc.taxonConcept.nameString}
+                <g:message code="classification.download.species"/> ${tc.taxonConcept.nameString}
             </a>
             <a class="btn btn-default" style="text-align:left;"
                href="${createLink(controller: 'species', action: 'search')}?q=${'rkid_' + tc.taxonConcept.rankString + ':' + tc.taxonConcept.guid}">
@@ -50,7 +50,7 @@
                 <g:if test="${taxon.isAustralian || tc.isAustralian}">
                     &nbsp;<span><img
                         src="${grailsApplication.config.ala.baseURL}/wp-content/themes/ala2011/images/status_native-sm.png"
-                        alt="Recorded in Australia" title="Recorded in Australia" width="21"
+                        alt="${message(code:"facet.locatedInHubCountry")}" title="${message(code:"facet.locatedInHubCountry")}" width="21"
                         height="21"></span>
                 </g:if>
             </dd>
@@ -73,16 +73,16 @@
                 <span>
                     <g:if test="${child.isAustralian}">
                         <img src="${grailsApplication.config.ala.baseURL}/wp-content/themes/ala2011/images/status_native-sm.png"
-                             alt="Recorded in Australia" title="Recorded in Australia" width="21"
+                             alt="${message(code:"facet.locatedInHubCountry")}" title="${message(code:"facet.locatedInHubCountry")}" width="21"
                              height="21">
                     </g:if>
                     <g:else>
                         <g:if test="${child.guid?.startsWith('urn:lsid:catalogueoflife.org:taxon')}">
                             <span class="inferredPlacement"
-                                  title="Not recorded in Australia">[inferred placement]</span>
+                                  title="${message(code:"facet.notLocatedInHubCountry")}">[inferred placement]</span>
                         </g:if>
                         <g:else>
-                            <span class="inferredPlacement" title="Not recorded in Australia"></span>
+                            <span class="inferredPlacement" title="${message(code:"facet.notLocatedInHubCountry")}"></span>
                         </g:else>
                     </g:else>
                 </span>

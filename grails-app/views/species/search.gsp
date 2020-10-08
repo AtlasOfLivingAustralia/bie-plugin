@@ -20,7 +20,7 @@
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <title>${query} | Search | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
+    <title>${query} | <g:message code="search.title.search" /> | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="breadcrumb" content="Search results"/>
     <asset:javascript src="search"/>
     <asset:javascript src="atlas"/>
@@ -56,10 +56,10 @@
                     <input name="sortField" value="${sortField?.encodeAsHTML()}" hidden>
                     <input name="dir" value="${dir?.encodeAsHTML()}" hidden>
                     <div class="input-group">
-                        <input id="autocompleteResultPage" type="text" name="q" placeholder="Search species, datasets, and more..." class="form-control" autocomplete="off" value="${query?.encodeAsHTML()?:""}">
+                        <input id="autocompleteResultPage" type="text" name="q" placeholder="${message(code:"search.autocomplete.placeholder")}" class="form-control" autocomplete="off" value="${query?.encodeAsHTML()?:""}">
                         <span class="input-group-btn">
                             <button class="btn btn-primary" title="submit">
-                                Search
+                                <g:message code="search.title.main-btn" />
                             </button>
                         </span>
                     </div>
@@ -72,14 +72,15 @@
             <div class="row">
                 <div class="col-sm-9">
                     <h1>
-                        Search for <strong>${searchResults.queryTitle == "*:*" ? 'everything' : searchResults.queryTitle}</strong>
-                        returned <g:formatNumber number="${searchResults.totalRecords}" type="number"/>
-                        results.
+                        <g:message code="search.for.title" args="[searchResults.queryTitle == 'all records' ?
+                                                                          g.message(code:'search.all.records') :
+                                                                          searchResults.queryTitle,
+                        g.formatNumber(number:searchResults.totalRecords, format:'###,###,###')]" />
                     </h1>
                 </div>
                 <div class="col-sm-3">
                     <div id="related-searches" class="related-searches hide">
-                        <h4>Related Searches</h4>
+                        <h4><g:message code="search.related"/></h4>
                         <ul class="list-unstyled"></ul>
                     </div>
                 </div>
@@ -91,8 +92,8 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="well refine-box">
-                    <h2 class="hidden-xs">Refine results</h2>
-                    <h2 class="visible-xs"><a href="#refine-options" data-toggle="collapse"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Refine results</a>
+                    <h2 class="hidden-xs"><g:message code="search.resultFine"/></h2>
+                    <h2 class="visible-xs"><a href="#refine-options" data-toggle="collapse"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> <g:message code="search.resultFine"/></a>
                     </h2>
 
                     <div id="refine-options" class="collapse mobile-collapse">
@@ -122,7 +123,7 @@
                                                         <strong><g:message code="${item.key}.${value}" default="${value}"/></strong>
                                                     </g:each>
                                                 </g:else>
-                                                <a href="#" onClick="javascript:removeFacet(${facetIdx}); return true;" title="remove filter"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                                                <a href="#" onClick="javascript:removeFacet(${facetIdx}); return true;" title="${message(code:"search.remove.filter")}"><span class="glyphicon glyphicon-remove-sign"></span></a>
                                             </li>
                                         </g:each>
                                     </ul>
@@ -168,7 +169,7 @@
                                 </ul>
                                 <g:if test="${facetResult.fieldResult.size() > 5}">
                                     <a class="expand-options" href="javascript:void(0)">
-                                        More
+                                        <g:message code="search.more"/>
                                     </a>
                                 </g:if>
                                 </div>
@@ -184,16 +185,16 @@
                     <g:if test="${idxTypes.contains("TAXON")}">
                         <div class="download-button pull-right">
                             <g:set var="downloadUrl" value="${grailsApplication.config.bie.index.url}/download?${request.queryString?:''}${grailsApplication.config.bieService.queryContext}"/>
-                            <a class="btn btn-default active btn-small" href="${downloadUrl}" title="Download a list of taxa for your search">
+                            <a class="btn btn-default active btn-small" href="${downloadUrl}" title="${message(code:"search.download.taxa.for.your.search")}">
                                 <i class="glyphicon glyphicon-download"></i>
-                                Download
+                                <g:message code="search.download"/>
                             </a>
                         </div>
                     </g:if>
 
                     <form class="form-inline">
                         <div class="form-group">
-                            <label for="per-page">Results per page</label>
+                            <label for="per-page"><g:message code="search.results.page"/></label>
                             <select class="form-control input-sm" id="per-page" name="per-page">
                                 <option value="10" ${(params.rows == '10') ? "selected=\"selected\"" : ""}>10</option>
                                 <option value="20" ${(params.rows == '20') ? "selected=\"selected\"" : ""}>20</option>
@@ -202,19 +203,31 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="sort-by">Sort by</label>
+                            <label for="sort-by"><g:message code="search.sort.by"/></label>
                             <select class="form-control input-sm" id="sort-by" name="sort-by">
-                                <option value="score" ${(params.sortField == 'score') ? "selected=\"selected\"" : ""}>best match</option>
-                                <option value="scientificName" ${(params.sortField == 'scientificName') ? "selected=\"selected\"" : ""}>scientific name</option>
-                                <option value="commonNameSingle" ${(params.sortField == 'commonNameSingle') ? "selected=\"selected\"" : ""}>common name</option>
-                                <option value="rank" ${(params.sortField == 'rank') ? "selected=\"selected\"" : ""}>taxon rank</option>
+                                <option value="score" ${(params.sortField == 'score') ? "selected=\"selected\"" : ""}>
+                                    <g:message code="search.sort.match"/>
+                                </option>
+                                <option value="scientificName" ${(params.sortField == 'scientificName') ? "selected=\"selected\"" : ""}>
+                                    <g:message code="search.sort.scientific"/>
+                                </option>
+                                <option value="commonNameSingle" ${(params.sortField == 'commonNameSingle') ? "selected=\"selected\"" : ""}>
+                                    <g:message code="search.sort.common"/>
+                                </option>
+                                <option value="rank" ${(params.sortField == 'rank') ? "selected=\"selected\"" : ""}>
+                                    <g:message code="search.sort.taxon"/>
+                                </option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="sort-order">Sort order</label>
+                            <label for="sort-order"><g:message code="search.sort.order"/></label>
                             <select class="form-control input-sm" id="sort-order" name="sort-order">
-                                <option value="asc" ${(params.dir == 'asc') ? "selected=\"selected\"" : ""}>ascending</option>
-                                <option value="desc" ${(params.dir == 'desc' || !params.dir) ? "selected=\"selected\"" : ""}>descending</option>
+                                <option value="asc" ${(params.dir == 'asc') ? "selected=\"selected\"" : ""}>
+                                    <g:message code="search.sort.order.ascending"/>
+                                </option>
+                                <option value="desc" ${(params.dir == 'desc' || !params.dir) ? "selected=\"selected\"" : ""}>
+                                    <g:message code="search.sort.order.desceding"/>
+                                </option>
                             </select>
                         </div>
                     </form>
@@ -336,7 +349,7 @@
                             <g:if test="${result.has("idxtype") && result.idxtype == 'TAXON'}">
                                 <ul class="summary-actions list-inline">
                                     <g:if test="${result.rankID < 7000}">
-                                        <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">View images of species within this ${result.rank}</g:link></li>
+                                        <li><g:link controller="species" action="imageSearch" params="[id:result.guid]"><g:message code="search.details.view.image" args="[result.rank]"/></g:link></li>
                                     </g:if>
 
                                     <g:if test="${grailsApplication.config.sightings.url && result.guid && result.name}">
@@ -344,7 +357,8 @@
                                     </g:if>
                                     <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
-                                        <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">Occurrences:
+                                        <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">
+                                        <g:message code="search.details.occurrence"/>
                                         <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
                                         </li>
                                     </g:if>
@@ -374,7 +388,7 @@
     <div class="col-sm-12">
         <ol class="search-results-list list-unstyled">
             <li class="search-result clearfix">
-                <h4><g:message code="idxtype.LOCALITY"/> : <a class="exploreYourAreaLink" href="">Address here</a></h4>
+                <h4><g:message code="idxtype.LOCALITY"/> : <a class="exploreYourAreaLink" href=""><g:message code="search.sort.address"/></a></h4>
             </li>
         </ol>
     </div>

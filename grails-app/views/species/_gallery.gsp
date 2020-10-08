@@ -14,7 +14,7 @@
     </g:each>
 
     <div id="cat_nonavailable">
-        <h2><g:message code="gallery.titulo"/></h2>
+        <h2><g:message code="gallery.title"/></h2>
 
 
         <p>

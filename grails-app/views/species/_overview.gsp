@@ -144,12 +144,7 @@
                 <div class="panel-body">
                     <p><strong><span class="datasetCount"></span>
                     </strong>
-                        <span class="datasetLabel">
-                            <g:message code="overview.datasets.count.have"/>
-                        </span>
-                        <g:message
-                                code="overview.datasets.count.provided"/> ${grailsApplication.config.skin.orgNameShort}
-                        <g:message code="overview.datasets.count.for"/> ${tc.taxonConcept.rankString}.
+                    </strong> <g:message code="overview.datasets.have.provided.data" args="[grailsApplication.config.skin.orgNameShort, tc.taxonConcept.rankString]" />
                     </p>
 
                     <p>

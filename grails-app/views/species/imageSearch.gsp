@@ -192,7 +192,7 @@
         <nav id="breadcrumb" class="span12">
             <ol class="breadcrumb">
                 <li>
-                    <a href="${alaUrl}">Home</a> <span class="icon icon-arrow-right"></span>
+                    <a href="${alaUrl}"><g:message code="home" /></a> <span class="icon icon-arrow-right"></span>
                 </li>
                 <li>
                     <g:link controler="species" action="search"><g:message code="images.specie"/></g:link>
@@ -218,7 +218,7 @@
         <g:if test="${taxonConcept}">
             <g:message code="images.from"/> ${taxonConcept.taxonConcept.taxonRank}
             <a href="${grailsApplication.config.getProperty('grails.serverURL')}/species/${taxonConcept?.taxonConcept?.guid}"
-               title="More information on this ${taxonConcept?.taxonConcept?.taxonRank}">${taxonConcept?.taxonConcept?.nameString}
+               title="${message(code:"images.more.information.on.this.0", args:[taxonConcept?.taxonConcept?.taxonRank])}">${taxonConcept?.taxonConcept?.nameString}
             </a>
         </g:if>
     </h1>
@@ -245,7 +245,7 @@
     <div id="divPostsLoader" style="margin-left:auto;margin-right:auto; width:120px;"></div>
 
     <div id="loadMoreTrigger" style="display: block;">
-        <input type="button" id="loadMoreButton" class="btn btn-primary" value="Carregar mais imagens"/>
+        <input type="button" id="loadMoreButton" class="btn btn-primary" value="${message(code:"images.load.more")}"/>
     </div>
 </div>
 </body>

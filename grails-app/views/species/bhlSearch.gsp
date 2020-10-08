@@ -169,7 +169,7 @@
     <div class="inner row-fluid">
         <nav id="breadcrumb" class="span12">
             <ol class="breadcrumb">
-                <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
+                <li><a href="${alaUrl}"><g:message code="home" /></a> <span class=" icon icon-arrow-right"></span></li>
                 <li class="active"> <g:message code="bhl.search"/>BHL Search</li>
             </ol>
         </nav>
