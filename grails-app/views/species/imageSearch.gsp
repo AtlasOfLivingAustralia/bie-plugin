@@ -25,8 +25,10 @@
 <!doctype html>
 <html>
 <head>
-    <title><g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} | </g:if>
-            Image browser | ${grailsApplication.config.getProperty('skin.orgNameLong')}</title>
+    <title>
+        <g:if test="${taxonConcept}">${taxonConcept.taxonConcept.taxonRank}  ${taxonConcept.taxonConcept.nameString} |</g:if>
+        <g:message code="images.search.title" /> | ${grailsApplication.config.getProperty('skin.orgNameLong')}
+    </title>
     <meta name="layout" content="${grailsApplication.config.getProperty('skin.layout')}"/>
     <asset:script type="text/javascript">
         var prevPage = 0;
@@ -56,7 +58,7 @@
 
         function imageLoad() {
             processing = true;
-            $('#divPostsLoader').html('<img src="${resource(dir: "images", file:"spinner.gif")}"/>');
+            $('#divPostsLoader').html('<img src="${resource(dir: "images", file: "spinner.gif")}"/>');
 
             //send a query to server side to present new content
             $.ajax({
@@ -177,49 +179,66 @@
     </style>
 </head>
 <body class="nav-species  image-search">
-    <header id="page-header" class="heading-bar">
-        <div class="inner row">
-            <nav id="breadcrumb" class="span12">
-                <ol class="breadcrumb">
-                    <li><a href="${alaUrl}">Home</a> <span class="icon icon-arrow-right"></span></li>
-                    <li><g:link controller="species" action="search"> species</g:link> <span class=" icon icon-arrow-right"></span></li>
-                    <li class="active">
-                        <g:if test="${taxonConcept}">
-                            Images for ${taxonConcept.taxonConcept.nameString}
-                        </g:if>
-                        <g:else>
-                            Species images
-                        </g:else>
-                    </li>
-                </ol>
-            </nav>
-        </div>
-
-        <h1>Images of <b id="totalImageCount">...</b> species
-            <g:if test="${taxonConcept}">
-                from ${taxonConcept.taxonConcept.taxonRank}
-                <a href="${grailsApplication.config.getProperty('grails.serverURL')}/species/${taxonConcept?.taxonConcept?.guid}" title="More information on this ${taxonConcept?.taxonConcept?.taxonRank}">${taxonConcept?.taxonConcept?.nameString}</a></h1>
-            </g:if>
-    </header>
-    <div>
-        <%-- template used by AJAX code --%>
-        <div class="imgConTmpl hide">
-            <div class="imgCon">
-                <a class="thumbImage" rel="thumbs" href="" id="thumb">
-                    <img src="" class="searchImage" alt="image thumbnail"/>
-                    <div class="meta brief"></div>
-                    <div class="meta detail hide"></div>
-                </a>
-            </div>
-        </div>
-
-        <div id="imageResults">
-            <!-- image objects get inserted here by JS -->
-        </div>
-
-        <div id="divPostsLoader" style="margin-left:auto;margin-right:auto; width:120px;"></div>
-
-        <div id="loadMoreTrigger" style="display: block;"><input type="button" id="loadMoreButton" class="btn btn-primary" value="Load more images"/></div>
+<header id="page-header" class="heading-bar">
+    <div class="inner row">
+        <nav id="breadcrumb" class="span12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="${alaUrl}"><g:message code="home" /></a> <span class="icon icon-arrow-right"></span>
+                </li>
+                <li>
+                    <g:link controler="species" action="search"><g:message code="images.specie"/></g:link>
+                    <span class=" icon icon-arrow-right"></span>
+                </li>
+                <li class="active">
+                    <g:if test="${taxonConcept}">
+                        <g:message code="images.for"/>
+                        ${taxonConcept.taxonConcept.nameString}
+                    </g:if>
+                    <g:else>
+                        <g:message code="images.species"/>
+                    </g:else>
+                </li>
+            </ol>
+        </nav>
     </div>
+
+    <h1>
+        <g:message code="images.of"/>
+        <b id="totalImageCount">...</b>
+        <g:message code="images.specie"/>
+        <g:if test="${taxonConcept}">
+            <g:message code="images.from"/> ${taxonConcept.taxonConcept.taxonRank}
+            <a href="${grailsApplication.config.getProperty('grails.serverURL')}/species/${taxonConcept?.taxonConcept?.guid}"
+               title="${message(code:"images.more.information.on.this.0", args:[taxonConcept?.taxonConcept?.taxonRank])}">${taxonConcept?.taxonConcept?.nameString}
+            </a>
+        </g:if>
+    </h1>
+</header>
+
+<div>
+    <%-- template used by AJAX code --%>
+    <div class="imgConTmpl hide">
+        <div class="imgCon">
+            <a class="thumbImage" rel="thumbs" href="" id="thumb">
+                <img src="" class="searchImage" alt="image thumbnail"/>
+
+                <div class="meta brief"></div>
+
+                <div class="meta detail hide"></div>
+            </a>
+        </div>
+    </div>
+
+    <div id="imageResults">
+        <!-- image objects get inserted here by JS -->
+    </div>
+
+    <div id="divPostsLoader" style="margin-left:auto;margin-right:auto; width:120px;"></div>
+
+    <div id="loadMoreTrigger" style="display: block;">
+        <input type="button" id="loadMoreButton" class="btn btn-primary" value="${message(code:"images.load.more")}"/>
+    </div>
+</div>
 </body>
 </html>
