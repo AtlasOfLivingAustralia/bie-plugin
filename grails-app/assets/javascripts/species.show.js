@@ -86,9 +86,9 @@ function addAlerts(){
         var searchString = "?q=lsid:" + SHOW_CONF.guid;
         var url = SHOW_CONF.alertsUrl + "/webservice/createBiocacheNewRecordsAlert?";
         url += "queryDisplayName=" + encodeURIComponent(query);
-        url += "&baseUrlForWS=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
+        url += "&baseUrlForWS=" + encodeURIComponent(SHOW_CONF.biocacheServiceUrl);
         url += "&baseUrlForUI=" + encodeURIComponent(SHOW_CONF.biocacheUrl);
-        url += "&webserviceQuery=%2Fws%2Foccurrences%2Fsearch" + encodeURIComponent(searchString);
+        url += "&webserviceQuery=%2Foccurrences%2Fsearch" + encodeURIComponent(searchString);
         url += "&uiQuery=%2Foccurrences%2Fsearch" + encodeURIComponent(searchString);
         url += "&resourceName=" + encodeURIComponent("Atlas");
         window.location.href = url;
