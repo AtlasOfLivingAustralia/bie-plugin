@@ -162,7 +162,7 @@ function updateOccurrenceCount() {
                     return false;
                 } else if (value == 0) {
                     // hide charts if no records
-                    $("#recordBreakdowns").html("<h3>" + jQuery.i18n.prop("no.records.found") + "</h3>");
+                    $("#recordBreakdowns").html("<h3>" + $.i18n.properties("no.records.found") + "</h3>");
                 }
             });
         }
@@ -244,7 +244,7 @@ function loadDataProviders(){
             }
 
             if(datasetCount == 1){
-                $('.datasetLabel').html("dataset has");
+                $('.datasetLabel').html($.i18n.properties("overview.datasets.descr01b"));
             }
 
             $('.datasetCount').html(datasetCount);
@@ -276,7 +276,6 @@ function loadDataProviders(){
         }
     });
 }
-
 function loadIndigenousData() {
 
     if(!SHOW_CONF.profileServiceUrl || SHOW_CONF.profileServiceUrl == ""){
@@ -376,8 +375,10 @@ function loadExternalSources(){
                         var sourceHtml = "";
 
                         if (sourceText.match("^http")) {
+                            console.log(sourceText);
                             sourceHtml = "<a href='" + sourceText + "' target='eol'>"  + sourceText + "</a>"
                         } else {
+                            console.log(sourceText);
                             sourceHtml = sourceText;
                         }
 
@@ -402,7 +403,7 @@ function loadExternalSources(){
     //load Genbank content
     $.ajax({url: SHOW_CONF.genbankUrl}).done(function ( data ) {
         if(data.total){
-            $('.genbankResultCount').html('<a href="' + data.resultsUrl + '">View all results - ' + data.total + '</a>');
+            $('.genbankResultCount').html('<a href="' + data.resultsUrl + '">' + jQuery.i18n.prop("sequences.viewresults") + ' ' + data.total + '</a>');
             if(data.results){
                 $.each(data.results, function(idx, result){
                     var $genbank =  $('#genbankTemplate').clone();

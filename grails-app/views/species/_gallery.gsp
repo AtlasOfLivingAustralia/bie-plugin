@@ -14,12 +14,11 @@
     </g:each>
 
     <div id="cat_nonavailable">
-        <h2>No images available for this taxon</h2>
+        <h2>${message(code: 'gallery.noimages')}</h2>
 
         <p>
-            If you have images for this taxon that you would like to share
-            with ${raw(grailsApplication.config.skin.orgNameLong)},
-            please upload using the upload tools.
+            ${message(code: 'gallery.noimages.descr01')} ${raw(grailsApplication.config.skin.orgNameLong)},
+            ${message(code: 'gallery.noimages.descr02')}
         </p>
     </div>
     <img src="${resource(dir: 'images', file: 'spinner.gif', plugin: 'biePlugin')}" id="gallerySpinner" class="hide" alt="spinner icon"/>

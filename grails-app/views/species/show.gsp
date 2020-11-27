@@ -92,7 +92,7 @@
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
             <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
             <h5 class="inline-head name-authority">
-                <strong>Name authority:</strong>
+                <strong><g:message code="facet.authority_s" /></strong>
                 <span class="name-authority">${tc?.taxonConcept.nameAuthority ?: grailsApplication.config.defaultNameAuthority}</span>
             </h5>
             <g:if test="${commonNameDisplay}">

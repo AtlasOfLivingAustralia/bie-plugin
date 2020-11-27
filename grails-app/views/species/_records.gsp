@@ -4,20 +4,18 @@
         <a class="btn btn-default"
            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}">
             <i class="glyphicon glyphicon-th-list"></i>
-            View list of all
-            occurrence records for this taxon (<span class="occurrenceRecordCount">0</span> records)
+            ${message(code: 'charts.button.viewlist01')}<span class="occurrenceRecordCount">0</span> ${message(code: 'charts.button.viewlist02')}
         </a>
         <a class="btn btn-default"
            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}#tab_mapView">
             <i class="glyphicon glyphicon-map-marker"></i>
-            View map of all
-            occurrence records for this taxon (<span class="occurrenceRecordCount">0</span> records)
+            ${message(code: 'charts.button.viewMap01')}<span class="occurrenceRecordCount">0</span> ${message(code: 'charts.button.viewMap02')}
         </a>
     </div>
 
     <div id="occurrenceRecords">
         <div id="recordBreakdowns" style="display: block;">
-            <h2>Charts showing breakdown of occurrence records (<span class="occurrenceRecordCount">0</span> records)</h2>
+            <h2>${message(code: 'charts.title.breakdown01')}<span class="occurrenceRecordCount">0</span> ${message(code: 'charts.title.breakdown02')}</h2>
             %{--<div id="chartsHint">Hint: click on chart elements to view that subset of records</div>--}%
             <div id="charts"></div>
         </div>

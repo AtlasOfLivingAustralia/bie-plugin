@@ -185,19 +185,19 @@
                     <li><g:link controller="species" action="search"> species</g:link> <span class=" icon icon-arrow-right"></span></li>
                     <li class="active">
                         <g:if test="${taxonConcept}">
-                            Images for ${taxonConcept.taxonConcept.nameString}
+                            ${message(code: 'imagesearch.imagesfor')} ${taxonConcept.taxonConcept.nameString}
                         </g:if>
                         <g:else>
-                            Species images
+                            ${message(code: 'imagesearch.speciesimages')}
                         </g:else>
                     </li>
                 </ol>
             </nav>
         </div>
 
-        <h1>Images of <b id="totalImageCount">...</b> species
+        <h1>${message(code: 'imagesearch.imagesof')} <b id="totalImageCount">...</b> ${message(code: 'imagesearch.species')}
             <g:if test="${taxonConcept}">
-                from ${taxonConcept.taxonConcept.taxonRank}
+                ${message(code: 'imagesearch.from')} ${taxonConcept.taxonConcept.taxonRank}
                 <a href="${grailsApplication.config.getProperty('grails.serverURL')}/species/${taxonConcept?.taxonConcept?.guid}" title="More information on this ${taxonConcept?.taxonConcept?.taxonRank}">${taxonConcept?.taxonConcept?.nameString}</a></h1>
             </g:if>
     </header>

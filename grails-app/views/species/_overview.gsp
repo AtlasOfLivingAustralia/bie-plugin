@@ -30,7 +30,7 @@
             <g:if test="${tc.conservationStatuses}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Conservation Status</h3>
+                        <h3 class="panel-title">${message(code: 'overview.conservationstatus')}</h3>
                     </div>
 
                     <div class="panel-body">
@@ -61,7 +61,7 @@
 
             <div class="panel panel-default panel-resources">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Online Resources</h3>
+                    <h3 class="panel-title">${message(code: 'overview.onlineresources')}</h3>
                 </div>
 
                 <div class="panel-body">
@@ -78,7 +78,7 @@
                 <p class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></p>
             </div>
             <div class="taxon-map">
-                <h3>Occurrence records map (<span class="occurrenceRecordCount">0</span> records)</h3>
+                <h3>${message(code: 'overview.map.occurrence.map')} (<span class="occurrenceRecordCount">0</span> ${message(code: 'overview.map.occurrence.records')})</h3>
                 <div id="leafletMap"></div>
 
                 <g:if test="${grailsApplication.config.spatial.baseURL}">
@@ -114,26 +114,32 @@
                                 <a href="${java.text.MessageFormat.format(citizenSciUrl, URLEncoder.encode(guid), URLEncoder.encode(scientificName))}"><span class="glyphicon glyphicon-map-marker"></span> <g:message code="label.recordSighting" default="Record a sighting"/></a>
                             </li>
                         </g:if>
-                        <li><a id="alertsButton" href="#"><span
-                                class="glyphicon glyphicon-bell"></span> Receive alerts when new records are added
-                        </a></li>
+                        <!--<li><a id="alertsButton" href="#"><span
+                                class="glyphicon glyphicon-bell"></span> ${ message(code: 'overview.map.alert') }
+                        </a></li>-->
                     </ul>
                 </div>
             </div>
 
             <div class="panel panel-default panel-data-providers">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Datasets</h3>
+                    <h3 class="panel-title">${ message(code: 'overview.datasets.title') }</h3>
                 </div>
 
                 <div class="panel-body">
-                    <p><strong><span class="datasetCount"></span>
-                    </strong> <span class="datasetLabel">datasets have</span> provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
-                    </p>
+                    <g:if test="${Locale.default.language == 'de-AT'}">
+                        <p><strong>
+                        </strong> ${message(code: 'overview.datasets.descr04')} ${grailsApplication.config.skin.orgNameShort} ${message(code: 'overview.datasets.descr02')} ${tc.taxonConcept.rankString} ${ message(code: 'overview.datasets.descr03')} <span class="datasetCount"></span> <span class="datasetLabel"> ${message(code: 'overview.datasets.descr01a')} </span>.
+                        </p>
+                    </g:if>
+                    <g:if test="${Locale.default.language != 'de-AT'}">
+                        <p><strong><span class="datasetCount"></span>
+                        </strong> <span class="datasetLabel">${message(code: 'overview.datasets.descr01a')}</span> provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
+                        </p>
+                    </g:if>
 
                     <p><a class="tab-link"
-                          href="#data-partners">Browse the list of datasets</a> and find organisations you can join if you are
-                    interested in participating in a survey for
+                          href="#data-partners">${message(code: 'overview.datasets.descr.survey01')}</a> ${message(code: 'overview.datasets.descr.survey02')}
                     <g:if test="${tc.taxonConcept?.rankID > 6000}">
                         species like ${raw(sciNameFormatted)}
                     </g:if>

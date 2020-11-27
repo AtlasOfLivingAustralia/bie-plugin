@@ -1,11 +1,11 @@
 <section class="tab-pane fade" id="names">
     <g:set var="acceptedName" value="${tc.taxonConcept.taxonomicStatus == 'accepted' || tc.taxonConcept.taxonomicStatus == 'inferredAccepted'}"/>
-    <h2>Names and sources</h2>
+    <h2>${message(code: 'names.title')}</h2>
     <table class="table name-table  table-responsive">
         <thead>
         <tr>
             <th title="<g:message code="label.acceptedName.detail"/>"><g:if test="${acceptedName}"><g:message code="label.acceptedName"/></g:if><g:else><g:message code="label.name"/></g:else></th>
-            <th title="<g:message code="label.source.detail"/>">Source</th>
+            <th title="<g:message code="label.source.detail"/>">${message(code: 'names.source')}</th>
         </tr>
         </thead>
         <tbody>

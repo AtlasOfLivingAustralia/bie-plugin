@@ -80,7 +80,7 @@ $(document).ready(function() {
 	});
 	$("a.expand-options").click(function() {
 		$(this).text(function(i, text){
-			return text.trim() === "More" ? "Less" : "More";
+			return text.trim() === $.i18n.properties("search.more").trim() ? $.i18n.properties("search.less").trim() : $.i18n.properties("search.more").trim();
 		})
 		$(this).prev(".collapse").collapse("toggle");
 	});

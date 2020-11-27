@@ -2,9 +2,9 @@
     <table id="data-providers-list" class="table name-table  table-responsive">
         <thead>
         <tr>
-            <th>Data sets</th>
-            <th>Licence</th>
-            <th>Records</th>
+            <th>${message(code: 'datapartners.datasets')}</th>
+            <th>${message(code: 'datapartners.licence')}</th>
+            <th>${message(code: 'datapartners.records')}</th>
         </tr>
         </thead>
         <tbody></tbody>
