@@ -314,21 +314,24 @@
                             </g:elseif>
                             <g:elseif test="${result.has("name")}">
                                 <h4><g:message code="idxtype.${result.idxtype}" default="${result.idxtype}"/>:
-                                    <a href="${result.guid}">${result.name}</a></h4>
-                                <p>
-                                    <span>${result?.description?:""}</span>
-                                </p>
+                                    <a href="${result.linkIdentifier ?: result.guid}">${result.name}</a></h4>
+                                <g:if test="${result.description}">
+                                    <p>${result.description.trimLength(500)}</p>
+                                </g:if>
+                                <g:if test="${result.content}">
+                                    <p>${result.content.trimLength(500)}</p>
+                                </g:if>
                             </g:elseif>
                             <g:elseif test="${result.has("acronym") && result.get("acronym")}">
                                 <h4><g:message code="idxtype.${result.idxtype}"/>:
-                                    <a href="${result.guid}">${result.name}</a></h4>
+                                    <a href="${result.linkIdentifier ?: result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span>${result.acronym}</span>
                                 </p>
                             </g:elseif>
                             <g:elseif test="${result.has("description") && result.get("description")}">
                                 <h4><g:message code="idxtype.${result.idxtype}"/>:
-                                    <a href="${result.guid}">${result.name}</a></h4>
+                                    <a href="${result.linkIdentifier ?: result.guid}">${result.name}</a></h4>
                                 <p>
                                     <span class="searchDescription">${result.description?.trimLength(500)}</span>
                                 </p>
