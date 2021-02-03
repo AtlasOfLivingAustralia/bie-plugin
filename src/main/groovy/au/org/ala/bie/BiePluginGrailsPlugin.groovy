@@ -47,8 +47,7 @@ A plugin providing basic species page functionality and site search.
 
             // Custom message source
             messageSource(ExtendedPluginAwareResourceBundleMessageSource) {
-                //basenames = ["WEB-INF/grails-app/i18n/messages","classpath:messages","classpath:grails-app/i18n/messages"] as String[]
-                basename = "classpath:grails-app/i18n/messages"
+                // basename = "classpath:grails-app/i18n/messages"
                 cacheSeconds = 10 //(60 * 60 * 6)
                 useCodeAsDefaultMessage = true
                 defaultEncoding = "UTF-8"
