@@ -164,20 +164,22 @@
     </script>
 </head>
 <body class="nav-species bhl-search">
-    <header id="page-header" class="heading-bar">
-        <div class="inner row-fluid">
-            <nav id="breadcrumb" class="span12">
-                <ol class="breadcrumb">
-                    <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li class="active">BHL Search</li>
-                </ol>
-            </nav>
-        </div>
-        <h1>Biodiversity Heritage Library</h1>
-    </header>
-    <div class="inner">
-        <section id="content-search">
-            <form id="search-form" action="" method="get" name="search-form">
+<header id="page-header" class="heading-bar">
+    <div class="inner row-fluid">
+        <nav id="breadcrumb" class="span12">
+            <ol class="breadcrumb">
+                <li><a href="${alaUrl}"><g:message code="home" /></a> <span class=" icon icon-arrow-right"></span></li>
+                <li class="active"> <g:message code="bhl.search"/>BHL Search</li>
+            </ol>
+        </nav>
+    </div>
+
+    <h1><g:message code="bhl.search.bhl"/></h1>
+</header>
+
+<div class="inner">
+    <section id="content-search">
+        <form id="search-form" action="" method="get" name="search-form">
             %{--<label for="search">Search</label>--}%
             <div class="input-append">
                 <input id="search" class="span4" name="q" type="text" placeholder="Search BHL" autocomplete="off" value="${params.q?:''}">
@@ -186,20 +188,21 @@
             </form>
         </section>
 
-        <div id="status-box" class="column-wrap" style="display: none;">
-            <div id="search-status" class="column-wrap" >
-                <span style="vertical-align: middle; ">
-                    Searching, please wait...
-                    <img src="${resource(dir: 'css/images', file: 'indicator.gif')}" alt="Searching" style="vertical-align: middle;"/>
-                </span>
-            </div>
-        </div>
-        <div id="results-home" class="column-wrap">
-            <div id="synonyms" style="display: none">
-            </div>
-            <div class="column-wrap" id="solr-results">
-            </div>
+    <div id="status-box" class="column-wrap" style="display: none;">
+        <div id="search-status" class="column-wrap">
+            <span style="vertical-align: middle; ">
+                <g:message code="bhl.search.wait"/>
+                <img src="${resource(dir: 'css/images', file: 'indicator.gif')}" alt="Searching" style="vertical-align: middle;"/>
+            </span>
         </div>
     </div>
+    <div id="results-home" class="column-wrap">
+        <div id="synonyms" style="display: none">
+        </div>
+
+        <div class="column-wrap" id="solr-results">
+        </div>
+    </div>
+</div>
 </body>
 </html>

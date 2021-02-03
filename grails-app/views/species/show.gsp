@@ -93,7 +93,7 @@
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
             <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
             <h5 class="inline-head name-authority">
-                <strong>Name authority:</strong>
+                <strong><g:message code="show.name.authority"/>:</strong>
                 <span class="name-authority">${tc?.taxonConcept.nameAuthority ?: grailsApplication.config.defaultNameAuthority}</span>
             </h5>
             <g:if test="${commonNameDisplay}">
@@ -168,11 +168,11 @@
     </div>
 
     <div class="panel-footer">
-        <p class="source">Source: <span class="sourceText"></span></p>
+        <p class="source"><g:message code="show.source" />: <span class="sourceText"></span></p>
 
-        <p class="rights">Rights holder: <span class="rightsText"></span></p>
+        <p class="rights"><g:message code="show.rights.holder" />: <span class="rightsText"></span></p>
 
-        <p class="provider">Provided by: <a href="#" class="providedBy"></a></p>
+        <p class="provider"><g:message code="show.provided.by" />: <a href="#" class="providedBy"></a></p>
     </div>
 </div>
 
@@ -218,7 +218,7 @@
             <div class="row">
 
                 <div class="col-md-8 panel-heading">
-                    <h3 class="panel-title">Main Image</h3>
+                    <h3 class="panel-title"><g:message code="show.main.image" /></h3>
                 </div>
             </div>
 
@@ -234,7 +234,7 @@
         <div class="col-md-3 hide main-audio padding-bottom-2">
             <div class="row">
                 <div class="col-md-8 panel-heading">
-                    <h3 class="panel-title">Main Audio</h3>
+                    <h3 class="panel-title"><g:message code="show.main.audio" /></h3>
                 </div>
             </div>
 
@@ -250,7 +250,7 @@
                 <div class="col-md-12 small">
                     <div class="row">
                         <div class="col-md-5 ">
-                            <strong>Name</strong>
+                            <strong><g:message code="show.name" /></strong>
                         </div>
 
                         <div class="col-md-7 audio-name"></div>
@@ -258,7 +258,7 @@
 
                     <div class="row">
                         <div class="col-md-5 ">
-                            <strong>Attribution</strong>
+                            <strong><g:message code="show.attribution" /></strong>
                         </div>
 
                         <div class="col-md-7 audio-attribution"></div>
@@ -266,7 +266,7 @@
 
                     <div class="row">
                         <div class="col-md-5 ">
-                            <strong>Licence</strong>
+                            <strong><g:message code="show.licence" /></strong>
                         </div>
 
                         <div class="col-md-7 audio-license"></div>
@@ -286,7 +286,7 @@
             <div class="col-md-2 ">
             </div>
             <div class="col-md-8 panel-heading">
-                <h3 class="panel-title">Main Video</h3>
+                <h3 class="panel-title"><g:message code="show.main.video" /></h3>
             </div>
         </div>
         <div class="row">
@@ -303,7 +303,7 @@
             <div class="col-md-7 small">
                 <div class="row">
                     <div class="col-md-2 ">
-                        <strong>Name</strong>
+                        <strong><g:message code="show.name" /></strong>
                     </div>
 
                     <div class="col-md-10 video-name"></div>
@@ -311,7 +311,7 @@
 
                 <div class="row">
                     <div class="col-md-2 ">
-                        <strong>Attribution</strong>
+                        <strong><g:message code="show.attribution" /></strong>
                     </div>
 
                     <div class="col-md-10 video-attribution"></div>
@@ -319,7 +319,7 @@
 
                 <div class="row">
                     <div class="col-md-2 ">
-                        <strong>Licence</strong>
+                        <strong><g:message code="show.licence" /></strong>
                     </div>
 
                     <div class="col-md-10 video-license"></div>
@@ -353,7 +353,7 @@
 
                 </div>
                 <!-- dialog buttons -->
-                <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div>
+                <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal"><g:message code="show.ok" /></button></div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
