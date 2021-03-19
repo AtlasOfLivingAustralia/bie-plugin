@@ -338,7 +338,7 @@
                                     </g:if>
 
                                     <g:if test="${grailsApplication.config.sightings.url}">
-                                        <li><a href="${java.text.MessageFormat.format(grailsApplication.config.sightings.url, URLEncoder.encode(result.guid), URLEncoder.encode(result.name))}"><g:message code="label.recordSighting" default="Record a sighting"/></a></li>
+                                        <!--<li><a href="${java.text.MessageFormat.format(grailsApplication.config.sightings.url, URLEncoder.encode(result.guid), URLEncoder.encode(result.name))}"><g:message code="label.recordSighting" default="Record a sighting"/></a></li>-->
                                     </g:if>
                                     <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
