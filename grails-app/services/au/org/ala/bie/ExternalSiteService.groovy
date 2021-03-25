@@ -2,10 +2,14 @@ package au.org.ala.bie
 
 import au.org.ala.citation.BHLAdaptor
 import grails.config.Config
-import grails.converters.JSON
 import grails.core.support.GrailsConfigurationAware
-import grails.transaction.Transactional
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import org.owasp.html.HtmlPolicyBuilder
+import org.owasp.html.PolicyFactory
+
+import java.text.MessageFormat
+import java.util.regex.Pattern
 
 /**
  * Get information from external sites
@@ -19,14 +23,35 @@ class ExternalSiteService implements GrailsConfigurationAware {
     int bhlPageSize
     /** Extend BHL information with DOIs and citations */
     boolean bhlExtend
+    /** The EoL search service patterm */
+    String eolSearchService
+    /** The EoL page service pattern */
+    String eolPageService
+    /** Sanitize the EoL pages */
+    boolean eolSanitise
+    /** Accept these languages for the EoL pages */
+    String eolLanguage
+    /** The file containing elements to update */
+    String updateFile
+    /** Allowed elements for HTML */
+    String allowedElements
+    /** Allowed attributes for HTML */
+    String allowedAttributes
 
 
     @Override
     void setConfiguration(Config config) {
-        bhlApi = config.literature.bhl.api
-        bhlApiKey = config.literature.bhl.apikey
-        bhlPageSize = config.literature.bhl.pageSize.toInteger()
-        bhlExtend = config.literature.bhl.extend.toBoolean()
+        bhlApi = config.getProperty("literature.bhl.api")
+        bhlApiKey = config.getProperty("literature.bhl.apikey")
+        bhlPageSize = config.getProperty("literature.bhl.pageSize", Integer)
+        bhlExtend = config.getProperty("literature.bhl.extend", Boolean)
+        eolSearchService = config.getProperty("external.eol.search.service")
+        eolPageService = config.getProperty("external.eol.page.service")
+        eolSanitise =  config.getProperty("eol.sanitise", Boolean, false)
+        eolLanguage = config.getProperty("eol.lang")
+        updateFile = config.getProperty("update.file.location")
+        allowedElements = config.getProperty("eol.html.allowedElements")
+        allowedAttributes = config.getProperty("eol.html.allowAttributes")
     }
 
     /**
@@ -100,6 +125,116 @@ class ExternalSiteService implements GrailsConfigurationAware {
             }
         }
         return [start: start, rows: rows, search: search, max: max, more: more, results: results]
+    }
+
+    def searchEol(String name, String filter) {
+        def nameEncoded = URLEncoder.encode(name, 'UTF-8')
+        def filterString  = URLEncoder.encode(filter ?: '', 'UTF-8')
+        def search =  MessageFormat.format(eolSearchService, nameEncoded, filterString)
+        log.debug "Initial EOL url = ${search}"
+        def js = new JsonSlurper()
+        def jsonText = new URL(search).text
+        def json = js.parseText(jsonText ?: '{}')
+        def result = [:]
+
+        //get first pageId
+        if (json.results) {
+            def match = json.results.find { it.title.equalsIgnoreCase(name) }
+            if (match) {
+                def pageId = match.id
+                def page = MessageFormat.format(eolPageService, pageId)
+                log.debug("EOL page url = ${page}")
+                def pageText = new URL(page).text ?: '{}'
+                pageText = updateEolOutput(pageText)
+                pageText = eolSanitise ? sanitiseEolOutput(pageText) : pageText
+                // Select on language
+                result = js.parseText(pageText)
+                if (result?.taxonConcept) {
+                    def dataObjects = result?.taxonConcept?.dataObjects ?: []
+                    if (eolLanguage) {
+                        dataObjects = dataObjects.findAll { dto -> dto.language && dto.language == eolLanguage }
+                    }
+                    result.taxonConcept.dataObjects = dataObjects
+                }
+            }
+        }
+        return result
+    }
+
+    /**
+     * Update EOL content before rendering, rules specified in an external file.
+     */
+    String updateEolOutput(String text){
+        if (updateFile != null && new File(updateFile).exists()){
+            new File(updateFile).eachLine { line ->
+                if (!line.startsWith("#")) {
+                    String[] valuePairs = line.split('--')
+                    String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
+                    text = text.replace(valuePairs[0], replacement)
+                }
+            }
+        }
+        text
+    }
+
+    /**
+     * Sanitise EOL response with defined policy.
+     * @param text EOL response
+     * @return processed EOL response
+     */
+    String sanitiseEolOutput(String text) {
+        def json = new JsonSlurper().parseText(text)
+
+        if(json.taxonConcept?.dataObjects){
+            PolicyFactory policy = getPolicyFactory()
+            json.taxonConcept.dataObjects.each { dataObject ->
+                String desc = dataObject.description
+                String processedDesc = sanitiseBodyText(policy, desc)
+                dataObject.description = processedDesc
+            }
+        }
+        JsonOutput.toJson(json)
+    }
+
+    /**
+     * Utility to sanitise HTML text and only allow links to be kept, removing any
+     * other HTML markup.
+     * @param policy PolicyFactory
+     * @param input HTML String
+     * @return output sanitized HTML String
+     */
+    String sanitiseBodyText(PolicyFactory policy, String input) {
+        // Sanitize the HTML based on given policy
+        String sanitisedHtml = policy.sanitize(input)
+        sanitisedHtml
+    }
+
+    private PolicyFactory getPolicyFactory(){
+        HtmlPolicyBuilder builder = new HtmlPolicyBuilder()
+                .allowStandardUrlProtocols()
+                .requireRelNofollowOnLinks()
+
+        if (allowedElements){
+            String[] elements = allowedElements.split(",")
+            elements.each {
+                builder.allowElements(it)
+            }
+        }
+
+        if (allowedAttributes){
+            String[] attributes = allowedAttributes.split(",")
+            attributes.each { attribute ->
+                String[] values = attribute.split (";")
+                if (values.length == 2){
+                    builder.allowAttributes(values[0]).onElements(values[1])
+                } else {
+                    builder.allowAttributes(values[0]).matching(Pattern.compile(values[2], Pattern.CASE_INSENSITIVE)).onElements(values[1])
+                }
+
+            }
+        }
+
+        builder.toFactory()
     }
 
 }
