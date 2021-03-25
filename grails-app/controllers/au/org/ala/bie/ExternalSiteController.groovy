@@ -36,39 +36,14 @@ class ExternalSiteController {
     RateLimiter eolRateLimiter = RateLimiter.create(1.0) // rate max requests per second (Double)
     RateLimiter genbankRateLimiter = RateLimiter.create(3.0) // rate max requests per second (Double)
 
-    // by default do not sanitise EOL response
-    boolean sanitiseEol = grailsApplication.config.getProperty("eol.sanitise", Boolean, false)
-
     def index() {}
 
     def eol = {
         eolRateLimiter.acquire()
-        String jsonOutput = "{}" // default is empty JSON object
-        def nameEncoded = URLEncoder.encode(params.s, 'UTF-8')
-        def filterString  = URLEncoder.encode(params.f ?: '', 'UTF-8')
-        String search = grailsApplication.config.external.eol.search.service
-        search =  MessageFormat.format(search, nameEncoded, filterString)
-        log.debug "Initial EOL url = ${search}"
-        def js = new JsonSlurper()
-        def jsonText = new URL(search).text
-        def json = js.parseText(jsonText ?: '{}')
-
-        //get first pageId
-        if (json.results) {
-            def match = json.results.find { it.title.equalsIgnoreCase(params.s) }
-            if (match) {
-                def pageId = match.id
-                String page = grailsApplication.config.external.eol.page.service
-                page = MessageFormat.format(page, pageId)
-                log.debug("EOL page url = ${page}")
-                def pageText = new URL(page).text ?: '{}'
-                def updatedPageText = updateEolOutput(pageText)
-                jsonOutput = sanitiseEol ? sanitiseEolOutput(updatedPageText) : updatedPageText
-            }
-        }
-
-        response.setContentType("application/json")
-        render jsonOutput
+        def name = params.s
+        def filter = params.f
+        def results = externalSiteService.searchEol(name, filter)
+        render results as JSON
     }
 
     def genbank = {
@@ -184,84 +159,5 @@ class ExternalSiteController {
                 bufferedReader.close() // can throw exception but passing on to Grails error handling
             }
         }
-    }
-
-    /**
-     * Update EOL content before rendering, rules specified in an external file.
-     */
-    String updateEolOutput(String text){
-        String updateFile = grailsApplication.config.update.file.location
-        if (updateFile != null && new File(updateFile).exists()){
-            new File(updateFile).eachLine { line ->
-                if (!line.startsWith("#")) {
-                    String[] valuePairs = line.split('--')
-                    String replacement = valuePairs.length==1 ? "''" :valuePairs[1]
-                    text = text.replace(valuePairs[0], replacement)
-                }
-            }
-        }
-        text
-    }
-
-    /**
-     * Sanitise EOL response with defined policy.
-     * @param text EOL response
-     * @return processed EOL response
-     */
-    String sanitiseEolOutput(String text) {
-        def json = new JsonSlurper().parseText(text)
-
-        if(json.taxonConcept?.dataObjects){
-            PolicyFactory policy = getPolicyFactory()
-            json.taxonConcept.dataObjects.each { dataObject ->
-                String desc = dataObject.description
-                String processedDesc = sanitiseBodyText(policy, desc)
-                dataObject.description = processedDesc
-            }
-        }
-        JsonOutput.toJson(json)
-    }
-
-    /**
-     * Utility to sanitise HTML text and only allow links to be kept, removing any
-     * other HTML markup.
-     * @param policy PolicyFactory
-     * @param input HTML String
-     * @return output sanitized HTML String
-     */
-    String sanitiseBodyText(PolicyFactory policy, String input) {
-        // Sanitize the HTML based on given policy
-        String sanitisedHtml = policy.sanitize(input)
-        sanitisedHtml
-    }
-
-    private PolicyFactory getPolicyFactory(){
-        HtmlPolicyBuilder builder = new HtmlPolicyBuilder()
-                .allowStandardUrlProtocols()
-                .requireRelNofollowOnLinks()
-
-        String allowedElements = grailsApplication.config.eol.html.allowedElements
-        if (allowedElements){
-            String[] elements = allowedElements.split(",")
-            elements.each {
-                builder.allowElements(it)
-            }
-        }
-
-        String allowedAttributes = grailsApplication.config.eol.html.allowAttributes
-        if (allowedAttributes){
-            String[] attributes = allowedAttributes.split(",")
-            attributes.each { attribute ->
-                String[] values = attribute.split (";")
-                if (values.length == 2){
-                    builder.allowAttributes(values[0]).onElements(values[1])
-                } else {
-                    builder.allowAttributes(values[0]).matching(Pattern.compile(values[2], Pattern.CASE_INSENSITIVE)).onElements(values[1])
-                }
-
-            }
-        }
-
-        builder.toFactory()
     }
 }
