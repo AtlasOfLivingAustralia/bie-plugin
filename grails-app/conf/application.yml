@@ -94,6 +94,10 @@ endpoints:
 app:
   name: bie-plugin
   dataDir: /tmp/gbif-ecat
+security:
+  cas:
+    casServerName: https://auth.ala.org.au
+    appServerName: http://dev.ala.org.au:8080
 skin:
   layout: generic
   orgNameLong: BIE Plugin
