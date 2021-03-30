@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title": "Test title blacklist",
+    "description": "A list of article titles suitable for blacklisting while testing. See Acacia for an example",
+    "version": "1.0",
+    "created": "2021-03-30"
+  },
+  "blacklist": [
+    "Damaging Agents"
+  ]
+}

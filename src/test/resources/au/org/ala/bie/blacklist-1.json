@@ -1,0 +1,10 @@
+{
+  "metadata": {
+    "title": "Test blacklist 1",
+    "version": "1.1"
+  },
+  "blacklist": [
+    "https://www.badplace.org.*",
+    "https?://www\\.worseplace\\.org/eol/.*"
+  ]
+}

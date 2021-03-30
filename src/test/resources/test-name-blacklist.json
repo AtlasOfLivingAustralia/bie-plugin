@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title": "Test names blacklist",
+    "description": "A list of names that prevent external site lookup. Use the names below as examples",
+    "version": "1.0",
+    "created": "2021-03-30"
+  },
+  "blacklist": [
+    "Acacia\\s+dealbata(\\s+Link.*)?"
+  ]
+}

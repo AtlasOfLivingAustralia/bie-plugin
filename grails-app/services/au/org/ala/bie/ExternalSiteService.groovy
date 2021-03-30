@@ -37,6 +37,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
     String allowedElements
     /** Allowed attributes for HTML */
     String allowedAttributes
+    /** Blacklists for external sites */
+    Map<String, Blacklist> blacklists;
 
 
     @Override
@@ -52,6 +54,11 @@ class ExternalSiteService implements GrailsConfigurationAware {
         updateFile = config.getProperty("update.file.location")
         allowedElements = config.getProperty("eol.html.allowedElements")
         allowedAttributes = config.getProperty("eol.html.allowAttributes")
+        blacklists = [:]
+        Map bl = config.getProperty('external.blacklist', Map)
+        bl.each {entry ->
+            blacklists.put(entry.key, Blacklist.read(new URL(entry.value)))
+        }
     }
 
     /**
@@ -128,6 +135,9 @@ class ExternalSiteService implements GrailsConfigurationAware {
     }
 
     def searchEol(String name, String filter) {
+        def nbl = blacklists.name
+        if (nbl && nbl.test(name))
+            return [:]
         def nameEncoded = URLEncoder.encode(name, 'UTF-8')
         def filterString  = URLEncoder.encode(filter ?: '', 'UTF-8')
         def search =  MessageFormat.format(eolSearchService, nameEncoded, filterString)
@@ -142,7 +152,7 @@ class ExternalSiteService implements GrailsConfigurationAware {
             def match = json.results.find { it.title.equalsIgnoreCase(name) }
             if (match) {
                 def pageId = match.id
-                def page = MessageFormat.format(eolPageService, pageId)
+                def page = MessageFormat.format(eolPageService, pageId, eolLanguage ?: "")
                 log.debug("EOL page url = ${page}")
                 def pageText = new URL(page).text ?: '{}'
                 pageText = updateEolOutput(pageText)
@@ -153,6 +163,14 @@ class ExternalSiteService implements GrailsConfigurationAware {
                     def dataObjects = result?.taxonConcept?.dataObjects ?: []
                     if (eolLanguage) {
                         dataObjects = dataObjects.findAll { dto -> dto.language && dto.language == eolLanguage }
+                    }
+                    dataObjects = dataObjects.findAll { dto ->
+                        def keep = true
+                        def sbl = blacklists.source
+                        keep = keep && (!sbl || !sbl.test(dto.source))
+                        def tbl = blacklists.title
+                        keep = keep && (!tbl || !tbl.test(dto.title))
+                        keep
                     }
                     result.taxonConcept.dataObjects = dataObjects
                 }
