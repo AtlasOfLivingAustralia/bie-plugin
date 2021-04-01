@@ -37,8 +37,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
     String allowedElements
     /** Allowed attributes for HTML */
     String allowedAttributes
-    /** Blacklists for external sites */
-    Map<String, Blacklist> blacklists;
+    /** Blacklist for external sites */
+    Blacklist blacklist;
 
 
     @Override
@@ -54,11 +54,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
         updateFile = config.getProperty("update.file.location")
         allowedElements = config.getProperty("eol.html.allowedElements")
         allowedAttributes = config.getProperty("eol.html.allowAttributes")
-        blacklists = [:]
-        Map bl = config.getProperty('external.blacklist', Map)
-        bl.each {entry ->
-            blacklists.put(entry.key, Blacklist.read(new URL(entry.value)))
-        }
+        def blacklistURL = config.getProperty('external.blacklist', URL)
+        blacklist = blacklistURL ? Blacklist.read(blacklistURL) : null
     }
 
     /**
@@ -135,9 +132,6 @@ class ExternalSiteService implements GrailsConfigurationAware {
     }
 
     def searchEol(String name, String filter) {
-        def nbl = blacklists.name
-        if (nbl && nbl.test(name))
-            return [:]
         def nameEncoded = URLEncoder.encode(name, 'UTF-8')
         def filterString  = URLEncoder.encode(filter ?: '', 'UTF-8')
         def search =  MessageFormat.format(eolSearchService, nameEncoded, filterString)
@@ -164,13 +158,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
                     if (eolLanguage) {
                         dataObjects = dataObjects.findAll { dto -> dto.language && dto.language == eolLanguage }
                     }
-                    dataObjects = dataObjects.findAll { dto ->
-                        def keep = true
-                        def sbl = blacklists.source
-                        keep = keep && (!sbl || !sbl.test(dto.source))
-                        def tbl = blacklists.title
-                        keep = keep && (!tbl || !tbl.test(dto.title))
-                        keep
+                    if (blacklist) {
+                        dataObjects = dataObjects.findAll { dto -> !blacklist.test(name, dto.source, dto.title) }
                     }
                     result.taxonConcept.dataObjects = dataObjects
                 }

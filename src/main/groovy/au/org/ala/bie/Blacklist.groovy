@@ -2,9 +2,6 @@ package au.org.ala.bie
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
-
-import java.util.function.Function
-import java.util.function.Predicate
 import java.util.regex.Pattern
 
 /**
@@ -12,39 +9,28 @@ import java.util.regex.Pattern
  * blacklisted.
  */
 
-class Blacklist implements Predicate<String> {
+class Blacklist {
     /** Blacklist metadata */
     @JsonProperty
     Metadata metadata
     /** The source URLs that should be black-listed */
-    List<Pattern> blacklist
-
-    @JsonProperty("blacklist")
-    List<String> getBlacklistStrings() {
-        return this.blacklist.collect { pattern -> pattern.pattern() }
-    }
-
-    @JsonProperty("blacklist")
-    setBlacklistStrings(List<String> blacklist) {
-        this.blacklist = blacklist.collect { pattern -> Pattern.compile(pattern) }
-    }
+    @JsonProperty
+    List<Rule> blacklist
 
     /**
-     * Evaluates this predicate on the given argument.
+     * Test an article against the blacklist
      * <p>
-     * If this returns true then the argument has been blacklisted
+     * If this returns true then the article has been blacklisted
      *
-     * @param d the input argument
+     * @param name The taxon name
+     * @param source The article source
+     * @param title The article title
+     *
      * @return {@code true} if the input argument matches the predicate,
      * otherwise {@code false}
      */
-    @Override
-    boolean test(String source) {
-        if (!source)
-            return false;
-        if (this.blacklist.any({ test -> test.matcher(source).matches() }))
-            return true;
-        return false
+    boolean test(String name, String source, String title) {
+        return this.blacklist.any({ rule -> rule.test(name, source, title) })
     }
 
     /**
@@ -58,5 +44,68 @@ class Blacklist implements Predicate<String> {
         def mapper = new ObjectMapper()
         def blacklist =  mapper.readValue(url, Blacklist)
         return blacklist
+    }
+
+    static class Rule {
+        /** Pattern that matches the taxon name */
+        Pattern name
+        /** Pattern than matches the article source (URL) */
+        Pattern source
+        /** Pattern that matches the article title */
+        Pattern title
+
+        @JsonProperty("name")
+        String getNamePattern() {
+            return this.name.pattern()
+        }
+
+        @JsonProperty("name")
+        void setNamePattern(String pattern) {
+            this.name = pattern ? Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE) : null
+        }
+
+        @JsonProperty("source")
+        String getSourcePattern() {
+            return this.source.pattern()
+        }
+
+        @JsonProperty("Source")
+        void setSourcePattern(String pattern) {
+            this.source = pattern ? Pattern.compile(pattern) : null
+        }
+
+        @JsonProperty("title")
+        String getTitlePattern() {
+            return this.title.pattern()
+        }
+
+        @JsonProperty("title")
+        void setTitlePattern(String pattern) {
+            this.title = pattern ? Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE) : null
+        }
+
+        /**
+         * Test to see if a rule matches and article
+         *
+         * @param name The taxon name
+         * @param source The article source URL
+         * @param title The article title
+         * @return
+         */
+        boolean test(String name, String source, String title) {
+            if (!name && this.name)
+                return false
+            if (name && this.name && !this.name.matcher(name).matches())
+                return false
+            if (!source && this.source)
+                return false
+            if (source && this.source && !this.source.matcher(source).matches())
+                return false
+            if (!title && this.title)
+                return false
+            if (title && this.title && !this.title.matcher(title).matches())
+                return false
+            return true
+        }
     }
 }

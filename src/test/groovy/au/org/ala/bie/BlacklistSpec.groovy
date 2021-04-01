@@ -18,38 +18,65 @@ class BlacklistSpec extends Specification {
         metadata.version == "1.1"
         blacklist.blacklist != null
         blacklist.blacklist.size() == 2
-        blacklist.blacklist[0] instanceof Pattern
-        blacklist.blacklist[0].pattern() == "https://www.badplace.org.*"
+        blacklist.blacklist[0] instanceof Blacklist.Rule
+        blacklist.blacklist[0].source.pattern() == "https://www.badplace.org.*"
     }
 
-    void "test predicate URL 1"() {
+    void "test test URL 1"() {
         when:
         Blacklist blacklist = Blacklist.read(this.class.getResource("blacklist-1.json"))
         then:
-        blacklist.test('https://www.badplace.org/Acacia')
-        !blacklist.test('https://www.notabadplace.org/Acacia')
-        !blacklist.test(null)
-        blacklist.test('https://www.worseplace.org/eol/Acacia')
-        blacklist.test('http://www.worseplace.org/eol/Acacia')
-        !blacklist.test('https://wwwxworseplace.org/eol/Acacia')
-        !blacklist.test('https://www.worseplace.org/xxx/Acacia')
+        blacklist.test('Acacia', 'https://www.badplace.org/Acacia', 'Acacia')
+        !blacklist.test('Acacia', 'https://www.notabadplace.org/Acacia', 'Acacia')
+        !blacklist.test(null, null, null)
+        blacklist.test(null, 'https://www.worseplace.org/eol/Acacia', null)
+        blacklist.test('Acacia', 'http://www.worseplace.org/eol/Acacia', null)
+        !blacklist.test(null, 'https://wwwxworseplace.org/eol/Acacia', 'Acacia')
+        !blacklist.test(null, 'https://www.worseplace.org/xxx/Acacia', null)
     }
 
 
-    void "test predicate Name 1"() {
+    void "test test name 1"() {
         when:
         Blacklist blacklist = Blacklist.read(this.class.getResource("blacklist-2.json"))
         then:
-        blacklist.test('Acacia')
-        blacklist.test('Acacia Mill.')
-        blacklist.test('Acacia    Miller')
-        blacklist.test('Acacia dealbata')
-        blacklist.test('Acacia dealbata dealbata')
-        blacklist.test('Acacia   pycnantha')
-        blacklist.test('Acacia pycnantha Benth.')
-        !blacklist.test('Acacia inops')
-        !blacklist.test('Reptilia')
-        !blacklist.test(null)
+        blacklist.test('Acacia', null, null)
+        blacklist.test('acacia Mill.', null, null)
+        blacklist.test('Acacia    Miller', null, null)
+        blacklist.test('acacia dealbata', 'https://www.badplace.org/Acacia', 'Acacia')
+        blacklist.test('Acacia dealbata dealbata','https://www.badplace.org/Acacia', 'Acacia')
+        blacklist.test('Acacia   pycnantha', null, null)
+        blacklist.test('Acacia pycnantha Benth.', null, null)
+        !blacklist.test('Acacia inops', 'https://www.badplace.org/Acacia_inops', 'Acacia Inops')
+        !blacklist.test('Reptilia', null, null)
+        !blacklist.test(null, null, null)
+    }
+
+    void "test test title 1"() {
+        when:
+        Blacklist blacklist = Blacklist.read(this.class.getResource("blacklist-3.json"))
+        then:
+        blacklist.test(null, null, 'Acacia Pest')
+        blacklist.test('Acacia Mill.', null, 'Acacia   pest species')
+        !blacklist.test('Acacia dealbata', 'https://www.badplace.org/Acacia', 'Acacia dealbata')
+        !blacklist.test('Acacia dealbata dealbata','https://www.badplace.org/Acacia', 'Nothing')
+        !blacklist.test(null, null, null)
+    }
+
+    void "test test mixed 1"() {
+        when:
+        Blacklist blacklist = Blacklist.read(this.class.getResource("blacklist-4.json"))
+        then:
+        blacklist.test('Acacia', 'https://www.badplace.org/Acacia', 'Acacia Pest')
+        blacklist.test('Acacia dealbata', 'https://www.worseplace.org/eol/Acacia_dealbata', 'Invasive species')
+        blacklist.test('Acacia', 'https://www.otherplace.org/Acacia', 'List of introduced species')
+        !blacklist.test('Acacia dealbata', 'https://www.badplace.org/Acacia_dealbata', 'Acacia Pest')
+        !blacklist.test('Acacia dealbata', 'https://www.worseplace.org/eol/Acacia_dealbata', 'Description')
+        !blacklist.test('Acacia dealbata', 'https://www.otherplace.org/Acacia', 'List of introduced species')
+        !blacklist.test('Acacia', 'https://www.otherplace.org/Acacia', 'Acacia Pest')
+        !blacklist.test('Acacia dealbata', 'https://www.worseplace.org/eol/Acacia_dealbata', 'Species list')
+        !blacklist.test('Acacia', 'https://www.otherplace.org/Acacia', 'List of native species')
+        !blacklist.test(null, null, null)
     }
 
 }
