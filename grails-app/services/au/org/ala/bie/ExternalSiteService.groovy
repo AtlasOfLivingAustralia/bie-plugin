@@ -37,6 +37,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
     String allowedElements
     /** Allowed attributes for HTML */
     String allowedAttributes
+    /** Blacklist for external sites */
+    Blacklist blacklist;
 
 
     @Override
@@ -52,6 +54,8 @@ class ExternalSiteService implements GrailsConfigurationAware {
         updateFile = config.getProperty("update.file.location")
         allowedElements = config.getProperty("eol.html.allowedElements")
         allowedAttributes = config.getProperty("eol.html.allowAttributes")
+        def blacklistURL = config.getProperty('external.blacklist', URL)
+        blacklist = blacklistURL ? Blacklist.read(blacklistURL) : null
     }
 
     /**
@@ -142,7 +146,7 @@ class ExternalSiteService implements GrailsConfigurationAware {
             def match = json.results.find { it.title.equalsIgnoreCase(name) }
             if (match) {
                 def pageId = match.id
-                def page = MessageFormat.format(eolPageService, pageId)
+                def page = MessageFormat.format(eolPageService, pageId, eolLanguage ?: "")
                 log.debug("EOL page url = ${page}")
                 def pageText = new URL(page).text ?: '{}'
                 pageText = updateEolOutput(pageText)
@@ -153,6 +157,9 @@ class ExternalSiteService implements GrailsConfigurationAware {
                     def dataObjects = result?.taxonConcept?.dataObjects ?: []
                     if (eolLanguage) {
                         dataObjects = dataObjects.findAll { dto -> dto.language && dto.language == eolLanguage }
+                    }
+                    if (blacklist) {
+                        dataObjects = dataObjects.findAll { dto -> !blacklist.isBlacklisted(name, dto.source, dto.title) }
                     }
                     result.taxonConcept.dataObjects = dataObjects
                 }

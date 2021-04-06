@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "title": "Test blacklist",
+    "description": "A list of patterns suitable for blacklisting while testing. For an example, use Phragmites australis and Acacia",
+    "version": "1.1",
+    "created": "2021-03-30",
+    "modified": "2021-03-31"
+  },
+  "blacklist": [
+    {
+      "source": "https?://www\\.fs\\.fed\\.us/.*"
+    },
+    {
+      "source": "https?://nyis\\.info/.*"
+    },
+    {
+      "name": "Acacia",
+      "title": "Damaging Agents"
+    }
+  ]
+}

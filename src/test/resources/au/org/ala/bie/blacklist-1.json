@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "title": "Test blacklist 1",
+    "version": "1.1"
+  },
+  "blacklist": [
+    {
+      "source": "https://www.badplace.org.*"
+    },
+    {
+      "source": "https?://www\\.worseplace\\.org/eol/.*"
+    }
+  ]
+}
