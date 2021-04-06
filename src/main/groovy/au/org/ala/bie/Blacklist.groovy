@@ -29,8 +29,8 @@ class Blacklist {
      * @return {@code true} if the input argument matches the predicate,
      * otherwise {@code false}
      */
-    boolean test(String name, String source, String title) {
-        return this.blacklist.any({ rule -> rule.test(name, source, title) })
+    boolean isBlacklisted(String name, String source, String title) {
+        return this.blacklist.any({ rule -> rule.match(name, source, title) })
     }
 
     /**
@@ -85,14 +85,17 @@ class Blacklist {
         }
 
         /**
-         * Test to see if a rule matches and article
+         * Test to see if a rule matches and article.
+         * <p>
+         * If a name, source or title is not supplied and the rule expects one,
+         * then there is no match.
          *
          * @param name The taxon name
          * @param source The article source URL
          * @param title The article title
          * @return
          */
-        boolean test(String name, String source, String title) {
+        boolean match(String name, String source, String title) {
             if (!name && this.name)
                 return false
             if (name && this.name && !this.name.matcher(name).matches())

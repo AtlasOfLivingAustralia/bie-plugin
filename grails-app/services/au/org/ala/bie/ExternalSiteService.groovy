@@ -159,7 +159,7 @@ class ExternalSiteService implements GrailsConfigurationAware {
                         dataObjects = dataObjects.findAll { dto -> dto.language && dto.language == eolLanguage }
                     }
                     if (blacklist) {
-                        dataObjects = dataObjects.findAll { dto -> !blacklist.test(name, dto.source, dto.title) }
+                        dataObjects = dataObjects.findAll { dto -> !blacklist.isBlacklisted(name, dto.source, dto.title) }
                     }
                     result.taxonConcept.dataObjects = dataObjects
                 }
