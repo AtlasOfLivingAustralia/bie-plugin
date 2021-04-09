@@ -74,11 +74,17 @@
         <div class="col-md-6">
             <div id="expertDistroDiv" style="display:none;margin-bottom: 20px;">
                 <h3>Compiled distribution map</h3>
-                <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg" style="width:316px;" alt="occurrence map" onerror="this.style.display='none'"/>
-                <p class="mapAttribution">Compiled distribution map provided by <span id="dataResource">[data resource not known]</span></p>
+                <img id="distroMapImage" src="${resource(dir: 'images', file: 'noImage.jpg')}" class="distroImg"
+                     style="width:316px;" alt="occurrence map" onerror="this.style.display = 'none'"/>
+
+                <p class="mapAttribution">Compiled distribution map provided by <span
+                        id="dataResource">[data resource not known]</span></p>
             </div>
+
             <div class="taxon-map">
-                <h3>${message(code: 'overview.map.occurrence.map')} (<span class="occurrenceRecordCount">0</span> ${message(code: 'overview.map.occurrence.records')})</h3>
+                <h3>${message(code: 'overview.map.occurrence.map')} (<span
+                        class="occurrenceRecordCount">0</span> ${message(code: 'overview.map.occurrence.records')})</h3>
+
                 <div id="leafletMap"></div>
 
                 <g:if test="${grailsApplication.config.spatial.baseURL}">
@@ -91,17 +97,19 @@
                 <div class="map-buttons">
                     <a class="btn btn-primary btn-lg"
                        href="${mapUrl}"
-                       title="${g.message(code:'overview.map.button.records.map.title', default:'View interactive map')}"
-                       role="button"><g:message code="overview.map.button.records.map" default="View Interactive Map"/></a>
+                       title="${g.message(code: 'overview.map.button.records.map.title', default: 'View interactive map')}"
+                       role="button"><g:message code="overview.map.button.records.map"
+                                                default="View Interactive Map"/></a>
                     <g:if test="${grailsApplication.config.map.simpleMapButton.toBoolean()}">
                         <a class="btn btn-primary btn-lg"
                            href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
-                           title="${g.message(code:'overview.map.button.records.simplemap.title', default:'View map')}"
-                           role="button"><g:message code="overview.map.button.records.simplemap" default="View map"/></a>
+                           title="${g.message(code: 'overview.map.button.records.simplemap.title', default: 'View map')}"
+                           role="button"><g:message code="overview.map.button.records.simplemap"
+                                                    default="View map"/></a>
                     </g:if>
                     <a class="btn btn-primary btn-lg"
                        href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
-                       title="${g.message(code:'overview.map.button.records.list.title', default:'View records')}"
+                       title="${g.message(code: 'overview.map.button.records.list.title', default: 'View records')}"
                        role="button"><g:message code="overview.map.button.records.list" default="View records"/></a>
                 </div>
             </div>
@@ -109,32 +117,129 @@
             <div class="panel panel-default panel-actions">
                 <div class="panel-body">
                     <ul class="list-unstyled">
-                        <g:if test="${citizenSciUrl}">
-                            <!--<li>
-                                <a href="${java.text.MessageFormat.format(citizenSciUrl, URLEncoder.encode(guid), URLEncoder.encode(scientificName))}"><span class="glyphicon glyphicon-map-marker"></span> <g:message code="label.recordSighting" default="Record a sighting"/></a>
-                            </li>-->
-                        </g:if>
-                        <!--<li><a id="alertsButton" href="#"><span
-                                class="glyphicon glyphicon-bell"></span> ${ message(code: 'overview.map.alert') }
-                        </a></li>-->
+                        <div class="cl_popup" onclick="showPopup()"><span
+                                class="glyphicon glyphicon-map-marker"></span> <g:message code="label.recordSighting"
+                                                                                          default="Record a sighting"/>
+                        </div>
                     </ul>
                 </div>
             </div>
 
+            <div class="popup">
+                <div class="blocker" onclick="hidePopup()"></div>
+
+                <div class="optPopup" id="optReport">
+                        <div class="panel panel-default">
+                            <div class="panel-heading cl_heading">
+                                <input class="close closeBtn" type="button" value="x" onclick="hidePopup()">
+                                <h3 class="cl_band panel-title"><g:message code="label.recordSighting"
+                                                                   default="Record a sighting"/></h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="cl_fsize"><g:message code="label.recordSighting.descr"
+                                                               default="Below you find optional plattforms where you can report your sightings"/></p>
+                                <ul style="margin-left: 2em;">
+                                    <li>
+                                        <a class="aPopup" href="https://www.naturbeobachtung.at/platform/mo/nabeat/index.do">naturbeobachtung.at</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Meldeplattform des Naturschutzbund Österreich für alle Beobachtungen
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://www.inaturalist.org/">iNaturalist</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Internationale Meldeplattform für alle Beobachtungen
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://www.hausdernatur.at/de/observation-org.html">Haus der Natur Salzburg</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Meldeplattform des Haus der Natur Salzburg in Kooperation mit observation.org
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://schmetterlingsapp.at/">Schmetterlingsapp</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Meldeplattform für Schmetterlinge in Österreich von Blühendes Österreich und GLOBAL 2000
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://stadtwildtiere.at/">StadtWildTiere</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Meldeplattform für Wildtiere in der Stadt von der Österreichischen Vogelwarte der Veterinärmedizinischen Universität Wien
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://www.nhm-wien.ac.at/forschung/1_zoologie_wirbeltiere/herpetologische_sammlung/funde_melden">Herpetologische Datenbank</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Meldeplattform für Amphibien und Reptilien aus Österreich vom Naturhistorischen Museum Wien
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://pilzfinder.at">Pilzfinder</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Meldeplattform für Pilzfunde in Österreich von der Österreichischen Mykologischen Gesellschaft
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://www.ornitho.at/">ornitho.at</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Meldeplattform für Vogelbeobachtungen von Birdlife Österreich
+                                    </p>
+                                    <li>
+                                        <a class="aPopup" href="https://www.citizen-science.at/projekte">Weitere Möglichkeiten</a><br>
+                                    </li>
+                                    <p class="cl_fsize">Auflistung einer Vielzahl weiterer Projekte zum Melden von Beobachtungen über das Citizen Science Netzwork Austria
+                                    </p>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                <script>
+                    // When the user clicks on <div>, open the popup
+                    const popup = document.querySelector('.popup');
+                    const blocker = document.querySelector('.blocker');
+
+                    function showPopup() {
+                        blocker.style.display = "block";
+                        popup.classList.add('open');
+                    }
+
+                    function hidePopup() {
+                        blocker.style.display = "none";
+                        popup.classList.remove('open');
+                    }
+                </script>
+            </div>
+            <!--
+            <div class="panel panel-default panel-actions">
+                <div class="panel-body">
+                    <ul class="list-unstyled">
+                        <g:if test="${citizenSciUrl}">
+                <li>
+                    <a href="${java.text.MessageFormat.format(citizenSciUrl, URLEncoder.encode(guid), URLEncoder.encode(scientificName))}"><span class="glyphicon glyphicon-map-marker"></span> <g:message
+                        code="label.recordSighting" default="Record a sighting"/></a>
+                            </li>
+            </g:if>
+                            <li><a id="alertsButton" href="#"><span
+                                class="glyphicon glyphicon-bell"></span> ${message(code: 'overview.map.alert')}
+                        </a></li>
+                    </ul>
+
+                </div>
+                </div>
+                -->
+
             <div class="panel panel-default panel-data-providers">
                 <div class="panel-heading">
-                    <h3 class="panel-title">${ message(code: 'overview.datasets.title') }</h3>
+                    <h3 class="panel-title">${message(code: 'overview.datasets.title')}</h3>
                 </div>
 
                 <div class="panel-body">
                     <g:if test="${Locale.default.language == 'de-AT'}">
                         <p><strong>
-                        </strong> ${message(code: 'overview.datasets.descr04')} ${grailsApplication.config.skin.orgNameShort} ${message(code: 'overview.datasets.descr02')} ${tc.taxonConcept.rankString} ${ message(code: 'overview.datasets.descr03')} <span class="datasetCount"></span> <span class="datasetLabel"> ${message(code: 'overview.datasets.descr01a')} </span>.
+                        </strong> ${message(code: 'overview.datasets.descr04')} ${grailsApplication.config.skin.orgNameShort} ${message(code: 'overview.datasets.descr02')} ${tc.taxonConcept.rankString} ${message(code: 'overview.datasets.descr03')} <span
+                                class="datasetCount"></span> <span
+                                class="datasetLabel">${message(code: 'overview.datasets.descr01a')}</span>.
                         </p>
                     </g:if>
                     <g:if test="${Locale.default.language != 'de-AT'}">
                         <p><strong><span class="datasetCount"></span>
-                        </strong> <span class="datasetLabel">${message(code: 'overview.datasets.descr01a')}</span> provided data to the ${grailsApplication.config.skin.orgNameShort} for this ${tc.taxonConcept.rankString}.
+                        </strong> <span
+                                class="datasetLabel">${message(code: 'overview.datasets.descr01a')}</span> ${message(code: 'overview.datasets.descr01c')} ${grailsApplication.config.skin.orgNameShort} ${message(code: 'overview.datasets.descr01d')} ${tc.taxonConcept.rankString}.
                         </p>
                     </g:if>
 

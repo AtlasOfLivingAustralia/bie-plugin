@@ -336,7 +336,6 @@
                                     <g:if test="${result.rankID < 7000}">
                                         <li><g:link controller="species" action="imageSearch" params="[id:result.guid]">${message(code: 'search.viewimages01')} ${result.rank} ${message(code: 'search.viewimages02')}</g:link></li>
                                     </g:if>
-
                                     <g:if test="${grailsApplication.config.sightings.url}">
                                         <!--<li><a href="${java.text.MessageFormat.format(grailsApplication.config.sightings.url, URLEncoder.encode(result.guid), URLEncoder.encode(result.name))}"><g:message code="label.recordSighting" default="Record a sighting"/></a></li>-->
                                     </g:if>

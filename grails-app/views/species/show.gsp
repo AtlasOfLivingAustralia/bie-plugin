@@ -127,7 +127,8 @@
         </div>
     </div><!-- end main-content -->
 </section>
-
+<g:set var="flag" value="false" scope="request">
+<g:if test="request.flag == true">
 <!-- taxon-summary-thumb template -->
 <div id="taxon-summary-thumb-template"
      class="taxon-summary-thumb hide"
@@ -357,6 +358,8 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+</g:if>
+</g:set>
 
 <asset:script type="text/javascript">
     // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list

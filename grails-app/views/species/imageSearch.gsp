@@ -181,7 +181,7 @@
         <div class="inner row">
             <nav id="breadcrumb" class="span12">
                 <ol class="breadcrumb">
-                    <li><a href="${alaUrl}">Home</a> <span class="icon icon-arrow-right"></span></li>
+                    <li><a href="https://biodiversityatlas.at">Home</a> <span class="icon icon-arrow-right"></span></li>
                     <li><g:link controller="species" action="search"> species</g:link> <span class=" icon icon-arrow-right"></span></li>
                     <li class="active">
                         <g:if test="${taxonConcept}">

@@ -9,8 +9,8 @@
         <div class="inner row-fluid">
             <nav id="breadcrumb" class="span12">
                 <ol class="breadcrumb">
-                    <li><a href="${alaUrl}">Home</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li><a href="${alaUrl}/australias-species/">Australia&#39;s species</a> <span class=" icon icon-arrow-right"></span></li>
+                    <li><a href="https://biodiversityatlas.at">Home</a> <span class=" icon icon-arrow-right"></span></li>
+                    <li><a href="https://biodiversityatlas.at">Australia&#39;s species</a> <span class=" icon icon-arrow-right"></span></li>
                     <li class="active">Biodiversity Information Explorer (BIE)</li>
                 </ol>
             </nav>
