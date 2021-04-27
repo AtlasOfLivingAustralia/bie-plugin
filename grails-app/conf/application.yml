@@ -94,6 +94,9 @@ endpoints:
 app:
   name: bie-plugin
   dataDir: /tmp/gbif-ecat
+security:
+  cas:
+    appServerName: http://dev.ala.org.au:8080
 skin:
   layout: generic
   orgNameLong: BIE Plugin
@@ -111,7 +114,7 @@ projectNameShort: ALA
 projectName: Atlas of Living Australia
 languageCodesUrl: /languages.json
 biocache:
-  baseURL: "http://biocache.ala.org.au"
+  baseURL: http://biocache.ala.org.au
 biocacheService:
   baseURL: http://biocache.ala.org.au/ws
   queryContext:
