@@ -115,7 +115,7 @@ projectNameShort: ALA
 projectName: Atlas of Living Australia
 languageCodesUrl: /languages.json
 biocache:
-  baseURL: "http://biocache.ala.org.au"
+  baseURL: http://biocache.ala.org.au
 biocacheService:
   baseURL: http://biocache.ala.org.au/ws
   queryContext:

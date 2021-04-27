@@ -1,4 +1,4 @@
-# bie-plugin  [![Build Status](https://travis-ci.org/AtlasOfLivingAustralia/bie-plugin.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/bie-plugin)
+# bie-plugin  [![Build Status](https://travis-ci.com/AtlasOfLivingAustralia/bie-plugin.svg?branch=master)](https://travis-ci.com/AtlasOfLivingAustralia/bie-plugin)
 
 **bie-plugin** is a Grails plugin that provides the core functionality for the _Atlas of Living Australia_ (ALA) [BIE search and taxon pages application](http://bie.ala.org.au/search) front-end. It should be used by a client Grails application, e.g. [ala-bie](https://github.com/AtlasOfLivingAustralia/ala-bie).
 
