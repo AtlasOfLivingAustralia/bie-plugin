@@ -20,6 +20,31 @@ Customisations of code and i18n files should be made in the copy of `ala-bie` (n
 
 The bie-plugin uses ISO-639 language codes, particularly ISO-639-3, drawn from http://www.sil.org/iso639-3/ and the AIATSIS codes, drawn from https://aiatsis.gov.au/
 
+### Blacklisted External Information
+
+It is possible to blacklist sources of external information
+that is either incorrect or not relevant.
+Blacklisting is performed by pattern matching and can be configured by URLs that give a specific blacklist.
+Blacklists are configured as a map of possible blacklists against the information in a document.
+For example:
+
+```yaml
+external:
+  blacklist: file:///data/ala-bie/config/blacklist.json
+```
+
+An example blacklist file can be found [here](src/test/resources/test-blacklist.json).
+It contains metadata descibing the intent of the blacklist and
+a list of entries that will cause the blacklist to trigger.
+
+Each blacklist entry can trigger on some combination of:
+
+* **source** The URL of the original source of the data.
+* **name** The supplied name of taxon.
+* **title** The title of the article
+
+Currently, the blacklist is only used with the Encyclopedia of Life external source.
+
 
 ### Common Names Pull
 

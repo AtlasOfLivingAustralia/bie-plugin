@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "title": "Test blacklist 2",
+    "version": "1.1"
+  },
+  "blacklist": [
+    {
+      "name": "Acacia(\\s+Mill[.a-z]*)?"
+    },
+    {
+      "name": "Acacia\\s+dealbata.*"
+    },
+    {
+      "name": "Acacia\\s+pycnantha.*"
+    }
+  ]
+}
