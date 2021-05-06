@@ -395,6 +395,7 @@ function loadExternalSources() {
                     $description.find(".providedBy").html("Encyclopedia of Life");
                     $description.appendTo('#descriptiveContent');
                     // test patch images of EOL lookup func
+                    /*
                     var strQueryEol = "https://de.wikipedia.org/w/api.php?action=query&format=json&origin=*&formatversion=2&prop=pageimages%7Cpageterms&piprop=original&titles="
                     var lookupImage = $('#descriptiveContent').find('a[href$="jpg"],a[href$="gif"],a[href$="png"]').each(function (index) {
                         var resFileURL = strQueryEol + $(this).attr('href').split("/")[$(this).attr('href').split("/").length - 1];
@@ -417,6 +418,7 @@ function loadExternalSources() {
                             $(this).css('display', 'none');
                         }
                     });
+                    */
                 }
             });
         }

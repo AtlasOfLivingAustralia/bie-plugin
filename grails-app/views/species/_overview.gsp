@@ -150,9 +150,9 @@
                                     <p class="cl_fsize">Internationale Meldeplattform für alle Beobachtungen
                                     </p>
                                     <li>
-                                        <a class="aPopup" href="https://www.hausdernatur.at/de/observation-org.html">Haus der Natur Salzburg</a><br>
+                                        <a class="aPopup" href="https://www.hausdernatur.at/de/observation-org.html">Observation.org</a><br>
                                     </li>
-                                    <p class="cl_fsize">Meldeplattform des Haus der Natur Salzburg in Kooperation mit observation.org
+                                    <p class="cl_fsize">Internationale Meldeplattform für alle Organismengruppen in Kooperation mit dem Haus der Natur Salzburg
                                     </p>
                                     <li>
                                         <a class="aPopup" href="https://schmetterlingsapp.at/">Schmetterlingsapp</a><br>
