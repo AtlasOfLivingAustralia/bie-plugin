@@ -184,7 +184,7 @@
 
                     <g:if test="${idxTypes.contains("TAXON")}">
                         <div class="download-button pull-right">
-                            <g:set var="downloadUrl" value="${grailsApplication.config.bie.index.url}/download?${request.queryString?:''}${grailsApplication.config.bieService.queryContext}"/>
+                            <g:set var="downloadUrl" value="${grailsApplication.config.bie.index.url}/download?${request.queryString ?: ''}${grailsApplication.config.bieService.queryContext ?: ''}"/>
                             <a class="btn btn-default active btn-small" href="${downloadUrl}" title="${message(code:"search.download.taxa.for.your.search")}">
                                 <i class="glyphicon glyphicon-download"></i>
                                 <g:message code="search.download"/>

@@ -94,6 +94,10 @@ endpoints:
 app:
   name: bie-plugin
   dataDir: /tmp/gbif-ecat
+security:
+  cas:
+    casServerName: https://auth.ala.org.au
+    appServerName: http://dev.ala.org.au:8080
 skin:
   layout: generic
   orgNameLong: BIE Plugin
@@ -111,7 +115,7 @@ projectNameShort: ALA
 projectName: Atlas of Living Australia
 languageCodesUrl: /languages.json
 biocache:
-  baseURL: "http://biocache.ala.org.au"
+  baseURL: http://biocache.ala.org.au
 biocacheService:
   baseURL: http://biocache.ala.org.au/ws
   queryContext:
@@ -178,7 +182,8 @@ external:
       service: https://eol.org/api/search/1.0.json?q={0}&page=1&exact=true&cache_ttl=
     page:
       # {0} = page id
-      service: https://eol.org/api/pages/1.0/{0,number,#0}.json?images_per_page=0&videos_per_page=0&sounds_per_page=0&maps_per_page=0&texts_per_page=30&subjects=overview&licenses=all&details=true&references=true&vetted=0&cache_ttl=
+      service: https://eol.org/api/pages/1.0/{0,number,#0}.json?language={1}&images_per_page=0&videos_per_page=0&sounds_per_page=0&maps_per_page=0&texts_per_page=30&subjects=overview&licenses=all&details=true&references=true&vetted=0&cache_ttl=
+  blacklist: file:./src/test/resources/test-blacklist.json
 literature:
   bhl:
     url: https://biodiversitylibrary.org

@@ -356,47 +356,46 @@ function loadExternalSources(){
             var eolIdentifier = data.taxonConcept.identifier;
             $.each(data.taxonConcept.dataObjects, function(idx, dataObject){
                 //console.log('Loading EOL content -> ' + dataObject.description);
-                if(dataObject.language == SHOW_CONF.eolLanguage || !dataObject.language){
-                    var $description = $('#descriptionTemplate').clone();
-                    $description.css({'display':'block'});
-                    $description.attr('id', dataObject.id);
-                    $description.find(".title").html(dataObject.title ?  dataObject.title : 'Description');
+                // Data objects are now language filtered on the server
+                var $description = $('#descriptionTemplate').clone();
+                $description.css({'display':'block'});
+                $description.attr('id', dataObject.id);
+                $description.find(".title").html(dataObject.title ?  dataObject.title : 'Description');
 
-                    var descriptionDom = $.parseHTML( dataObject.description );
-                    var body = $(descriptionDom).find('#bodyContent > p:lt(2)').html(); // for really long EOL blocks
+                var descriptionDom = $.parseHTML( dataObject.description );
+                var body = $(descriptionDom).find('#bodyContent > p:lt(2)').html(); // for really long EOL blocks
 
-                    if (body) {
-                        $description.find(".content").html(body);
-                    } else {
-                        $description.find(".content").html(dataObject.description);
-                    }
-
-
-                    if(dataObject.source && dataObject.source.trim().length != 0){
-                        var sourceText = dataObject.source;
-                        var sourceHtml = "";
-
-                        if (sourceText.match("^http")) {
-                            sourceHtml = "<a href='" + sourceText + "' target='eol'>"  + sourceText + "</a>"
-                        } else {
-                            sourceHtml = sourceText;
-                        }
-
-                        $description.find(".sourceText").html(sourceHtml);
-                    } else {
-                        $description.find(".source").css({'display':'none'});
-                    }
-                    if(dataObject.rightsHolder && dataObject.rightsHolder.trim().length != 0){
-                        $description.find(".rightsText").html(dataObject.rightsHolder);
-                    } else {
-                        $description.find(".rights").css({'display':'none'});
-                    }
-
-                    $description.find(".providedBy").attr('href', 'https://eol.org/pages/' + eolIdentifier);
-                    $description.find(".providedBy").attr('target', '_blank');
-                    $description.find(".providedBy").html("Encyclopedia of Life");
-                    $description.appendTo('#descriptiveContent');
+                if (body) {
+                    $description.find(".content").html(body);
+                } else {
+                    $description.find(".content").html(dataObject.description);
                 }
+
+
+                if(dataObject.source && dataObject.source.trim().length != 0){
+                    var sourceText = dataObject.source;
+                    var sourceHtml = "";
+
+                    if (sourceText.match("^http")) {
+                        sourceHtml = "<a href='" + sourceText + "' target='eol'>"  + sourceText + "</a>"
+                    } else {
+                        sourceHtml = sourceText;
+                    }
+
+                    $description.find(".sourceText").html(sourceHtml);
+                } else {
+                    $description.find(".source").css({'display':'none'});
+                }
+                if(dataObject.rightsHolder && dataObject.rightsHolder.trim().length != 0){
+                    $description.find(".rightsText").html(dataObject.rightsHolder);
+                } else {
+                    $description.find(".rights").css({'display':'none'});
+                }
+
+                $description.find(".providedBy").attr('href', 'https://eol.org/pages/' + eolIdentifier);
+                $description.find(".providedBy").attr('target', '_blank');
+                $description.find(".providedBy").html("Encyclopedia of Life");
+                $description.appendTo('#descriptiveContent');
             });
         }
     });
