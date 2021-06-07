@@ -13,15 +13,18 @@
 
 package au.org.ala.bie
 
-import au.org.ala.citation.BHLAdaptor
 import com.google.common.util.concurrent.RateLimiter
 import grails.converters.JSON
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import org.owasp.html.HtmlPolicyBuilder
+import org.owasp.html.PolicyFactory
 
 import java.text.MessageFormat
+import java.util.regex.Pattern
 
 /**
  * Controller that proxies external webservice calls to get around cross domain issues
@@ -37,31 +40,10 @@ class ExternalSiteController {
 
     def eol = {
         eolRateLimiter.acquire()
-        String jsonOutput = "{}" // default is empty JSON object
-        def nameEncoded = URLEncoder.encode(params.s, 'UTF-8')
-        def filterString  = URLEncoder.encode(params.f ?: '', 'UTF-8')
-        String search = grailsApplication.config.external.eol.search.service
-        search =  MessageFormat.format(search, nameEncoded, filterString)
-        log.debug "Initial EOL url = ${search}"
-        def js = new JsonSlurper()
-        def jsonText = new URL(search).text
-        def json = js.parseText(jsonText ?: '{}')
-
-        //get first pageId
-        if (json.results) {
-            def match = json.results.find { it.title.equalsIgnoreCase(params.s) }
-            if (match) {
-                def pageId = match.id
-                String page = grailsApplication.config.external.eol.page.service
-                page = MessageFormat.format(page, pageId)
-                log.debug("EOL page url = ${page}")
-                def pageText = new URL(page).text ?: '{}'
-                jsonOutput = pageText
-            }
-        }
-
-        response.setContentType("application/json")
-        render jsonOutput
+        def name = params.s
+        def filter = params.f
+        def results = externalSiteService.searchEol(name, filter)
+        render results as JSON
     }
 
     def genbank = {
@@ -116,7 +98,6 @@ class ExternalSiteController {
     }
 
     def scholar = {
-
         def searchStrings = params.list("s")
         def searchParams = "\"" + searchStrings.join("\" OR \"") + "\""
         def scholarBase = grailsApplication.config.literature?.scholar?.url ?: "https://scholar.google.com"

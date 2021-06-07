@@ -1,11 +1,11 @@
 <section class="tab-pane fade" id="names">
     <g:set var="acceptedName" value="${tc.taxonConcept.taxonomicStatus == 'accepted' || tc.taxonConcept.taxonomicStatus == 'inferredAccepted'}"/>
-    <h2>${message(code: 'names.title')}</h2>
+    <h2><g:message code="names.title"/></h2>
     <table class="table name-table  table-responsive">
         <thead>
         <tr>
             <th title="<g:message code="label.acceptedName.detail"/>"><g:if test="${acceptedName}"><g:message code="label.acceptedName"/></g:if><g:else><g:message code="label.name"/></g:else></th>
-            <th title="<g:message code="label.source.detail"/>">${message(code: 'names.source')}</th>
+            <th title="<g:message code="label.source.detail"/>"><g:message code="names.accepted.source"/></th>
         </tr>
         </thead>
         <tbody>
@@ -174,7 +174,7 @@
                     </td>
                     <td class="source">
                         <ul>
-                            <g:if test="${grailsApplication.config.vernacularName.pull.showLanguage}">
+                            <g:if test="${grailsApplication.config.getProperty('vernacularName.pull.showLanguage', Boolean, false)}">
                                 <li>
                                     <bie:showLanguage lang="${language}"/>
                                 </li>

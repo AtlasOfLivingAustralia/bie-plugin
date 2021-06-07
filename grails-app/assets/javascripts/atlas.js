@@ -47,7 +47,7 @@ $(document).ready(function() {
 			addDrawer: false,
 			addCloseButton: true,
 			addAttribution: true,
-			addLikeDislikeButton: true,
+			addLikeDislikeButton: false,
 			addPreferenceButton: SHOW_CONF.addPreferenceButton,
 			attribution: attribution,
 			disableLikeDislikeButton: SHOW_CONF.disableLikeDislikeButton,
@@ -80,7 +80,7 @@ $(document).ready(function() {
 	});
 	$("a.expand-options").click(function() {
 		$(this).text(function(i, text){
-			return text.trim() === $.i18n.properties("search.more").trim() ? $.i18n.properties("search.less").trim() : $.i18n.properties("search.more").trim();
+			return text.trim() === "More" ? "Less" : "More";
 		})
 		$(this).prev(".collapse").collapse("toggle");
 	});

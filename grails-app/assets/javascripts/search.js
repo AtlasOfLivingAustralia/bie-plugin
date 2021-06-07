@@ -1,5 +1,4 @@
 //= require jquery.sortElemets
-//= require jquery.i18n.properties.js
 /*
  * Copyright (C) 2012 Atlas of Living Australia
  * All Rights Reserved.
@@ -194,7 +193,7 @@ function injectBiocacheResults() {
         success:  function(data) {
             var maxItems = parseInt(data.totalRecords, 10);
             var url = SEARCH_CONF.biocacheUrl + "/occurrences/search?q=" + queryToUse;
-            var html = "<li data-count=\"" + maxItems + "\"><a href=\"" + url + "\" id=\"biocacheSearchLink\" data-i18n='search.occurrence.records'>Occurrence records</a> ("
+            var html = "<li data-count=\"" + maxItems + "\"><a href=\"" + url + "\" id=\"biocacheSearchLink\">Occurrence records</a> ("
                 + numberWithCommas(maxItems) + ")</li>";
             insertSearchLinks(html);
         }

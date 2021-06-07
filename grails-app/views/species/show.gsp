@@ -22,6 +22,7 @@
 <g:set var="alertsUrl" value="${grailsApplication.config.alerts.url}"/>
 <g:set var="guid" value="${tc?.previousGuid ?: tc?.taxonConcept?.guid ?: ''}"/>
 <g:set var="scientificName" value="${tc?.taxonConcept?.nameString ?: ''}" />
+<g:set var="taxonRank" value="${tc?.taxonConcept?.rankString?.capitalize() ?: ''}" />
 <g:set var="tabs" value="${grailsApplication.config.show.tabs.split(',')}"/>
 <g:set var="jsonLink" value="${grailsApplication.config.bie.index.url}/species/${tc?.taxonConcept?.guid}.json"/>
 <g:set var="sciNameFormatted"><bie:formatSciName rankId="${tc?.taxonConcept?.rankID}"
@@ -44,8 +45,8 @@
     <title>${tc?.taxonConcept?.nameString}<g:if test="${commonNameDisplay}"> : ${commonNameDisplay}</g:if> | ${raw(grailsApplication.config.skin.orgNameLong)}</title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
 
-    <!-- facebook tags -->
-    <g:render template="facebookTags"/>
+    <!-- facebook and twitter tags -->
+    <g:render template="facebookTwitterTags"/>
 
     <asset:javascript src="show.js"/>
     <asset:javascript src="charts.js"/>
@@ -92,7 +93,7 @@
             <h5 class="inline-head taxon-rank">${tc.taxonConcept.rankString}</h5>
             <g:if test="${tc.taxonConcept.taxonomicStatus}"><h5 class="inline-head taxonomic-status" title="${message(code: 'taxonomicStatus.' + tc.taxonConcept.taxonomicStatus + '.detail', default: '')}"><g:message code="taxonomicStatus.${tc.taxonConcept.taxonomicStatus}" default="${tc.taxonConcept.taxonomicStatus}"/></h5></g:if>
             <h5 class="inline-head name-authority">
-                <strong><g:message code="facet.authority_s" /></strong>
+                <strong><g:message code="show.name.authority"/>:</strong>
                 <span class="name-authority">${tc?.taxonConcept.nameAuthority ?: grailsApplication.config.defaultNameAuthority}</span>
             </h5>
             <g:if test="${commonNameDisplay}">
@@ -101,7 +102,7 @@
             <g:if test="${tc?.taxonConcept?.acceptedConceptName}">
                 <h2><g:link uri="/species/${tc.taxonConcept.acceptedConceptID}">${tc.taxonConcept.acceptedConceptName}</g:link></h2>
             </g:if>
-            <g:if test="${grailsApplication.config.vernacularName.pull.showHeader && tc.pullCommonNames}">
+            <g:if test="${grailsApplication.config.getProperty('vernacularName.pull.showHeader', Boolean, false) && tc.pullCommonNames}">
                 <g:each in="${tc.pullCommonNames}" var="cn" status="cni">
                     <g:if test="${cni % 2 == 0}"><g:if test="${cni != 0}"></div></g:if><div class="row"></g:if>
                     <div class="col-md-6"><h2><bie:markLanguage text="${cn.nameString}" lang="${cn.language}" mark="${grailsApplication.config.vernacularName.pull.showLanguage}" tag="${false}"/></h2></div>
@@ -127,8 +128,7 @@
         </div>
     </div><!-- end main-content -->
 </section>
-<g:set var="flag" value="false" scope="request">
-<g:if test="request.flag == true">
+
 <!-- taxon-summary-thumb template -->
 <div id="taxon-summary-thumb-template"
      class="taxon-summary-thumb hide"
@@ -168,11 +168,11 @@
     </div>
 
     <div class="panel-footer">
-        <p class="source">Source: <span class="sourceText"></span></p>
+        <p class="source"><g:message code="show.source" />: <span class="sourceText"></span></p>
 
-        <p class="rights">Rights holder: <span class="rightsText"></span></p>
+        <p class="rights"><g:message code="show.rights.holder" />: <span class="rightsText"></span></p>
 
-        <p class="provider">Provided by: <a href="#" class="providedBy"></a></p>
+        <p class="provider"><g:message code="show.provided.by" />: <a href="#" class="providedBy"></a></p>
     </div>
 </div>
 
@@ -218,7 +218,7 @@
             <div class="row">
 
                 <div class="col-md-8 panel-heading">
-                    <h3 class="panel-title">Main Image</h3>
+                    <h3 class="panel-title"><g:message code="show.main.image" /></h3>
                 </div>
             </div>
 
@@ -234,7 +234,7 @@
         <div class="col-md-3 hide main-audio padding-bottom-2">
             <div class="row">
                 <div class="col-md-8 panel-heading">
-                    <h3 class="panel-title">Main Audio</h3>
+                    <h3 class="panel-title"><g:message code="show.main.audio" /></h3>
                 </div>
             </div>
 
@@ -250,7 +250,7 @@
                 <div class="col-md-12 small">
                     <div class="row">
                         <div class="col-md-5 ">
-                            <strong>Name</strong>
+                            <strong><g:message code="show.name" /></strong>
                         </div>
 
                         <div class="col-md-7 audio-name"></div>
@@ -258,7 +258,7 @@
 
                     <div class="row">
                         <div class="col-md-5 ">
-                            <strong>Attribution</strong>
+                            <strong><g:message code="show.attribution" /></strong>
                         </div>
 
                         <div class="col-md-7 audio-attribution"></div>
@@ -266,7 +266,7 @@
 
                     <div class="row">
                         <div class="col-md-5 ">
-                            <strong>Licence</strong>
+                            <strong><g:message code="show.licence" /></strong>
                         </div>
 
                         <div class="col-md-7 audio-license"></div>
@@ -286,7 +286,7 @@
             <div class="col-md-2 ">
             </div>
             <div class="col-md-8 panel-heading">
-                <h3 class="panel-title">Main Video</h3>
+                <h3 class="panel-title"><g:message code="show.main.video" /></h3>
             </div>
         </div>
         <div class="row">
@@ -303,7 +303,7 @@
             <div class="col-md-7 small">
                 <div class="row">
                     <div class="col-md-2 ">
-                        <strong>Name</strong>
+                        <strong><g:message code="show.name" /></strong>
                     </div>
 
                     <div class="col-md-10 video-name"></div>
@@ -311,7 +311,7 @@
 
                 <div class="row">
                     <div class="col-md-2 ">
-                        <strong>Attribution</strong>
+                        <strong><g:message code="show.attribution" /></strong>
                     </div>
 
                     <div class="col-md-10 video-attribution"></div>
@@ -319,7 +319,7 @@
 
                 <div class="row">
                     <div class="col-md-2 ">
-                        <strong>Licence</strong>
+                        <strong><g:message code="show.licence" /></strong>
                     </div>
 
                     <div class="col-md-10 video-license"></div>
@@ -353,13 +353,11 @@
 
                 </div>
                 <!-- dialog buttons -->
-                <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div>
+                <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal"><g:message code="show.ok" /></button></div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-</g:if>
-</g:set>
 
 <asset:script type="text/javascript">
     // Global var to pass GSP vars into JS file @TODO replace bhl and trove with literatureSource list
@@ -369,12 +367,12 @@
         layersServiceUrl:   "${grailsApplication.config.layersService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
         profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
-        imageServiceBaseUrl:"${grailsApplication.config.image.baseURL}",
+        imageServiceBaseUrl:"${grailsApplication.config.imageServiceBaseURL}",
         guid:               "${guid}",
         scientificName:     "${tc?.taxonConcept?.nameString ?: ''}",
         rankString:         "${tc?.taxonConcept?.rankString ?: ''}",
         taxonRankID:        "${tc?.taxonConcept?.rankID ?: ''}",
-        synonyms:            [ <g:each in="${tc?.synonyms}" var="syn" status="si">"${syn.nameString.encodeAsJavaScript()}"<g:if test="${si < tc.synonyms.size() - 1}">, </g:if></g:each> ],
+        synonyms:           [ <g:each in="${synonyms}" var="syn" status="idx">"${syn.encodeAsJavaScript()}"<g:if test="${idx < synonyms.size() - 1}">, </g:if></g:each> ],
         family:             "${tc?.classification?.family ?: ''}",
         kingdom:            "${tc?.classification?.kingdom ?: ''}",
         preferredImageId:   "${tc?.imageIdentifier?: ''}",

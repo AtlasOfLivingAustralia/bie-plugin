@@ -54,6 +54,14 @@ class UtilityService {
         namesSet
     }
 
+    def stripQuotes(String str) {
+        if (str == null || str.length() < 2)
+            return str
+        if (str.startsWith('"') && str.endsWith('"'))
+            str = str.substring(1, str.length() - 1)
+        return str.trim()
+    }
+
     /**
      * Group names which are equivalent into a map with a list of their name objects.
      * <p>
@@ -103,7 +111,7 @@ class UtilityService {
                 if (term.contains(":")) {
                     String[] fqBits = StringUtils.split(term, ":", 2);
                     def values = facetMap.get(fqBits[0], [])
-                    values << fqBits[-1] ?: ""
+                    values << this.stripQuotes(fqBits[-1]) ?: ""
                 }
             }
         }
@@ -202,4 +210,5 @@ class UtilityService {
         }
         log.debug "synonyms = ${synonyms}"
         synonyms
-    }}
+    }
+}

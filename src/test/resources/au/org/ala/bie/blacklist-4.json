@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "Test blacklist 4",
+    "version": "1.1"
+  },
+  "blacklist": [
+    {
+      "name": "Acacia",
+      "source": "https://www.badplace.org.*"
+    },
+    {
+      "source": "https?://www\\.worseplace\\.org/eol/.*",
+      "title": "Invasive.*"
+    },
+    {
+      "name": "Acacia",
+      "title": ".*Introduced.*"
+    }
+  ]
+}

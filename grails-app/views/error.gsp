@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>An error has occurrence | BIE</title>
+    <title><g:message code="error.main.title" /></title>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
 </head>
 <body>
@@ -9,9 +9,9 @@
         <div class="inner row-fluid">
             <nav id="breadcrumb" class="span12">
                 <ol class="breadcrumb">
-                    <li><a href="https://biodiversityatlas.at">Home</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li><a href="https://biodiversityatlas.at">Australia&#39;s species</a> <span class=" icon icon-arrow-right"></span></li>
-                    <li class="active">Biodiversity Information Explorer (BIE)</li>
+                    <li><a href="${alaUrl}"><g:message code="home" /></a> <span class=" icon icon-arrow-right"></span></li>
+                    <li><g:message code="error.url" args="[alaUrl]" /> <span class=" icon icon-arrow-right"></span></li>
+                    <li class="active"><g:message code="error.title" /></li>
                 </ol>
             </nav>
             <hgroup>

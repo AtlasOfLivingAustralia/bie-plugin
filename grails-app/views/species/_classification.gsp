@@ -10,7 +10,7 @@
             <a href="${grailsApplication.config.bie.index.url}/download?q=rkid_${tc.taxonConcept.rankString}:${tc.taxonConcept.guid}&fq=rank:species&${grailsApplication.config.bieService.queryContext}"
                class="btn btn-default" style="text-align:left;">
                 <i class="glyphicon glyphicon-arrow-down"></i>
-                 ${message(code: 'classification.download.speciesof01')} ${tc.taxonConcept.nameString} ${message(code: 'classification.download.speciesof02')}
+                ${message(code: 'classification.download.speciesof01')} ${tc.taxonConcept.nameString} ${message(code: 'classification.download.speciesof02')}
             </a>
             <a class="btn btn-default"  style="text-align:left;"
                href="${createLink(controller: 'species', action: 'search')}?q=${'rkid_' + tc.taxonConcept.rankString + ':' + tc.taxonConcept.guid}">
