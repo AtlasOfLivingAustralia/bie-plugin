@@ -60,7 +60,7 @@ class BieTagLibSpec extends Specification {
 
     def "test constructEYALink 1"() {
         expect:
-        tagLib.constructEYALink(result: [centroid: '-38.9 145.5']) == '<a href=\'http://biocache.ala.org.au/explore/your-area#145.5|-38.9|12|ALL_SPECIES\'></a>'
+        tagLib.constructEYALink(result: [centroid: '-38.9 145.5']) == "<a href='https://biocache.ala.org.au/explore/your-area#145.5|-38.9|12|ALL_SPECIES'></a>"
     }
 
     def "test colourForStatus 1"() {
