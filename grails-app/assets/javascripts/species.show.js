@@ -500,10 +500,10 @@ function loadOverviewImages(){
     if (SHOW_CONF.preferredImageId) {
         hasPreferredImage = true;
         var prefUrl = SHOW_CONF.biocacheServiceUrl  +
-            '/occurrences/search.json?q=image_url:' + SHOW_CONF.preferredImageId +
+            '/occurrences/search.json?q=images:' + SHOW_CONF.preferredImageId +
             '&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
         $.getJSON(prefUrl, function(data){
-            //console.log("prefUrl", prefUrl, data);
+            // console.log("prefUrl", prefUrl, data);
             if (data && data.totalRecords > 0) {
                 addOverviewImage(data.occurrences[0]);
             } else {
