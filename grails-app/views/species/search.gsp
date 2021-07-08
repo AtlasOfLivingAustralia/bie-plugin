@@ -28,7 +28,8 @@
     <asset:script type="text/javascript">
         // global var to pass GSP vars into JS file
         SEARCH_CONF = {
-            searchResultTotal: ${searchResults.totalRecords},
+            searchResultTotal: ${searchResults.totalRecords},      
+            searchSpecieEnable: "${grailsApplication.config.searchSpecie.enable}",
             bieWebServiceUrl: "${grailsApplication.config.bie.index.url}",
             query: "${BieTagLib.escapeJS(query)}",
             queryTitle: "${searchResults.queryTitle}",
@@ -47,6 +48,7 @@
 
 <section class="${fluidLayout ? 'container-fluid' : 'container'}">
     <div class="main-content panel panel-body">
+        <g:if test="${searchSpecieEnable}">
         <div class="row margin-bottom-30">
             <div class="col-sm-9">
                 <form method="get" action="${g.createLink(controller: 'species', action: 'search')}">
@@ -66,6 +68,7 @@
                 </form>
             </div>
         </div>
+        </g:if>
 
 
         <header class="pg-header">
