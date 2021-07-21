@@ -19,13 +19,13 @@ class BiocacheService {
         JSONObject jsonObj = new JSONObject()
         if (!grailsApplication.config.biocacheService.baseURL)
             return jsonObj
-        def queryUrl = grailsApplication.config.biocacheService.baseURL + "/occurrences/search?q=" + URIUtil.encodeWithinQuery("lsid:\"${taxonID}\"", "UTF-8") + "&fq=multimedia:Sound"
+        def queryUrl = grailsApplication.config.biocacheService.baseURL + "/occurrences/search?q=" + URIUtil.encodeWithinQuery("lsid:\"${taxonID}\"", "UTF-8") + "&fq=multimedia:Sound&qualityProfile=ALA"
 
         log.debug "calling url = ${queryUrl}"
         def data = webClientService.getJson(queryUrl)
 
         if (data.size() && data.has("occurrences") && data.get("occurrences").size()) {
-            def recordUrl = grailsApplication.config.biocacheService.baseURL + "/occurrence/" + data.get("occurrences").get(0).uuid
+            def recordUrl = grailsApplication.config.biocacheService.baseURL + "/occurrence/" + data.get("occurrences").get(0).uuid+"&qualityProfile=ALA"
             jsonObj = webClientService.getJson(recordUrl)
         }
 

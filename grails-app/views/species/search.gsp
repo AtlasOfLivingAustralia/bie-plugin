@@ -360,7 +360,7 @@
                                     </g:if>
                                     <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
-                                        <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">
+                                        <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}&qualityProfile=ALA">
                                         <g:message code="search.details.occurrence"/>
                                         <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
                                         </li>

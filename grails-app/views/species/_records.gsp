@@ -2,13 +2,13 @@
 
     <div class="pull-right btn-group btn-group-vertical">
         <a class="btn btn-default"
-           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}">
+           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}&qualityProfile=ALA">
             <i class="glyphicon glyphicon-th-list"></i>
             <g:message code="records.list.all.records.button"/>
             (<span class="occurrenceRecordCount">0</span> <g:message code="records"/>)
         </a>
         <a class="btn btn-default"
-           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}#tab_mapView">
+           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid ?: ''}&qualityProfile=ALA#tab_mapView">
             <i class="glyphicon glyphicon-map-marker"></i>
             <g:message code="records.list.all.map.button"/>
             (<span class="occurrenceRecordCount">0</span> <g:message code="records"/>)

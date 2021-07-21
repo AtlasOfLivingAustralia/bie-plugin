@@ -103,7 +103,7 @@ function loadMap() {
 
     //add an occurrence layer for this taxon
     var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=lsid:" +
-        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter, {
+        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter +"&qualityProfile=ALA", {
         layers: 'ALA:occurrences',
         format: 'image/png',
         transparent: true,
@@ -154,7 +154,7 @@ function loadMap() {
  * Update the total records count for the occurrence map in heading text
  */
 function updateOccurrenceCount() {
-    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid + "&fq=" + SHOW_CONF.mapQueryContext, function( data ) {
+    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid + "&fq=" + SHOW_CONF.mapQueryContext +"&qualityProfile=ALA", function( data ) {
         if (data) {
             $.each( data, function( key, value ) {
                 if (value && typeof value == "number") {
@@ -170,7 +170,7 @@ function updateOccurrenceCount() {
 }
 
 function fitMapToBounds() {
-    var jsonUrl = SHOW_CONF.biocacheServiceUrl + "/mapping/bounds.json?q=lsid:" + SHOW_CONF.guid + "&callback=?";
+    var jsonUrl = SHOW_CONF.biocacheServiceUrl + "/mapping/bounds.json?q=lsid:" + SHOW_CONF.guid + "&qualityProfile=ALA&callback=?";
     $.getJSON(jsonUrl, function(data) {
         if (data.length == 4 && data[0] != 0 && data[1] != 0) {
             //console.log("data", data);
@@ -220,7 +220,7 @@ function loadDataProviders(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&pageSize=0&flimit=-1';
+        '&qualityProfile=ALA&pageSize=0&flimit=-1&qualityProfile=ALA';
 
     if(SHOW_CONF.mapQueryContext){
        url = url + '&fq=' + SHOW_CONF.mapQueryContext;
@@ -230,7 +230,7 @@ function loadDataProviders(){
 
     var uiUrl = SHOW_CONF.biocacheUrl  +
         '/occurrences/search?q=lsid:' +
-        SHOW_CONF.guid;
+        SHOW_CONF.guid + "&qualityProfile=ALA";
 
     $.getJSON(url, function(data){
 
@@ -455,7 +455,7 @@ function loadExternalSources(){
             }
 
             soundsDiv += '</div><div class="panel-footer"><p>' + source + '<br>';
-            soundsDiv += '<a href="' + SHOW_CONF.biocacheUrl + '/occurrence/'+ data.raw.rowKey +'">View more details of this audio</a></p>';
+            soundsDiv += '<a href="' + SHOW_CONF.biocacheUrl + '/occurrence/'+ data.raw.rowKey +'&qualityProfile=ALA">View more details of this audio</a></p>';
             soundsDiv += '</div></div>';
             $('#sounds').append(soundsDiv);
         }
@@ -501,7 +501,7 @@ function loadOverviewImages(){
         hasPreferredImage = true;
         var prefUrl = SHOW_CONF.biocacheServiceUrl  +
             '/occurrences/search.json?q=image_url:' + SHOW_CONF.preferredImageId +
-            '&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
+            '&qualityProfile=ALA&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
         $.getJSON(prefUrl, function(data){
             //console.log("prefUrl", prefUrl, data);
             if (data && data.totalRecords > 0) {
@@ -525,7 +525,7 @@ function loadOverviewImages(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&fq=geospatial_kosher:true&fq=-user_assertions:50001&fq=-user_assertions:50005&im=true&facet=off&pageSize=5&start=0&callback=?';
+        '&qualityProfile=ALA&fq=multimedia:"Image"&fq=geospatial_kosher:true&fq=-user_assertions:50001&fq=-user_assertions:50005&im=true&facet=off&pageSize=5&start=0&callback=?';
     //console.log('Loading images from: ' + url);
 
     $.getJSON(url, function(data){
@@ -592,7 +592,7 @@ function generateOverviewThumb(occurrence, id){
     $taxonSummaryThumbLink.attr('data-footer', getImageFooterFromOccurrence(occurrence));
     $taxonSummaryThumbLink.attr('href', occurrence.largeImageUrl);
     $taxonSummaryThumbLink.attr('data-image-id', occurrence.image);
-    $taxonSummaryThumbLink.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + occurrence.uuid);
+    $taxonSummaryThumbLink.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + occurrence.uuid+'&qualityProfile=ALA');
     return $taxonSummaryThumb;
 }
 
@@ -624,7 +624,7 @@ function loadGalleryType(category, start) {
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&pageSize=' + pageSize +
+        '&qualityProfile=ALA&fq=multimedia:"Image"&pageSize=' + pageSize +
         '&facet=off&start=' + start + imageCategoryParams[category] + '&im=true&callback=?';
 
     //console.log("URL: " + url);
@@ -658,7 +658,7 @@ function loadGalleryType(category, start) {
                 // write to DOM
                 $taxonThumb.attr('data-footer', getImageFooterFromOccurrence(el));
                 $taxonThumb.attr('data-image-id', el.image);
-                $taxonThumb.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid);
+                $taxonThumb.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid+'&qualityProfile=ALA');
                 $categoryTmpl.find('.taxon-gallery').append($taxonThumb);
             });
 
@@ -728,9 +728,9 @@ function getImageFooterFromOccurrence(el){
 
     // write to DOM
     if (el.uuid) {
-        detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a>' +
+        detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '&qualityProfile=ALA">View details of this record</a>' +
             '<br><br>If this image is incorrectly<br>identified please flag an<br>issue on the <a href=' + SHOW_CONF.biocacheUrl +
-            '/occurrences/' + el.uuid + '>record.<br></div>';
+            '/occurrences/' + el.uuid + '&qualityProfile=ALA' + '>record.<br></div>';
     }
     return detailHtml;
 }
