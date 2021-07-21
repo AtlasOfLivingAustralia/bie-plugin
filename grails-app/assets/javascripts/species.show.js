@@ -220,7 +220,7 @@ function loadDataProviders(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&qualityProfile=ALA&pageSize=0&flimit=-1&qualityProfile=ALA';
+        '&pageSize=0&flimit=-1&qualityProfile=ALA';
 
     if(SHOW_CONF.mapQueryContext){
        url = url + '&fq=' + SHOW_CONF.mapQueryContext;
@@ -230,7 +230,7 @@ function loadDataProviders(){
 
     var uiUrl = SHOW_CONF.biocacheUrl  +
         '/occurrences/search?q=lsid:' +
-        SHOW_CONF.guid + "&qualityProfile=ALA";
+        SHOW_CONF.guid;
 
     $.getJSON(url, function(data){
 
@@ -455,7 +455,7 @@ function loadExternalSources(){
             }
 
             soundsDiv += '</div><div class="panel-footer"><p>' + source + '<br>';
-            soundsDiv += '<a href="' + SHOW_CONF.biocacheUrl + '/occurrence/'+ data.raw.rowKey +'&qualityProfile=ALA">View more details of this audio</a></p>';
+            soundsDiv += '<a href="' + SHOW_CONF.biocacheUrl + '/occurrence/'+ data.raw.rowKey +'">View more details of this audio</a></p>';
             soundsDiv += '</div></div>';
             $('#sounds').append(soundsDiv);
         }
@@ -592,7 +592,7 @@ function generateOverviewThumb(occurrence, id){
     $taxonSummaryThumbLink.attr('data-footer', getImageFooterFromOccurrence(occurrence));
     $taxonSummaryThumbLink.attr('href', occurrence.largeImageUrl);
     $taxonSummaryThumbLink.attr('data-image-id', occurrence.image);
-    $taxonSummaryThumbLink.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + occurrence.uuid+'&qualityProfile=ALA');
+    $taxonSummaryThumbLink.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + occurrence.uuid);
     return $taxonSummaryThumb;
 }
 
@@ -658,7 +658,7 @@ function loadGalleryType(category, start) {
                 // write to DOM
                 $taxonThumb.attr('data-footer', getImageFooterFromOccurrence(el));
                 $taxonThumb.attr('data-image-id', el.image);
-                $taxonThumb.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid+'&qualityProfile=ALA');
+                $taxonThumb.attr('data-record-url', SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid);
                 $categoryTmpl.find('.taxon-gallery').append($taxonThumb);
             });
 
@@ -728,9 +728,9 @@ function getImageFooterFromOccurrence(el){
 
     // write to DOM
     if (el.uuid) {
-        detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '&qualityProfile=ALA">View details of this record</a>' +
+        detailHtml += '<div class="recordLink"><a href="' + SHOW_CONF.biocacheUrl + '/occurrences/' + el.uuid + '">View details of this record</a>' +
             '<br><br>If this image is incorrectly<br>identified please flag an<br>issue on the <a href=' + SHOW_CONF.biocacheUrl +
-            '/occurrences/' + el.uuid + '&qualityProfile=ALA' + '>record.<br></div>';
+            '/occurrences/' + el.uuid + '>record.<br></div>';
     }
     return detailHtml;
 }
