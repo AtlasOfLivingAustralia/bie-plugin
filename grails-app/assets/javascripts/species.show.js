@@ -626,7 +626,7 @@ function loadGalleryType(category, start) {
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        (SHOW_CONF.qualityProfile? "&qualityProfile="+SHOW_CONF.qualityProfile : "") + '&fq=multimedia:"Image"&pageSize=' + pageSize +
+        (SHOW_CONF.qualityProfile ? "&qualityProfile=" + SHOW_CONF.qualityProfile : "") + '&fq=multimedia:"Image"&pageSize=' + pageSize +
         '&facet=off&start=' + start + imageCategoryParams[category] + '&im=true&callback=?';
 
     //console.log("URL: " + url);
