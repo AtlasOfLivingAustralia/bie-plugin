@@ -91,10 +91,10 @@
                 <div id="leafletMap"></div>
 
                 <g:if test="${grailsApplication.config.spatial.baseURL}">
-                    <g:set var="mapUrl">${grailsApplication.config.spatial.baseURL}?q=lsid:${tc?.taxonConcept?.guid}</g:set>
+                    <g:set var="mapUrl">${grailsApplication.config.spatial.baseURL}?q=lsid:${tc?.taxonConcept?.guid}${grailsApplication.config.qualityProfile ? '&qualityProfile=' + grailsApplication.config.qualityProfile : ''}</g:set>
                 </g:if>
                 <g:else>
-                    <g:set var="mapUrl">${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}&qualityProfile=ALA#tab_mapView</g:set>
+                    <g:set var="mapUrl">${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView</g:set>
                 </g:else>
 
                 <div class="map-buttons">
@@ -106,13 +106,13 @@
                     </a>
                     <g:if test="${grailsApplication.config.map.simpleMapButton.toBoolean()}">
                         <a class="btn btn-primary btn-lg"
-                           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}&qualityProfile=ALA#tab_mapView"
+                           href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_mapView"
                            title="${g.message(code: 'overview.map.button.records.simplemap.title', default: 'View map')}"
                            role="button"><g:message code="overview.map.button.records.simplemap"
                                                     default="View map"/></a>
                     </g:if>
                     <a class="btn btn-primary btn-lg"
-                       href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}&qualityProfile=ALA#tab_recordsView"
+                       href="${biocacheUrl}/occurrences/search?q=lsid:${tc?.taxonConcept?.guid}#tab_recordsView"
                        title="${g.message(code: 'overview.map.button.records.list.title', default: 'View records')}"
                        role="button"><g:message code="overview.map.button.records.list" default="View records"/></a>
                 </div>

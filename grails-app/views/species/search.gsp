@@ -38,7 +38,8 @@
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
             bhlUrl: "${grailsApplication.config.bhl.url}",
             biocacheQueryContext: '${raw(grailsApplication.config.biocacheService.queryContext)}',
-            geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
+            geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}",
+            qualityProfile: "${grailsApplication.config.qualityProfile}"
         }
     </asset:script>
     <asset:javascript src="autocomplete-configuration"/>
@@ -360,7 +361,7 @@
                                     </g:if>
                                     <g:if test="${grailsApplication.config.occurrenceCounts.enabled.toBoolean() && result?.occurrenceCount?:0 > 0}">
                                         <li>
-                                        <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}&qualityProfile=ALA">
+                                        <a href="${biocacheUrl}/occurrences/search?q=lsid:${result.guid}">
                                         <g:message code="search.details.occurrence"/>
                                         <g:formatNumber number="${result.occurrenceCount}" type="number"/></a></span>
                                         </li>

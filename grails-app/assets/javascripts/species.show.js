@@ -103,7 +103,9 @@ function loadMap() {
 
     //add an occurrence layer for this taxon
     var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=lsid:" +
-        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter +"&qualityProfile=ALA", {
+        SHOW_CONF.guid + (SHOW_CONF.qualityProfile? "&qualityProfile="+SHOW_CONF.qualityProfile : "")
+        +"&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter
+        , {
         layers: 'ALA:occurrences',
         format: 'image/png',
         transparent: true,
@@ -154,7 +156,7 @@ function loadMap() {
  * Update the total records count for the occurrence map in heading text
  */
 function updateOccurrenceCount() {
-    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid + "&fq=" + SHOW_CONF.mapQueryContext +"&qualityProfile=ALA", function( data ) {
+    $.getJSON(SHOW_CONF.biocacheServiceUrl + '/occurrences/taxaCount?guids=' + SHOW_CONF.guid + "&fq=" + SHOW_CONF.mapQueryContext, function( data ) {
         if (data) {
             $.each( data, function( key, value ) {
                 if (value && typeof value == "number") {
@@ -170,7 +172,7 @@ function updateOccurrenceCount() {
 }
 
 function fitMapToBounds() {
-    var jsonUrl = SHOW_CONF.biocacheServiceUrl + "/mapping/bounds.json?q=lsid:" + SHOW_CONF.guid + "&qualityProfile=ALA&callback=?";
+    var jsonUrl = SHOW_CONF.biocacheServiceUrl + "/mapping/bounds.json?q=lsid:" + SHOW_CONF.guid + "&callback=?";
     $.getJSON(jsonUrl, function(data) {
         if (data.length == 4 && data[0] != 0 && data[1] != 0) {
             //console.log("data", data);
@@ -220,7 +222,7 @@ function loadDataProviders(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&pageSize=0&flimit=-1&qualityProfile=ALA';
+        '&pageSize=0&flimit=-1';
 
     if(SHOW_CONF.mapQueryContext){
        url = url + '&fq=' + SHOW_CONF.mapQueryContext;
@@ -501,7 +503,7 @@ function loadOverviewImages(){
         hasPreferredImage = true;
         var prefUrl = SHOW_CONF.biocacheServiceUrl  +
             '/occurrences/search.json?q=image_url:' + SHOW_CONF.preferredImageId +
-            '&qualityProfile=ALA&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
+            '&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
         $.getJSON(prefUrl, function(data){
             //console.log("prefUrl", prefUrl, data);
             if (data && data.totalRecords > 0) {
@@ -525,7 +527,7 @@ function loadOverviewImages(){
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&qualityProfile=ALA&fq=multimedia:"Image"&fq=geospatial_kosher:true&fq=-user_assertions:50001&fq=-user_assertions:50005&im=true&facet=off&pageSize=5&start=0&callback=?';
+        '&fq=multimedia:"Image"&fq=geospatial_kosher:true&fq=-user_assertions:50001&fq=-user_assertions:50005&im=true&facet=off&pageSize=5&start=0&callback=?';
     //console.log('Loading images from: ' + url);
 
     $.getJSON(url, function(data){
