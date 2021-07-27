@@ -21,7 +21,6 @@
                     <!-- Search results go here -->
                 </div>
             </div>
-            <!--
             <div id="trove-integration" class="column-wrap" style="padding-top:50px;">
                 %{--<h2>&nbsp;</h2>--}%
                 <hr />
@@ -31,7 +30,6 @@
 
                 </div>
             </div>
-            -->
         </div><!--/right-->
     </div><!--/row-->
 </section>
