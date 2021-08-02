@@ -103,7 +103,9 @@ function loadMap() {
 
     //add an occurrence layer for this taxon
     var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=lsid:" +
-        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter, {
+        SHOW_CONF.guid + (SHOW_CONF.qualityProfile? "&qualityProfile="+SHOW_CONF.qualityProfile : "")
+        +"&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter
+        , {
         layers: 'ALA:occurrences',
         format: 'image/png',
         transparent: true,
@@ -624,7 +626,7 @@ function loadGalleryType(category, start) {
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&pageSize=' + pageSize +
+        (SHOW_CONF.qualityProfile ? "&qualityProfile=" + SHOW_CONF.qualityProfile : "") + '&fq=multimedia:"Image"&pageSize=' + pageSize +
         '&facet=off&start=' + start + imageCategoryParams[category] + '&im=true&callback=?';
 
     //console.log("URL: " + url);

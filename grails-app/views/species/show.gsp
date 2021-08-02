@@ -364,6 +364,7 @@
     var SHOW_CONF = {
         biocacheUrl:        "${grailsApplication.config.biocache.baseURL}",
         biocacheServiceUrl: "${grailsApplication.config.biocacheService.baseURL}",
+        qualityProfile:     "${grailsApplication.config.qualityProfile}",
         layersServiceUrl:   "${grailsApplication.config.layersService.baseURL}",
         collectoryUrl:      "${grailsApplication.config.collectory.baseURL}",
         profileServiceUrl:  "${grailsApplication.config.profileService.baseURL}",
@@ -433,7 +434,8 @@
                 biocacheWebappUrl="${grailsApplication.config.biocache.baseURL}"
                 q="lsid:${guid}"
                 qc="${grailsApplication.config.biocacheService.queryContext ?: ''}"
-                fq=""/>
+                fq=""
+            />
     }
     if(target == '#overview'){
         loadMap();
