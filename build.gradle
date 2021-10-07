@@ -58,15 +58,7 @@ dependencies {
     compile ('org.jasig.cas.client:cas-client-core:3.4.1') {
         exclude group: 'javax.servlet', module: 'servlet-api'
     }
-    compile('au.org.ala:ala-name-matching:3.4') {
-        exclude group: 'org.apache.lucene', module: 'lucene-core'
-        exclude group: 'org.apache.lucene', module: 'lucene-analyzers-common'
-        exclude group: 'org.apache.lucene', module: 'lucene-queryparser'
-        exclude group: 'uk.ac.shef.wit', module: 'simmetrics'
-        exclude group: 'org.apache.bval', module: 'org.apache.bval.bundle'
-        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-
-    }
+    compile group: 'au.org.ala', name: 'ala-name-matching-model', version: '4.0-SNAPSHOT', changing: true
     compile "commons-httpclient:commons-httpclient:3.1"
     compile "org.codehaus.jackson:jackson-core-asl:1.8.6"
     compile "org.codehaus.jackson:jackson-mapper-asl:1.8.6"
