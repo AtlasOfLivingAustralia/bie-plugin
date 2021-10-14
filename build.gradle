@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.5.2"
+version "1.5.3-SNAPSHOT"
 
 group "au.org.ala.plugins.grails"
 
@@ -58,7 +58,7 @@ dependencies {
     compile ('org.jasig.cas.client:cas-client-core:3.4.1') {
         exclude group: 'javax.servlet', module: 'servlet-api'
     }
-    compile group: 'au.org.ala', name: 'ala-name-matching-model', version: '4.0'
+    compile group: 'au.org.ala', name: 'ala-name-matching-model', version: '4.1-SNAPSHOT', changing: true
     compile "commons-httpclient:commons-httpclient:3.1"
     compile "org.codehaus.jackson:jackson-core-asl:1.8.6"
     compile "org.codehaus.jackson:jackson-mapper-asl:1.8.6"
