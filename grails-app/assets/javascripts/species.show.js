@@ -103,7 +103,9 @@ function loadMap() {
 
     //add an occurrence layer for this taxon
     var taxonLayer = L.tileLayer.wms(SHOW_CONF.biocacheServiceUrl + "/mapping/wms/reflect?q=lsid:" +
-        SHOW_CONF.guid + "&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter, {
+        SHOW_CONF.guid + (SHOW_CONF.qualityProfile? "&qualityProfile="+SHOW_CONF.qualityProfile : "")
+        +"&qc=" + SHOW_CONF.mapQueryContext + SHOW_CONF.additionalMapFilter
+        , {
         layers: 'ALA:occurrences',
         format: 'image/png',
         transparent: true,
@@ -500,10 +502,10 @@ function loadOverviewImages(){
     if (SHOW_CONF.preferredImageId) {
         hasPreferredImage = true;
         var prefUrl = SHOW_CONF.biocacheServiceUrl  +
-            '/occurrences/search.json?q=image_url:' + SHOW_CONF.preferredImageId +
+            '/occurrences/search.json?q=images:' + SHOW_CONF.preferredImageId +
             '&fq=-assertion_user_id:*&im=true&facet=off&pageSize=1&start=0&callback=?';
         $.getJSON(prefUrl, function(data){
-            //console.log("prefUrl", prefUrl, data);
+            // console.log("prefUrl", prefUrl, data);
             if (data && data.totalRecords > 0) {
                 addOverviewImage(data.occurrences[0]);
             } else {
@@ -624,7 +626,7 @@ function loadGalleryType(category, start) {
     var url = SHOW_CONF.biocacheServiceUrl  +
         '/occurrences/search.json?q=lsid:' +
         SHOW_CONF.guid +
-        '&fq=multimedia:"Image"&pageSize=' + pageSize +
+        (SHOW_CONF.qualityProfile ? "&qualityProfile=" + SHOW_CONF.qualityProfile : "") + '&fq=multimedia:"Image"&pageSize=' + pageSize +
         '&facet=off&start=' + start + imageCategoryParams[category] + '&im=true&callback=?';
 
     //console.log("URL: " + url);

@@ -38,7 +38,8 @@
             biocacheServicesUrl: "${grailsApplication.config.biocacheService.baseURL}",
             bhlUrl: "${grailsApplication.config.bhl.url}",
             biocacheQueryContext: '${raw(grailsApplication.config.biocacheService.queryContext)}',
-            geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}"
+            geocodeLookupQuerySuffix: "${grailsApplication.config.geocode.querySuffix}",
+            qualityProfile: "${grailsApplication.config.qualityProfile}"
         }
     </asset:script>
     <asset:javascript src="autocomplete-configuration"/>
