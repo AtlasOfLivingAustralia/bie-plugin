@@ -19,7 +19,8 @@ class BootStrap {
                 "file:///var/opt/atlas/i18n/bie-plugin/messages",
                 "file:///opt/atlas/i18n/bie-plugin/messages",
                 "classpath:grails-app/i18n/messages",
-                "classpath:messages"
+                "classpath:messages",
+                "${grailsApplication.config.biocacheService.baseURL}/facets/i18n"
         )
         Object.metaClass.trimLength = { Integer stringLength ->
 
